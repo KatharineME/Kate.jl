@@ -1,56 +1,49 @@
-from os.path import isfile
+include("print_command_and_run.jl")
 
-from ._check_fastq_gzs import _check_fastq_gzs
-from ._print_and_run_command import _print_and_run_command
+function count_transcripts_using_kallisto_quant(
+    fastq_gz_file_paths::Array,
+    fasta_gz_file_path::String,
+    output_directory_path::String;
+    fragment_length::Int=180,
+    fragment_length_standard_deviation::Int=20,
+    n_job::Int=1,
+    overwrite::Bool=false,
+)::String
 
+    fasta_gz_kallisto_index_file_path = "$fasta_gz_file_path.kallisto.index"
 
-def count_transcripts_using_kallisto_quant(
-    fastq_gz_file_paths,
-    fasta_gz_file_path,
-    output_directory_path,
-    n_bootstrap=0,
-    fragment_length=180,
-    fragment_length_standard_deviation=20,
-    n_job=1,
-    overwrite=False,
-):
+    if !isfile(fasta_gz_kallisto_index_file_path)
 
-    _check_fastq_gzs(fastq_gz_file_paths)
+        print_command_and_run(`kallisto index --index $fasta_gz_kallisto_index_file_path $fasta_gz_file_path`)
 
-    fasta_gz_kallisto_index_file_path = "{}.kallisto.index".format(fasta_gz_file_path)
+    end
 
-    if not isfile(fasta_gz_kallisto_index_file_path):
+    abundance_file_path = "$output_directory_path/abundance.tsv"
 
-        _print_and_run_command(
-            "kallisto index --index {} {}".format(
-                fasta_gz_kallisto_index_file_path, fasta_gz_file_path
-            )
-        )
+    if !overwrite && isfile(abundance_file_path)
 
-    abundance_file_path = "{}/abundance.tsv".format(output_directory_path)
+        error(abundance_file_path)
 
-    if not overwrite and isfile(abundance_file_path):
+    end
 
-        raise FileExistsError(abundance_file_path)
+    if length(fastq_gz_file_paths) == 1
 
-    if len(fastq_gz_file_paths) == 1:
+        arguments = [
+            "--single",
+            "--fragment-length",
+            fragment_length,
+            "--sd",
+            fragment_length_standard_deviation,
+        ]
 
-        sample_argument = "--single --fragment-length {} --sd {} {}".format(
-            fragment_length, fragment_length_standard_deviation, fastq_gz_file_paths[0]
-        )
+    elseif length(fastq_gz_file_paths) == 2
 
-    elif len(fastq_gz_file_paths) == 2:
+        arguments = []
 
-        sample_argument = "{} {}".format(*fastq_gz_file_paths)
+    end
 
-    _print_and_run_command(
-        "kallisto quant --index {} --output-dir {} --bootstrap-samples {} --threads {} {}".format(
-            fasta_gz_kallisto_index_file_path,
-            output_directory_path,
-            n_bootstrap,
-            n_job,
-            sample_argument,
-        )
-    )
+    print_command_and_run(`kallisto quant --index $fasta_gz_kallisto_index_file_path --output-dir $output_directory_path --threads $n_job $arguments $fastq_gz_file_paths`)
 
     return output_directory_path
+
+end
