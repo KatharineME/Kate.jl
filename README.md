@@ -1,3 +1,3 @@
-# Analyze.jl
+# Kraft.jl
 
-Library for analyzing information :computer:
+Library for playing with information :slot_machine:
