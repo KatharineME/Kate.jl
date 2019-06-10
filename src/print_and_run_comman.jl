@@ -1,4 +1,4 @@
-function print_command_and_run(command::Cmd)
+function print_and_run_command(command::Cmd)
 
     println(command)
 
