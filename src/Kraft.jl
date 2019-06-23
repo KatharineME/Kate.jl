@@ -1,15 +1,15 @@
 module Kraft
 
-println(@__FILE__)
+    println(@__FILE__)
 
-for name in readdir(@__DIR__)
+    for name::String in readdir(@__DIR__)
 
-    if name != splitdir(@__FILE__)[end] && endswith(name, ".jl")
+        if endswith(name, ".jl") && name != splitdir(@__FILE__)[end]
 
-        include(name)
+            include(name)
+
+        end
 
     end
-
-end
 
 end

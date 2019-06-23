@@ -1,29 +1,38 @@
+include("print_and_run_cmd.jl")
+
+
 function align_sequence(
-        _1_fq_gz::String,
-        _2_fq_gz::String,
-        sample_name::String,
-        dna_fa_gz_mmi::String,
-        bam::String,
-        n_job::Int,
-        output_dir::String,
-    )
+    _1_fq_gz::String,
+    _2_fq_gz::String,
+    sample_name::String,
+    dna_fa_gz_mmi::String,
+    bam::String,
+    n_job::Int,
+)
 
     println("Aligning sequence ...")
 
-    kraft.print_and_run_cmd(pipeliene(
-            `minimap2 -x sr -t $n_job -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fa_gz_mmi $_1_fq_gz $_2_fq_gz`,
-            `samtools sort -n --threads $n_job`,
-            `samtools fixmate -m --threads $n_job - -`,
-            `samtools sort --threads $n_job`,
-            "/tmp/no_markdup.bam"
-            ))
+    bam_prefix::String, bam_extension::String = splitext(bam)
 
-    kraft.print_and_run_cmd(`samtools markdup -s --threads $n_job /tmp/no_markdup.bam $bam`)
+    no_markdup_bam::String = "$bam_prefix.no_markdup.$bam_extension"
 
-    kraft.print_and_run_cmd(`rm --force /tmp/no_markdup.bam`)
+    print_and_run_cmd(pipeliene(
+        `minimap2 -x sr -t $n_job -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fa_gz_mmi $_1_fq_gz $_2_fq_gz`,
+        `samtools sort -n --threads $n_job`,
+        `samtools fixmate -m --threads $n_job - -`,
+        `samtools sort --threads $n_job`,
+        no_markdup_bam,
+    ))
 
-    kraft.print_and_run_cmd(`samtools index -@ $n_job $bam`)
+    print_and_run_cmd(`samtools markdup --threads $n_job -s $no_markdup_bam $bam`)
 
-    kraft.print_and_run_cmd(pipeliene(`samtools flagstat --threads $n_job $bam`, "$bam.flagstat"))
+    print_and_run_cmd(`rm --force $no_markdup_bam`)
+
+    print_and_run_cmd(`samtools index -@ $n_job $bam`)
+
+    print_and_run_cmd(pipeliene(
+        `samtools flagstat --threads $n_job $bam`,
+        "$bam.flagstat",
+    ))
 
 end
