@@ -6,7 +6,7 @@ function find_mutation(
     soma_bam::String,
     dna_fa_bgz::String,
     chromosome_bed_gz::String,
-    sequencing_scope::String,
+    exome::Bool,
     chrn_n_tsv::String,
     output_dir::String,
     n_job::Int,
@@ -15,7 +15,13 @@ function find_mutation(
 
     println("Finding mutation ...")
 
-    config_parameters::String = "--referenceFasta $dna_fa_bgz --callRegions $chromosome_bed_gz --$sequencing_scope"
+    config_parameters::String = "--referenceFasta $dna_fa_bgz --callRegions $chromosome_bed_gz"
+
+    if exome
+
+        config_parameters = "$config_parameters --exome"
+
+    end
 
     if ispath(germ_bam) && ispath(soma_bam)
 
