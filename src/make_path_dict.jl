@@ -1,27 +1,51 @@
 include("print_and_run_cmd.jl")
 
 
-function check_paths(
+function make_path_dict(
     data_dir::String,
     remake::Bool,
     n_job::Int,
 )
 
-    println("Checking paths ...")
+    println("Making path dict ...")
 
-    dna_fa_gz::String = "$data_dir/grch/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
+    dna_fa_gz::String = joinpath(
+        data_dir,
+        "grch",
+        "GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz",
+    )
 
-    chromosome_bed_gz::String = "$data_dir/grch/chromosome.bed.gz"
+    chromosome_bed_gz::String = joinpath(
+        data_dir,
+        "grch",
+        "chromosome.bed.gz",
+    )
 
-    chrn_n_tsv::String = "$data_dir/grch/chrn_n.tsv"
+    chrn_n_tsv::String = joinpath(
+        data_dir,
+        "grch",
+        "chrn_n.tsv",
+    )
 
-    cdna_fa_gz::String = "$data_dir/grch/Homo_sapiens.GRCh38.cdna.all.fa.gz"
+    cdna_fa_gz::String = joinpath(
+        data_dir,
+        "grch",
+        "Homo_sapiens.GRCh38.cdna.all.fa.gz",
+    )
 
-    grch_enst_gene_name_tsv::String = "$data_dir/grch/enst_gene_name.tsv"
+    grch_enst_gene_name_tsv::String = joinpath(
+        data_dir,
+        "grch",
+        "enst_gene_name.tsv",
+    )
 
-    virus_cdna_fa_gz::String = "$data_dir/virus/sequences.fasta"
+    virus_cdna_fa_gz::String = joinpath(
+        data_dir,
+        "virus",
+        "sequences.fasta",
+    )
 
-    virus_sequences_csv::String = "$data_dir/virus/sequences.csv"
+    virus_sequences_csv::String = "$(splitext(virus_cdna_fa_gz)[1]).csv"
 
     for path::String in (
         dna_fa_gz,
@@ -92,5 +116,14 @@ function check_paths(
         print_and_run_cmd(`kallisto index --index $virus_cdna_fa_gz_kallisto_index $virus_cdna_fa_gz`)
 
     end
+
+    Dict(
+        "dna.fa.bgz"=>dna_fa_bgz,
+        "dna.fa.gz.mmi"=>dna_fa_gz_mmi,
+        "chromosome.bed.gz"=>chromosome_bed_gz,
+        "chrn_n.tsv"=>chrn_n_tsv,
+        "cdna.fa.gz.kallisto_index"=>cdna_fa_gz_kallisto_index,
+        "virus_cdna.fa.gz.kallisto_index"=>virus_cdna_fa_gz_kallisto_index,
+    )
 
 end

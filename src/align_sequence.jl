@@ -14,9 +14,13 @@ function align_sequence(
 
     bam_prefix::String, bam_extension::String = splitext(bam)
 
-    no_markdup_bam::String = "$bam_prefix.no_markdup.$bam_extension"
+    output_dir::String = splitdir(bam)[1]
 
-    print_and_run_cmd(pipeliene(
+    mkpath(output_dir)
+
+    no_markdup_bam::String = "$bam_prefix.no_markdup$bam_extension"
+
+    print_and_run_cmd(pipeline(
         `minimap2 -x sr -t $n_job -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fa_gz_mmi $_1_fq_gz $_2_fq_gz`,
         `samtools sort -n --threads $n_job`,
         `samtools fixmate -m --threads $n_job - -`,
@@ -30,7 +34,7 @@ function align_sequence(
 
     print_and_run_cmd(`samtools index -@ $n_job $bam`)
 
-    print_and_run_cmd(pipeliene(
+    print_and_run_cmd(pipeline(
         `samtools flagstat --threads $n_job $bam`,
         "$bam.flagstat",
     ))
