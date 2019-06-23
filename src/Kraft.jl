@@ -1,5 +1,15 @@
 module Kraft
 
-include("print_and_run_command.jl")
+println(@__FILE__)
+
+for name in readdir(@__DIR__)
+
+    if name != splitdir(@__FILE__)[end] && endswith(name, ".jl")
+
+        include(name)
+
+    end
+
+end
 
 end
