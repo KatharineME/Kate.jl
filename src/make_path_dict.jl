@@ -45,7 +45,10 @@ function make_path_dict(
         "sequences.fasta",
     )
 
-    virus_sequences_csv::String = "$(splitext(virus_cdna_fa_gz)[1]).csv"
+    virus_sequences_csv::String = replace(
+        virus_cdna_fa_gz,
+        ".tsv"=>".csv",
+    )
 
     for path::String in (
         dna_fa_gz,
@@ -69,7 +72,10 @@ function make_path_dict(
 
     end
 
-    dna_fa_bgz::String = "$(splitext(dna_fa_gz)[1]).bgz"
+    dna_fa_bgz::String = replace(
+        dna_fa_gz,
+        ".gz"=>".bgz",
+    )
 
     if remake || !ispath(dna_fa_bgz)
 
