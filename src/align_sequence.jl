@@ -26,7 +26,7 @@ function align_sequence(
     mkpath(output_dir)
 
     print_and_run_cmd(pipeline(
-        `minimap2 -x sr -t $n_job -K $job_gb_memory -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fa_gz_mmi $_1_fq_gz $_2_fq_gz`,
+        `minimap2 -x sr -t $n_job -K $(job_gb_memory)G -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fa_gz_mmi $_1_fq_gz $_2_fq_gz`,
         `samtools sort --threads $n_job -m $(job_gb_memory)G -n`,
         `samtools fixmate --threads $n_job -m - -`,
         `samtools sort --threads $n_job -m $(job_gb_memory)G`,
