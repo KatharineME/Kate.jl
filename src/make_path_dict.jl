@@ -3,7 +3,6 @@ include("print_and_run_cmd.jl")
 
 function make_path_dict(
     data_dir::String,
-    remake::Bool,
     n_job::Int,
 )
 
@@ -77,7 +76,7 @@ function make_path_dict(
         ".gz"=>".bgz",
     )
 
-    if remake || !ispath(dna_fa_bgz)
+    if !ispath(dna_fa_bgz)
 
         print_and_run_cmd(pipeline(
             `gzip --decompress $dna_fa_gz --stdout`,
@@ -87,49 +86,13 @@ function make_path_dict(
 
     end
 
-    dna_fa_gz_mmi = "$dna_fa_gz.mmi"
-
-    if remake || !ispath(dna_fa_gz_mmi)
-
-        print_and_run_cmd(`minimap2 -t $n_job -d $dna_fa_gz_mmi $dna_fa_gz`)
-
-    end
-
-    if remake || !(ispath("$dna_fa_bgz.fai") && ispath("$dna_fa_bgz.gzi"))
-
-        print_and_run_cmd(`samtools faidx $dna_fa_bgz`)
-
-    end
-
-    if remake || !ispath("$chromosome_bed_gz.tbi")
-
-        print_and_run_cmd(`tabix --force $chromosome_bed_gz`)
-
-    end
-
-    cdna_fa_gz_kallisto_index = "$cdna_fa_gz.kallisto_index"
-
-    if remake || !ispath(cdna_fa_gz_kallisto_index)
-
-        print_and_run_cmd(`kallisto index --index $cdna_fa_gz_kallisto_index $cdna_fa_gz`)
-
-    end
-
-    virus_cdna_fa_gz_kallisto_index = "$virus_cdna_fa_gz.kallisto_index"
-
-    if remake || !ispath(virus_cdna_fa_gz_kallisto_index)
-
-        print_and_run_cmd(`kallisto index --index $virus_cdna_fa_gz_kallisto_index $virus_cdna_fa_gz`)
-
-    end
-
     Dict(
+        "dna.fa.gz"=>dna_fa_gz,
         "dna.fa.bgz"=>dna_fa_bgz,
-        "dna.fa.gz.mmi"=>dna_fa_gz_mmi,
         "chromosome.bed.gz"=>chromosome_bed_gz,
         "chrn_n.tsv"=>chrn_n_tsv,
-        "cdna.fa.gz.kallisto_index"=>cdna_fa_gz_kallisto_index,
-        "virus_cdna.fa.gz.kallisto_index"=>virus_cdna_fa_gz_kallisto_index,
+        "cdna.fa.gz"=>cdna_fa_gz,
+        "virus_cdna.fa.gz"=>virus_cdna_fa_gz,
     )
 
 end

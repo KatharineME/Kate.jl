@@ -16,4 +16,6 @@ function trim_sequence(
 
     print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --compress --output $output_prefix $_1_fq_gz $_2_fq_gz`)
 
+    nothing
+
 end
