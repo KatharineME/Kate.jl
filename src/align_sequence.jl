@@ -8,6 +8,7 @@ function align_sequence(
     dna_fa_gz::String,
     bam::String,
     n_job::Int,
+    job_gb_memory::Int,
 )
 
     println("Aligning sequence ...")
@@ -25,10 +26,10 @@ function align_sequence(
     mkpath(output_dir)
 
     print_and_run_cmd(pipeline(
-        `minimap2 -x sr -t $n_job -K 1G -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fa_gz_mmi $_1_fq_gz $_2_fq_gz`,
-        `samtools sort --threads $n_job -m 1G -n`,
+        `minimap2 -x sr -t $n_job -K $job_gb_memory -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fa_gz_mmi $_1_fq_gz $_2_fq_gz`,
+        `samtools sort --threads $n_job -m $(job_gb_memory)G -n`,
         `samtools fixmate --threads $n_job -m - -`,
-        `samtools sort --threads $n_job -m 1G`,
+        `samtools sort --threads $n_job -m $(job_gb_memory)G`,
         "$bam.tmp",
     ))
 
