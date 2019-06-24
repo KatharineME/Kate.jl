@@ -1,19 +1,23 @@
+using Dates
+
 include("print_and_run_cmd.jl")
 
 
-function find_mutation(
+function find_variant(
     germ_bam::Union{String, Nothing},
     soma_bam::Union{String, Nothing},
     dna_fa_bgz::String,
     chromosome_bed_gz::String,
-    exome::Bool,
+    is_targeted::Bool,
     chrn_n_tsv::String,
     output_dir::String,
     n_job::Int,
     gb_memory::Int,
 )
 
-    println("Finding mutation ...")
+    start_time = now()
+
+    println("($start_time) Finding variant ...")
 
     if !ispath("$chromosome_bed_gz.tbi")
 
@@ -23,7 +27,7 @@ function find_mutation(
 
     config_parameters::String = "--referenceFasta $dna_fa_bgz --callRegions $chromosome_bed_gz"
 
-    if exome
+    if is_targeted
 
         config_parameters = "$config_parameters --exome"
 
@@ -85,6 +89,7 @@ function find_mutation(
             "sample.txt",
         )
 
+        #TODO: get sample names (maybe from .bam) and use them instead of "Germ" and "Soma"
         open(
             io->write(io, "Germ\nSoma"),
             sample_txt;
@@ -179,7 +184,7 @@ function find_mutation(
 
     snpeff_vcf_gz::String = joinpath(
         snpeff_dir,
-        "snpeff.vcf.gz"
+        "snpeff.vcf.gz",
     )
 
     print_and_run_cmd(pipeline(
@@ -190,6 +195,8 @@ function find_mutation(
 
     print_and_run_cmd(`tabix $snpeff_vcf_gz`)
 
-    nothing
+    end_time = now()
+
+    println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
 
 end

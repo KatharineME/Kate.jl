@@ -1,3 +1,5 @@
+using Dates
+
 include("print_and_run_cmd.jl")
 
 
@@ -11,7 +13,9 @@ function align_sequence(
     job_gb_memory::Int,
 )
 
-    println("Aligning sequence ...")
+    start_time = now()
+
+    println("($start_time) Aligning sequence ...")
 
     dna_fa_gz_mmi::String = "$dna_fa_gz.mmi"
 
@@ -44,6 +48,8 @@ function align_sequence(
         "$bam.flagstat",
     ))
 
-    nothing
+    end_time = now()
+
+    println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
 
 end

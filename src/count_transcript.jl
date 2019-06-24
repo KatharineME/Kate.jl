@@ -1,3 +1,5 @@
+using Dates
+
 include("print_and_run_cmd.jl")
 
 
@@ -9,7 +11,9 @@ function count_transcript(
     n_job::Int,
 )
 
-    println("Counting transcript ...")
+    start_time = now()
+
+    println("($start_time) Counting transcript ...")
 
     cdna_fa_gz_kallisto_index::String = "$cdna_fa_gz.kallisto_index"
 
@@ -23,6 +27,8 @@ function count_transcript(
 
     print_and_run_cmd(`kallisto quant --threads $n_job --index $cdna_fa_gz_kallisto_index --output-dir $output_dir $_1_fq_gz $_2_fq_gz`)
 
-    nothing
+    end_time = now()
+
+    println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
 
 end

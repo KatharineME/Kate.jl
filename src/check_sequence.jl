@@ -1,3 +1,5 @@
+using Dates
+
 include("print_and_run_cmd.jl")
 
 
@@ -7,12 +9,16 @@ function check_sequence(
     n_job::Int,
 )
 
-    println("Checking sequence ...")
+    start_time = now()
+
+    println("($start_time) Checking sequence ...")
 
     mkpath(output_dir)
 
     print_and_run_cmd(`fastqc --threads $(minimum((length(fq_gzs), n_job))) --outdir $output_dir $fq_gzs`)
 
-    nothing
+    end_time = now()
+
+    println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
 
 end

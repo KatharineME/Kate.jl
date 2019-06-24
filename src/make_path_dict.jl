@@ -1,10 +1,7 @@
 include("print_and_run_cmd.jl")
 
 
-function make_path_dict(
-    data_dir::String,
-    n_job::Int,
-)
+function make_path_dict(data_dir::String)
 
     println("Making path dict ...")
 
@@ -80,7 +77,7 @@ function make_path_dict(
 
         print_and_run_cmd(pipeline(
             `gzip --decompress $dna_fa_gz --stdout`,
-            `bgzip --threads $n_job --stdout`,
+            `bgzip --threads 2 --stdout`,
             dna_fa_bgz,
         ))
 

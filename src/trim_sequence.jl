@@ -1,3 +1,5 @@
+using Dates
+
 include("print_and_run_cmd.jl")
 
 
@@ -8,14 +10,18 @@ function trim_sequence(
     n_job::Int,
 )
 
-    println("Trimming sequence ...")
+    start_time = now()
+
+    println("($start_time) Trimming sequence ...")
 
     output_dir::String = splitdir(output_prefix)[1]
 
     mkpath(output_dir)
 
-    print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --compress --output $output_prefix $_1_fq_gz $_2_fq_gz`)
+    print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --compress --output $output_prefix --quiet $_1_fq_gz $_2_fq_gz`)
 
-    nothing
+    end_time = now()
+
+    println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
 
 end
