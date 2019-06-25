@@ -6,9 +6,9 @@ include("print_and_run_cmd.jl")
 function find_variant(
     germ_bam::Union{String, Nothing},
     soma_bam::Union{String, Nothing},
-    dna_fa_bgz::String,
-    chromosome_bed_gz::String,
     is_targeted::Bool,
+    dna_fasta_bgz::String,
+    chromosome_bed_gz::String,
     chrn_n_tsv::String,
     output_dir::String,
     n_job::Int,
@@ -25,7 +25,7 @@ function find_variant(
 
     end
 
-    config_parameters::String = "--referenceFasta $dna_fa_bgz --callRegions $chromosome_bed_gz"
+    config_parameters::String = "--referenceFasta $dna_fasta_bgz --callRegions $chromosome_bed_gz"
 
     if is_targeted
 
@@ -194,6 +194,19 @@ function find_variant(
     ))
 
     print_and_run_cmd(`tabix $snpeff_vcf_gz`)
+
+    pass_vcf_gz::String = joinpath(
+        output_dir,
+        "pass.vcf.gz",
+    )
+
+    print_and_run_cmd(pipeline(
+        `bcftools view --threads $n_job --include 'FILTER=="PASS"' $snpeff_vcf_gz`,
+        `bgzip --threads $n_job --stdout`,
+        pass_vcf_gz,
+    ))
+
+    print_and_run_cmd(`tabix $pass_vcf_gz`)
 
     end_time = now()
 

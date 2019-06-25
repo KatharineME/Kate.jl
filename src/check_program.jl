@@ -1,9 +1,9 @@
 include("print_and_run_cmd.jl")
 
 
-function check_programs()
+function check_program()
 
-    println("Checking programs ...")
+    println("Checking program ...")
 
     for program::String in (
         "skewer",

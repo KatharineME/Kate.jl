@@ -4,8 +4,8 @@ include("print_and_run_cmd.jl")
 
 
 function trim_sequence(
-    _1_fq_gz::String,
-    _2_fq_gz::String,
+    _1_fastq_gz::String,
+    _2_fastq_gz::String,
     output_prefix::String,
     n_job::Int,
 )
@@ -18,7 +18,7 @@ function trim_sequence(
 
     mkpath(output_dir)
 
-    print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --compress --output $output_prefix --quiet $_1_fq_gz $_2_fq_gz`)
+    print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --compress --output $output_prefix --quiet $_1_fastq_gz $_2_fastq_gz`)
 
     end_time = now()
 
