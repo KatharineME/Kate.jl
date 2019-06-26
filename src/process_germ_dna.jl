@@ -22,15 +22,12 @@ function process_germ_dna(
     job_gb_memory::Int,
 )
 
-    dna_fasta_bgz::String = "$(splitext(dna_fasta_gz)[1]).bgz"
-
     for file_path::String in(
         germ_dna_1_fastq_gz,
         germ_dna_2_fastq_gz,
         # soma_dna_1_fastq_gz,
         # soma_dna_2_fastq_gz,
         dna_fasta_gz,
-        dna_fasta_bgz,
         chromosome_bed_gz,
         chrn_n_tsv,
     )
@@ -122,6 +119,18 @@ function process_germ_dna(
     #     n_job,
     #     job_gb_memory,
     # )
+
+    dna_fasta_bgz::String = "$(splitext(dna_fasta_gz)[1]).bgz"
+
+    if !isfile(dna_fasta_bgz)
+
+        print_and_run_cmd(pipeline(
+            `gzip --decompress $dna_fasta_gz --stdout`,
+            `bgzip --threads $n_job --stdout`,
+            dna_fasta_bgz,
+        ))
+
+    end
 
     find_variant_dir::String = joinpath(
         output_dir,

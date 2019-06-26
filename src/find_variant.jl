@@ -19,6 +19,12 @@ function find_variant(
 
     println("($start_time) Finding variant ...")
 
+    if !(isfile("$dna_fasta_bgz.fai") && ispath("$dna_fasta_bgz.gzi"))
+
+        print_and_run_cmd(`samtools faidx $dna_fasta_bgz`)
+
+    end
+
     if !ispath("$chromosome_bed_gz.tbi")
 
         print_and_run_cmd(`tabix --force $chromosome_bed_gz`)
