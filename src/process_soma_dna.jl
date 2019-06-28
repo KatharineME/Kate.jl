@@ -22,7 +22,7 @@ function process_soma_dna(
     job_gb_memory::Int,
 )
 
-    for file_path::String in(
+    for file_path in(
         germ_dna_1_fastq_gz,
         germ_dna_2_fastq_gz,
         soma_dna_1_fastq_gz,
@@ -40,11 +40,7 @@ function process_soma_dna(
 
     end
 
-    germ_trim_sequence_prefix::String = joinpath(
-        output_dir,
-        "trim_sequence",
-        "germ",
-    )
+    germ_trim_sequence_prefix = joinpath(output_dir, "trim_sequence", "germ")
 
     trim_sequence(
         germ_dna_1_fastq_gz,
@@ -53,15 +49,11 @@ function process_soma_dna(
         n_job,
     )
 
-    germ_trim_1_fastq_gz::String = "$germ_trim_sequence_prefix-trimmed-pair1.fastq.gz"
+    germ_trim_1_fastq_gz = "$germ_trim_sequence_prefix-trimmed-pair1.fastq.gz"
 
-    germ_trim_2_fastq_gz::String = "$germ_trim_sequence_prefix-trimmed-pair2.fastq.gz"
+    germ_trim_2_fastq_gz = "$germ_trim_sequence_prefix-trimmed-pair2.fastq.gz"
 
-    soma_trim_sequence_prefix::String = joinpath(
-        output_dir,
-        "trim_sequence",
-        "soma",
-    )
+    soma_trim_sequence_prefix = joinpath(output_dir, "trim_sequence", "soma")
 
     trim_sequence(
         soma_dna_1_fastq_gz,
@@ -70,9 +62,9 @@ function process_soma_dna(
         n_job,
     )
 
-    soma_trim_1_fastq_gz::String = "$soma_trim_sequence_prefix-trimmed-pair1.fastq.gz"
+    soma_trim_1_fastq_gz = "$soma_trim_sequence_prefix-trimmed-pair1.fastq.gz"
 
-    soma_trim_2_fastq_gz::String = "$soma_trim_sequence_prefix-trimmed-pair2.fastq.gz"
+    soma_trim_2_fastq_gz = "$soma_trim_sequence_prefix-trimmed-pair2.fastq.gz"
 
     check_sequence(
         (
@@ -81,18 +73,11 @@ function process_soma_dna(
             soma_trim_1_fastq_gz,
             soma_trim_2_fastq_gz,
         ),
-        joinpath(
-            output_dir,
-            "check_sequence",
-        ),
+        joinpath(output_dir, "check_sequence"),
         n_job,
     )
 
-    germ_bam::String = joinpath(
-        output_dir,
-        "align_sequence",
-        "germ.bam",
-    )
+    germ_bam = joinpath(output_dir, "align_sequence", "germ.bam")
 
     align_sequence(
         germ_trim_1_fastq_gz,
@@ -104,11 +89,7 @@ function process_soma_dna(
         job_gb_memory,
     )
 
-    soma_bam::String = joinpath(
-        output_dir,
-        "align_sequence",
-        "soma.bam",
-    )
+    soma_bam = joinpath(output_dir, "align_sequence", "soma.bam")
 
     align_sequence(
         soma_trim_1_fastq_gz,
@@ -120,7 +101,7 @@ function process_soma_dna(
         job_gb_memory,
     )
 
-    dna_fasta_bgz::String = "$(splitext(dna_fasta_gz)[1]).bgz"
+    dna_fasta_bgz = "$(splitext(dna_fasta_gz)[1]).bgz"
 
     if !isfile(dna_fasta_bgz)
 
@@ -132,10 +113,7 @@ function process_soma_dna(
 
     end
 
-    find_variant_dir::String = joinpath(
-        output_dir,
-        "find_variant",
-    )
+    find_variant_dir = joinpath(output_dir, "find_variant")
 
     find_variant(
         germ_bam,

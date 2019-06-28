@@ -5,13 +5,16 @@ function check_program()
 
     println("Checking program ...")
 
-    for program::String in (
+    for program in (
         "skewer",
         "fastqc",
         "bgzip",
         "tabix",
         "minimap2",
         "samtools",
+        "configManta.py",
+        "configureStrelkaGermlineWorkflow.py",
+        "configureStrelkaSomaticWorkflow.py",
         "bcftools",
         "snpEff",
         "kallisto",
@@ -20,17 +23,5 @@ function check_program()
         print_and_run_cmd(`which $program`)
 
     end
-
-    for program::String in (
-        "configManta.py",
-        "configureStrelkaGermlineWorkflow.py",
-        "configureStrelkaSomaticWorkflow.py",
-    )
-
-        print_and_run_cmd(`bash -c "source activate py2.7 && which $program"`)
-
-    end
-
-    nothing
 
 end

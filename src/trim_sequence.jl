@@ -14,7 +14,7 @@ function trim_sequence(
 
     println("($start_time) Trimming sequence ...")
 
-    output_dir::String = splitdir(output_prefix)[1]
+    output_dir = splitdir(output_prefix)[1]
 
     mkpath(output_dir)
 

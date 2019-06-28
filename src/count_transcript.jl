@@ -15,7 +15,7 @@ function count_transcript(
 
     println("($start_time) Counting transcript ...")
 
-    cdna_fasta_gz_kallisto_index::String = "$cdna_fasta_gz.kallisto_index"
+    cdna_fasta_gz_kallisto_index = "$cdna_fasta_gz.kallisto_index"
 
     if !ispath(cdna_fasta_gz_kallisto_index)
 

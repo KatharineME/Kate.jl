@@ -17,7 +17,7 @@ function align_sequence(
 
     println("($start_time) Aligning sequence ...")
 
-    dna_fasta_gz_mmi::String = "$dna_fasta_gz.mmi"
+    dna_fasta_gz_mmi = "$dna_fasta_gz.mmi"
 
     if !ispath(dna_fasta_gz_mmi)
 
@@ -25,7 +25,7 @@ function align_sequence(
 
     end
 
-    output_dir::String = splitdir(bam)[1]
+    output_dir = splitdir(bam)[1]
 
     mkpath(output_dir)
 
