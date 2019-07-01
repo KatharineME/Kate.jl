@@ -27,6 +27,8 @@ function process_soma_rna(
 
     end
 
+    mkpath(output_dir)
+
     soma_trim_sequence_prefix = joinpath(output_dir, "trim_sequence", "soma")
 
     trim_sequence(

@@ -40,6 +40,8 @@ function process_germ_dna(
 
     end
 
+    mkpath(output_dir)
+
     germ_trim_sequence_prefix = joinpath(output_dir, "trim_sequence", "germ")
 
     trim_sequence(
