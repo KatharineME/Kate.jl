@@ -22,7 +22,7 @@ function process_germ_dna(
     job_gb_memory::Int,
 )
 
-    for file_path in(
+    for file_path in (
         germ_dna_1_fastq_gz,
         germ_dna_2_fastq_gz,
         # soma_dna_1_fastq_gz,
@@ -34,7 +34,7 @@ function process_germ_dna(
 
         if !isfile(file_path)
 
-            error("$file_path doesn't exist.")
+            error("$file_path does not exist.")
 
         end
 
@@ -64,16 +64,16 @@ function process_germ_dna(
     germ_trim_2_fastq_gz = "$germ_trim_sequence_prefix-trimmed-pair2.fastq.gz"
 
     # soma_trim_sequence_prefix = joinpath(output_dir, "trim_sequence", "soma")
-    #
+
     # trim_sequence(
     #     soma_dna_1_fastq_gz,
     #     soma_dna_2_fastq_gz,
     #     soma_trim_sequence_prefix,
     #     n_job,
     # )
-    #
+
     # soma_trim_1_fastq_gz = "$soma_trim_sequence_prefix-trimmed-pair1.fastq.gz"
-    #
+
     # soma_trim_2_fastq_gz = "$soma_trim_sequence_prefix-trimmed-pair2.fastq.gz"
 
     check_sequence(
@@ -100,7 +100,7 @@ function process_germ_dna(
     )
 
     # soma_bam = joinpath(output_dir, "align_sequence", "soma.bam")
-    #
+
     # align_sequence(
     #     soma_trim_1_fastq_gz,
     #     soma_trim_2_fastq_gz,
@@ -127,7 +127,7 @@ function process_germ_dna(
 
     find_variant(
         germ_bam,
-        nothing,#soma_bam,
+        nothing, # soma_bam,
         dna_is_targeted,
         dna_fasta_bgz,
         chromosome_bed_gz,

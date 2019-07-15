@@ -22,7 +22,7 @@ function process_soma_dna(
     job_gb_memory::Int,
 )
 
-    for file_path in(
+    for file_path in (
         germ_dna_1_fastq_gz,
         germ_dna_2_fastq_gz,
         soma_dna_1_fastq_gz,
@@ -34,7 +34,7 @@ function process_soma_dna(
 
         if !isfile(file_path)
 
-            error("$file_path doesn't exist.")
+            error("$file_path does not exist.")
 
         end
 

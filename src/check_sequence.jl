@@ -13,15 +13,26 @@ function check_sequence(
 
     println("($start_time) Checking sequence ...")
 
-    if isdir(output_dir)
+    for fastq_gz in fastq_gzs
 
-        error("$output_dir exists.")
-    
-    else
+        suffix = "_fastqc.html"
 
-        mkpath(output_dir)
-    
+        html = joinpath(
+            output_dir,
+            replace(replace(split(fastq_gz, "/")[end], ".fastq.gz"=>suffix), ".fq.gz"=>suffix),
+        )
+
+        println(html)
+
+        if isfile(html)
+
+            error("$html exist.")
+
+        end
+
     end
+
+    mkpath(output_dir)
 
     print_and_run_cmd(`fastqc --threads $(minimum((length(fastq_gzs), n_job))) --outdir $output_dir $fastq_gzs`)
 

@@ -81,7 +81,7 @@ function find_variant(
 
         sample_txt = joinpath(output_dir, "sample.txt")
 
-        #TODO: get sample names (maybe from .bam) and use them instead of "Germ" and "Soma"
+        # TODO: Use actual sample names instead of "Germ" and "Soma"
         open(io->write(io, "Germ\nSoma"), sample_txt; write=true)
 
         somatic_indel_vcf_gz = joinpath(strelka_dir, partial_path, "somatic.indels.vcf.gz")

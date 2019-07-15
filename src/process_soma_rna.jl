@@ -13,7 +13,7 @@ function process_soma_rna(
     n_job::Int,
 )
 
-    for file_path in(
+    for file_path in (
         soma_rna_1_fastq_gz,
         soma_rna_2_fastq_gz,
         cdna_fasta_gz,
@@ -21,7 +21,7 @@ function process_soma_rna(
 
         if !isfile(file_path)
 
-            error("$file_path doesn't exist.")
+            error("$file_path does not exist.")
 
         end
 

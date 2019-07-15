@@ -14,17 +14,15 @@ function trim_sequence(
 
     println("($start_time) Trimming sequence ...")
 
+    if isfile("$output_prefix-trimmed-pair1.fastq.gz") || isfile("$output_prefix-trimmed-pair2.fastq.gz")
+
+        error("$output_prefix-trimmed-pair(1|2).fastq.gz exists.")
+
+    end
+    
     output_dir = splitdir(output_prefix)[1]
 
-    if isdir(output_dir)
-
-        error("$output_dir exists.")
-    
-    else
-
-        mkpath(output_dir)
-    
-    end
+    mkpath(output_dir)
 
     print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --compress --output $output_prefix --quiet $_1_fastq_gz $_2_fastq_gz`)
 
