@@ -40,7 +40,15 @@ function process_germ_dna(
 
     end
 
-    mkpath(output_dir)
+    if isdir(output_dir)
+
+        error("$output_dir exists.")
+    
+    else
+
+        mkpath(output_dir)
+    
+    end
 
     germ_trim_sequence_prefix = joinpath(output_dir, "trim_sequence", "germ")
 

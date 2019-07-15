@@ -27,7 +27,15 @@ function align_sequence(
 
     output_dir = splitdir(bam)[1]
 
-    mkpath(output_dir)
+    if isdir(output_dir)
+
+        error("$output_dir exists.")
+    
+    else
+
+        mkpath(output_dir)
+    
+    end
 
     print_and_run_cmd(pipeline(
         `minimap2 -x sr -t $n_job -K $(job_gb_memory)G -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fasta_gz_mmi $_1_fastq_gz $_2_fastq_gz`,

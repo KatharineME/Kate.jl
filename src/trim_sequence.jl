@@ -16,7 +16,15 @@ function trim_sequence(
 
     output_dir = splitdir(output_prefix)[1]
 
-    mkpath(output_dir)
+    if isdir(output_dir)
+
+        error("$output_dir exists.")
+    
+    else
+
+        mkpath(output_dir)
+    
+    end
 
     print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --compress --output $output_prefix --quiet $_1_fastq_gz $_2_fastq_gz`)
 

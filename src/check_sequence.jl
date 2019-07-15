@@ -13,7 +13,15 @@ function check_sequence(
 
     println("($start_time) Checking sequence ...")
 
-    mkpath(output_dir)
+    if isdir(output_dir)
+
+        error("$output_dir exists.")
+    
+    else
+
+        mkpath(output_dir)
+    
+    end
 
     print_and_run_cmd(`fastqc --threads $(minimum((length(fastq_gzs), n_job))) --outdir $output_dir $fastq_gzs`)
 
