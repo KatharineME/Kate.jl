@@ -28,32 +28,6 @@ function error_if_same(
 end
 
 
-function check_program()
-
-    println("Checking program ...")
-
-    for program in (
-        "skewer",
-        "fastqc",
-        "bgzip",
-        "tabix",
-        "minimap2",
-        "samtools",
-        "configManta.py",
-        "configureStrelkaGermlineWorkflow.py",
-        "configureStrelkaSomaticWorkflow.py",
-        "bcftools",
-        "snpEff",
-        "kallisto",
-    )
-
-        print_and_run_cmd(`which $program`)
-
-    end
-
-end
-
-
 function check_sequence(
     fastq_gzs::Tuple{Vararg{String}},
     output_dir::String,
