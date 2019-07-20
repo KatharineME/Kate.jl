@@ -473,7 +473,7 @@ function process_germ_dna(
 
     if isdir(output_dir)
 
-        error("$output_dir exists.")
+        # error("$output_dir exists.")
     
     else
 
