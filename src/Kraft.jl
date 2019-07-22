@@ -473,7 +473,7 @@ function process_germ_dna(
 
     if isdir(output_dir)
 
-        # error("$output_dir exists.")
+        error("$output_dir exists.")
     
     else
 
@@ -487,28 +487,28 @@ function process_germ_dna(
         "germ",
     )
 
-    # trim_sequence(
-    #     germ_dna_1_fastq_gz,
-    #     germ_dna_2_fastq_gz,
-    #     germ_trim_sequence_prefix,
-    #     n_job,
-    # )
+    trim_sequence(
+        germ_dna_1_fastq_gz,
+        germ_dna_2_fastq_gz,
+        germ_trim_sequence_prefix,
+        n_job,
+    )
 
     germ_trim_1_fastq_gz = "$germ_trim_sequence_prefix-trimmed-pair1.fastq.gz"
 
     germ_trim_2_fastq_gz = "$germ_trim_sequence_prefix-trimmed-pair2.fastq.gz"
 
-    # check_sequence(
-    #     (
-    #         germ_trim_1_fastq_gz,
-    #         germ_trim_2_fastq_gz,
-    #     ),
-    #     joinpath(
-    #         output_dir,
-    #         "check_sequence",
-    #     ),
-    #     n_job,
-    # )
+    check_sequence(
+        (
+            germ_trim_1_fastq_gz,
+            germ_trim_2_fastq_gz,
+        ),
+        joinpath(
+            output_dir,
+            "check_sequence",
+        ),
+        n_job,
+    )
 
     germ_bam = joinpath(
         output_dir,
@@ -516,15 +516,15 @@ function process_germ_dna(
         "germ.bam",
     )
 
-    # align_sequence(
-    #     germ_trim_1_fastq_gz,
-    #     germ_trim_2_fastq_gz,
-    #     "Germ",
-    #     dna_fasta_gz,
-    #     germ_bam,
-    #     n_job,
-    #     job_gb_memory,
-    # )
+    align_sequence(
+        germ_trim_1_fastq_gz,
+        germ_trim_2_fastq_gz,
+        "Germ",
+        dna_fasta_gz,
+        germ_bam,
+        n_job,
+        job_gb_memory,
+    )
 
     dna_fasta_bgz = "$(splitext(dna_fasta_gz)[1]).bgz"
 
