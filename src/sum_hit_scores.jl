@@ -9,7 +9,7 @@ function sum_hit_scores(
         
         if hits[i] == 1
         
-            sum_ += abs(scores[i])
+            sum_ += scores[i]
             
         end
         

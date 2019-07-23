@@ -3,32 +3,61 @@ function make_hits(
     elements_to_find::Array{String, 1},
 )
     
-    n = length(elements)
+    n_element = length(elements)
     
     hits = Array{Int64, 1}(
         undef,
-        n,
+        n_element,
     )
     
-    elements_to_find_ = Dict(e=>nothing for e in elements_to_find)
+    element_to_find_nothing = Dict(element=>nothing for element in elements_to_find)
     
-    @inbounds @fastmath @simd for i in 1:n
+    @inbounds @fastmath @simd for index in 1:n_element
 
         if haskey(
-            elements_to_find_,
-            elements[i],
+            element_to_find_nothing,
+            elements[index],
         )
             
-            hit = 1
+            hits[index] = 1
 
         else
             
-            hit = 0
+            hits[index] = 0
+
+        end
+
+    end
+    
+    hits
+
+end
+
+
+function make_hits(
+    element_index::Dict{String, Int64},
+    elements_to_find::Array{String, 1},
+)
+    
+    hits = fill(
+        0,
+        length(element_index),
+    )
+    
+    @inbounds @fastmath @simd for element in elements_to_find
+
+        index = get(
+            element_index,
+            element,
+            nothing,
+        )
+
+        if index !== nothing
+
+            hits[index] = 1
 
         end
         
-        hits[i] = hit
-
     end
     
     hits
