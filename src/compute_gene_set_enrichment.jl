@@ -8,6 +8,7 @@ function compute_gene_set_enrichment(
     scores::Array{Float64, 1},
     gene_set_genes::Array{String, 1};
     gene_index::Union{Dict{String, Int64}, Nothing}=nothing,
+    sort_scores::Bool=true,
 )
     
     n_gene = length(genes)
@@ -32,9 +33,20 @@ function compute_gene_set_enrichment(
         )
         
     end
+
+    if sort_scores
+
+        sort!(
+            scores,
+            rev=true,
+        )
+
+    end
+
+    abs_scores = abs.(scores)
         
     hit_scores_sum = sum_hit_scores(
-        scores,
+        abs_scores,
         hits,
     )
     
@@ -52,7 +64,7 @@ function compute_gene_set_enrichment(
         
         if hits[index] == 1
             
-            value += scores[index] / hit_scores_sum
+            value += abs_scores[index] / hit_scores_sum
             
         else
             
@@ -84,7 +96,9 @@ end
 function compute_gene_set_enrichment(
     genes::Array{String, 1},
     scores::Array{Float64, 1},
-    gene_set_dict::Dict{String, Array{String, 1}},
+    gene_set_dict::Dict{String, Array{String, 1}};
+    sort_scores::Bool=true,
+
 )
     
     if length(gene_set_dict) < 5
@@ -99,7 +113,18 @@ function compute_gene_set_enrichment(
         ))
         
     end
-        
+
+    if sort_scores
+
+        sort!(
+            scores,
+            rev=true,
+        )
+
+        sort_scores = false
+
+    end
+
     gene_set_result_dict = Dict{String, Dict{String, Union{Float64, Array{Float64, 1}}}}()
 
     for (gene_set_name, gene_set_genes) in gene_set_dict
@@ -109,6 +134,7 @@ function compute_gene_set_enrichment(
             scores,
             gene_set_genes;
             gene_index=gene_index,
+            sort_scores=false,
         )
         
         gene_set_result_dict[gene_set_name] = Dict(
@@ -119,5 +145,7 @@ function compute_gene_set_enrichment(
         )
         
     end
+
+    gene_set_result_dict
     
 end
