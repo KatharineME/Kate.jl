@@ -4,20 +4,27 @@ include("sum_hits.jl")
 
 
 function compute_gene_set_enrichment(
-    genes::Array{String, 1},
     scores::Array{Float64, 1},
+    genes::Array{String, 1},
     gene_set_genes::Array{String, 1};
-    gene_index::Union{Dict{String, Int64}, Nothing}=nothing,
     sort_scores::Bool=true,
+    gene_index::Union{Dict{String, Int64}, Nothing}=nothing,
+    compute_cumulative_sum::Bool=true,
 )
     
-    n_gene = length(genes)
-    
-    cumulative_sum = Array{Float64, 1}(
-        undef,
-        n_gene,
-    )
-    
+    if sort_scores
+
+        sort!(
+            scores,
+            rev=true,
+        )
+
+        # TODO: Sort genes also
+
+    end
+
+    abs_scores = abs.(scores)
+
     if gene_index === nothing
         
         hits = make_hits(
@@ -34,31 +41,35 @@ function compute_gene_set_enrichment(
         
     end
 
-    if sort_scores
-
-        sort!(
-            scores,
-            rev=true,
-        )
-
-    end
-
-    abs_scores = abs.(scores)
-        
     hit_scores_sum = sum_hit_scores(
         abs_scores,
         hits,
     )
+
+    n_gene = length(genes)
     
     d_down = -1 / (n_gene - sum_hits(hits))
     
     value = 0.0
-    
-    auc = 0.0
+
+    if compute_cumulative_sum
+
+        cumulative_sum = Array{Float64, 1}(
+            undef,
+            n_gene,
+        )
+
+    else
+
+        cumulative_sum = nothing
+
+    end
     
     min_ = 0.0
     
     max_ = 0.0
+
+    auc = 0.0
     
     @inbounds @fastmath @simd for index in 1:n_gene
         
@@ -72,9 +83,11 @@ function compute_gene_set_enrichment(
             
         end
         
-        cumulative_sum[index] = value
-        
-        auc += value
+        if compute_cumulative_sum
+
+            cumulative_sum[index] = value
+
+        end
         
         if value < min_
             
@@ -85,21 +98,33 @@ function compute_gene_set_enrichment(
             max_ = value
             
         end
+
+        auc += value
             
     end
     
-    cumulative_sum, auc, min_, max_
+    cumulative_sum, min_, max_, auc
     
 end
 
 
 function compute_gene_set_enrichment(
-    genes::Array{String, 1},
     scores::Array{Float64, 1},
+    genes::Array{String, 1},
     gene_set_dict::Dict{String, Array{String, 1}};
     sort_scores::Bool=true,
-
 )
+
+    if sort_scores
+
+        sort!(
+            scores,
+            rev=true,
+        )
+
+        # TODO: Sort genes
+
+    end
     
     if length(gene_set_dict) < 5
         
@@ -114,36 +139,19 @@ function compute_gene_set_enrichment(
         
     end
 
-    if sort_scores
-
-        sort!(
-            scores,
-            rev=true,
-        )
-
-        sort_scores = false
-
-    end
-
-    gene_set_result_dict = Dict{String, Dict{String, Union{Float64, Array{Float64, 1}}}}()
+    gene_set_result_dict = Dict{String, Tuple{Union{Array{Float64, 1}, Nothing}, Float64, Float64, Float64}}()
 
     for (gene_set_name, gene_set_genes) in gene_set_dict
-        
-        cumulative_sum, auc, min_, max_ = compute_gene_set_enrichment(
-            genes,
+
+        gene_set_result_dict[gene_set_name] = compute_gene_set_enrichment(
             scores,
+            genes,
             gene_set_genes;
-            gene_index=gene_index,
             sort_scores=false,
-        )
-        
-        gene_set_result_dict[gene_set_name] = Dict(
-            "cumulative_sum"=>cumulative_sum,
-            "auc"=>auc,
-            "min"=>min_,
-            "max"=>max_,
-        )
-        
+            gene_index=gene_index,
+            compute_cumulative_sum=false,
+        )        
+
     end
 
     gene_set_result_dict
