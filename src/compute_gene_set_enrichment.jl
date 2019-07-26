@@ -14,12 +14,14 @@ function compute_gene_set_enrichment(
     
     if sort_scores
 
-        sort!(
+        sort_indices = sortperm(
             scores,
             rev=true,
         )
 
-        # TODO: Sort genes also
+        scores = scores[sort_indices]
+
+        genes = genes[sort_indices]
 
     end
 
@@ -117,15 +119,17 @@ function compute_gene_set_enrichment(
 
     if sort_scores
 
-        sort!(
+        sort_indices = sortperm(
             scores,
             rev=true,
         )
 
-        # TODO: Sort genes
+        scores = scores[sort_indices]
+
+        genes = genes[sort_indices]
 
     end
-    
+
     if length(gene_set_dict) < 5
         
         gene_index = nothing
