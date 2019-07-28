@@ -5,7 +5,7 @@ include("sum_hits.jl")
 
 function compute_gene_set_enrichment(
     scores::Array{Float64, 1},
-    genes::Array{String, 1},
+    genes::AbstractArray{String, 1},
     gene_set_genes::Array{String, 1};
     sort_scores::Bool=true,
     gene_index::Union{Dict{String, Int64}, Nothing}=nothing,
@@ -112,7 +112,7 @@ end
 
 function compute_gene_set_enrichment(
     scores::Array{Float64, 1},
-    genes::Array{String, 1},
+    genes::AbstractArray{String, 1},
     gene_set_dict::Dict{String, Array{String, 1}};
     sort_scores::Bool=true,
 )
@@ -143,11 +143,11 @@ function compute_gene_set_enrichment(
         
     end
 
-    gene_set_result_dict = Dict{String, Tuple{Union{Array{Float64, 1}, Nothing}, Float64, Float64, Float64}}()
+    gene_set_enrichment_dict = Dict{String, Tuple{Union{Array{Float64, 1}, Nothing}, Float64, Float64, Float64}}()
 
     for (gene_set_name, gene_set_genes) in gene_set_dict
 
-        gene_set_result_dict[gene_set_name] = compute_gene_set_enrichment(
+        gene_set_enrichment_dict[gene_set_name] = compute_gene_set_enrichment(
             scores,
             genes,
             gene_set_genes;
@@ -158,6 +158,6 @@ function compute_gene_set_enrichment(
 
     end
 
-    gene_set_result_dict
+    gene_set_enrichment_dict
     
 end

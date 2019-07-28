@@ -1,6 +1,6 @@
 function read_gmt(gmt_file_path::String)
     
-    gene_set_dict = Dict{String, Array{String, 1}}()
+    gene_set_name_genes = Dict{String, Array{String, 1}}()
     
     for line in readlines(gmt_file_path)
         
@@ -9,10 +9,28 @@ function read_gmt(gmt_file_path::String)
             '\t',
         ))
         
-        gene_set_dict[line_split[1]] = line_split[3:end]
+        gene_set_name_genes[line_split[1]] = line_split[3:end]
         
     end
     
-    gene_set_dict
+    gene_set_name_genes
+    
+end
+
+
+function read_gmt(gmt_file_paths::Array{String, 1})
+    
+    gene_set_name_genes = Dict{String, Array{String, 1}}()
+    
+    for gmt_file_path in gmt_file_paths
+        
+        gene_set_name_genes = merge(
+            gene_set_name_genes,
+            read_gmt(gmt_file_path),
+        )
+        
+    end
+    
+    gene_set_name_genes
     
 end
