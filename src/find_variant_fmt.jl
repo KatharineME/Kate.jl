@@ -4,8 +4,8 @@ include("print_and_run_cmd.jl")
 
 
 function find_variant(
-    germ_bam::Union{String, Nothing},
-    soma_bam::Union{String, Nothing},
+    germ_bam::Union{String,Nothing},
+    soma_bam::Union{String,Nothing},
     is_targeted::Bool,
     dna_fasta_bgz::String,
     chromosome_bed_gz::String,
@@ -56,29 +56,17 @@ function find_variant(
 
     run_parameters = `--mode local --jobs $n_job --memGb $gb_memory --quiet`
 
-    partial_path = joinpath(
-        "results",
-        "variants",
-    )
+    partial_path = joinpath("results", "variants",)
 
-    manta_dir = joinpath(
-        output_dir,
-        "manta",
-    )
+    manta_dir = joinpath(output_dir, "manta",)
 
     print_and_run_cmd(`configManta.py $config_parameters --outputContig --runDir $manta_dir`)
 
-    manta_runworkflow_py = joinpath(
-        manta_dir,
-        "runWorkflow.py",
-    )
+    manta_runworkflow_py = joinpath(manta_dir, "runWorkflow.py",)
 
     print_and_run_cmd(`$manta_runworkflow_py $run_parameters`)
 
-    strelka_dir = joinpath(
-        output_dir,
-        "strelka",
-    )
+    strelka_dir = joinpath(output_dir, "strelka",)
 
     # TODO: Check the best practice to check for nothing
     if germ_bam != nothing && soma_bam != nothing
@@ -97,75 +85,42 @@ function find_variant(
 
     end
 
-    strelka_runworkflow_py = joinpath(
-        strelka_dir,
-        "runWorkflow.py",
-    )
+    strelka_runworkflow_py = joinpath(strelka_dir, "runWorkflow.py",)
 
     print_and_run_cmd(`$strelka_runworkflow_py $run_parameters`)
 
     # TODO: Check the best practice to check for nothing
     if germ_bam != nothing && soma_bam != nothing
 
-        sample_txt = joinpath(
-            output_dir,
-            "sample.txt",
-        )
+        sample_txt = joinpath(output_dir, "sample.txt",)
 
         # TODO: Use actual sample names instead of "Germ" and "Soma"
-        open(
-            io->write(
-                io,
-                "Germ\nSoma",
-            ),
-            sample_txt;
-            write=true,
-        )
+        open(io -> write(io, "Germ\nSoma",), sample_txt; write = true,)
 
-        somatic_indel_vcf_gz = joinpath(
-            strelka_dir,
-            partial_path,
-            "somatic.indels.vcf.gz",
-        )
+        somatic_indel_vcf_gz = joinpath(strelka_dir, partial_path, "somatic.indels.vcf.gz",)
 
         print_and_run_cmd(pipeline(
             `bcftools reheader --threads $n_job --samples $sample_txt $somatic_indel_vcf_gz`,
             "$somatic_indel_vcf_gz.tmp",
         ))
 
-        mv(
-            "$somatic_indel_vcf_gz.tmp",
-            somatic_indel_vcf_gz;
-            force=true,
-        )
+        mv("$somatic_indel_vcf_gz.tmp", somatic_indel_vcf_gz; force = true,)
 
         print_and_run_cmd(`tabix --force $somatic_indel_vcf_gz`)
 
-        somatic_snv_vcf_gz = joinpath(
-            strelka_dir,
-            partial_path,
-            "somatic.snvs.vcf.gz",
-        )
+        somatic_snv_vcf_gz = joinpath(strelka_dir, partial_path, "somatic.snvs.vcf.gz",)
 
         print_and_run_cmd(pipeline(
             `bcftools reheader --threads $n_job --samples $sample_txt $somatic_snv_vcf_gz`,
             "$somatic_snv_vcf_gz.tmp",
         ))
 
-        mv(
-            "$somatic_snv_vcf_gz.tmp",
-            somatic_snv_vcf_gz;
-            force=true,
-        )
+        mv("$somatic_snv_vcf_gz.tmp", somatic_snv_vcf_gz; force = true,)
 
         print_and_run_cmd(`tabix --force $somatic_snv_vcf_gz`)
 
         concat_vcfs = (
-            joinpath(
-                manta_dir,
-                partial_path,
-                "somaticSV.vcf.gz",
-            ),
+            joinpath(manta_dir, partial_path, "somaticSV.vcf.gz",),
             somatic_indel_vcf_gz,
             somatic_snv_vcf_gz,
         )
@@ -173,24 +128,13 @@ function find_variant(
     else
 
         concat_vcfs = (
-            joinpath(
-                manta_dir,
-                partial_path,
-                "diploidSV.vcf.gz",
-            ),
-            joinpath(
-                strelka_dir,
-                partial_path,
-                "variants.vcf.gz",
-            ),
+            joinpath(manta_dir, partial_path, "diploidSV.vcf.gz",),
+            joinpath(strelka_dir, partial_path, "variants.vcf.gz",),
         )
 
     end
 
-    concat_vcf_gz = joinpath(
-        output_dir,
-        "concat.vcf.gz",
-    )
+    concat_vcf_gz = joinpath(output_dir, "concat.vcf.gz",)
 
     print_and_run_cmd(pipeline(
         `bcftools concat --threads $n_job --allow-overlaps $concat_vcfs`,
@@ -201,27 +145,15 @@ function find_variant(
 
     print_and_run_cmd(`tabix $concat_vcf_gz`)
 
-    snpeff_dir = joinpath(
-        output_dir,
-        "snpeff",
-    )
+    snpeff_dir = joinpath(output_dir, "snpeff",)
 
     mkpath(snpeff_dir)
 
-    snpeff_vcf_gz = joinpath(
-        snpeff_dir,
-        "snpeff.vcf.gz",
-    )
+    snpeff_vcf_gz = joinpath(snpeff_dir, "snpeff.vcf.gz",)
 
-    stats_csv = joinpath(
-        snpeff_dir,
-        "stats.csv",
-    )
+    stats_csv = joinpath(snpeff_dir, "stats.csv",)
 
-    stats_html = replace(
-        stats_csv,
-        ".csv"=>".html",
-    )
+    stats_html = replace(stats_csv, ".csv" => ".html",)
 
     print_and_run_cmd(pipeline(
         `snpEff -Xmx$(gb_memory)g GRCh38.86 -noLog -verbose -csvStats $stats_csv -htmlStats $stats_html $concat_vcf_gz`,
@@ -231,10 +163,7 @@ function find_variant(
 
     print_and_run_cmd(`tabix $snpeff_vcf_gz`)
 
-    pass_vcf_gz = joinpath(
-        output_dir,
-        "pass.vcf.gz",
-    )
+    pass_vcf_gz = joinpath(output_dir, "pass.vcf.gz",)
 
     print_and_run_cmd(pipeline(
         `bcftools view --threads $n_job --include 'FILTER=="PASS"' $snpeff_vcf_gz`,

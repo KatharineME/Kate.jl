@@ -26,12 +26,10 @@ function count_transcript(
     if isdir(output_dir)
 
         error("$output_dir exists.")
-    
-    else
 
-        mkpath(output_dir)
-    
     end
+
+    mkpath(output_dir)
 
     print_and_run_cmd(`kallisto quant --threads $n_job --index $cdna_fasta_gz_kallisto_index --output-dir $output_dir $_1_fastq_gz $_2_fastq_gz`)
 

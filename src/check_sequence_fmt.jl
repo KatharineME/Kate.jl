@@ -3,11 +3,7 @@ using Dates
 include("print_and_run_cmd.jl")
 
 
-function check_sequence(
-    fastq_gzs::Tuple{Vararg{String}},
-    output_dir::String,
-    n_job::Int,
-)
+function check_sequence(fastq_gzs::Tuple{Vararg{String}}, output_dir::String, n_job::Int,)
 
     start_time = now()
 
@@ -20,11 +16,8 @@ function check_sequence(
         html = joinpath(
             output_dir,
             replace(
-                replace(
-                    splitdir(fastq_gz)[end],
-                    ".fastq.gz"=>suffix,
-                ),
-                ".fq.gz"=>suffix,
+                replace(splitdir(fastq_gz)[end], ".fastq.gz" => suffix,),
+                ".fq.gz" => suffix,
             ),
         )
 
