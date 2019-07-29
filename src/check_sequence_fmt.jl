@@ -3,7 +3,11 @@ using Dates
 include("print_and_run_cmd.jl")
 
 
-function check_sequence(fastq_gzs::Tuple{Vararg{String}}, output_dir::String, n_job::Int,)
+function check_sequence(
+    fastq_gzs::Tuple{Vararg{String}},
+    output_dir::String,
+    n_job::Int,
+)
 
     start_time = now()
 
@@ -16,7 +20,10 @@ function check_sequence(fastq_gzs::Tuple{Vararg{String}}, output_dir::String, n_
         html = joinpath(
             output_dir,
             replace(
-                replace(splitdir(fastq_gz)[end], ".fastq.gz" => suffix,),
+                replace(
+                    splitdir(fastq_gz)[end],
+                    ".fastq.gz" => suffix,
+                ),
                 ".fq.gz" => suffix,
             ),
         )
@@ -35,7 +42,8 @@ function check_sequence(fastq_gzs::Tuple{Vararg{String}}, output_dir::String, n_
 
     end_time = now()
 
-    run_time = canonicalize(Dates.CompoundPeriod(end_time - start_time))
+    run_time = canonicalize(Dates.CompoundPeriod(end_time -
+                                                 start_time))
 
     println("($end_time) Done in $run_time.")
 

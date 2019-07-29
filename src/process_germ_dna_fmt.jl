@@ -44,7 +44,11 @@ function process_germ_dna(
     
     end
 
-    germ_trim_sequence_prefix = joinpath(output_dir, "trim_sequence", "germ",)
+    germ_trim_sequence_prefix = joinpath(
+        output_dir,
+        "trim_sequence",
+        "germ",
+    )
 
     trim_sequence(
         germ_dna_1_fastq_gz,
@@ -75,12 +79,22 @@ function process_germ_dna(
     # soma_trim_2_fastq_gz = "$soma_trim_sequence_prefix-trimmed-pair2.fastq.gz"
 
     check_sequence(
-        (germ_trim_1_fastq_gz, germ_trim_2_fastq_gz,),
-        joinpath(output_dir, "check_sequence",),
+        (
+         germ_trim_1_fastq_gz,
+         germ_trim_2_fastq_gz,
+        ),
+        joinpath(
+            output_dir,
+            "check_sequence",
+        ),
         n_job,
     )
 
-    germ_bam = joinpath(output_dir, "align_sequence", "germ.bam",)
+    germ_bam = joinpath(
+        output_dir,
+        "align_sequence",
+        "germ.bam",
+    )
 
     align_sequence(
         germ_trim_1_fastq_gz,
@@ -122,7 +136,10 @@ function process_germ_dna(
 
     end
 
-    find_variant_dir = joinpath(output_dir, "find_variant",)
+    find_variant_dir = joinpath(
+        output_dir,
+        "find_variant",
+    )
 
     find_variant(
         germ_bam,

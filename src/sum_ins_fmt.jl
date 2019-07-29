@@ -1,4 +1,7 @@
-function sum_ins(ins::Array{Int64,1})
+function sum_ins(ins::Array{
+    Int64,
+    1
+})
     
     sum_ = 0
     

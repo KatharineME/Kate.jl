@@ -8,8 +8,6 @@ include("find_variant.jl")
 function process_germ_dna(
     germ_dna_1_fastq_gz::String,
     germ_dna_2_fastq_gz::String,
-    # soma_dna_1_fastq_gz::String,
-    # soma_dna_2_fastq_gz::String,
     dna_is_targeted::Bool,
     output_dir::String,
     dna_fasta_gz::String,
@@ -23,8 +21,6 @@ function process_germ_dna(
     for file_path in (
         germ_dna_1_fastq_gz,
         germ_dna_2_fastq_gz,
-        # soma_dna_1_fastq_gz,
-        # soma_dna_2_fastq_gz,
         dna_fasta_gz,
         chromosome_bed_gz,
         chrn_n_tsv,
@@ -84,10 +80,8 @@ function process_germ_dna(
 
     check_sequence(
         (
-            germ_trim_1_fastq_gz,
-            germ_trim_2_fastq_gz,
-            # soma_trim_1_fastq_gz,
-            # soma_trim_2_fastq_gz,
+         germ_trim_1_fastq_gz,
+         germ_trim_2_fastq_gz,
         ),
         joinpath(
             output_dir,
@@ -149,7 +143,7 @@ function process_germ_dna(
 
     find_variant(
         germ_bam,
-        nothing,# soma_bam,
+        nothing,
         dna_is_targeted,
         dna_fasta_bgz,
         chromosome_bed_gz,

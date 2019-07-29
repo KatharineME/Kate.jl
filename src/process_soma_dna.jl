@@ -84,10 +84,10 @@ function process_soma_dna(
 
     check_sequence(
         (
-            germ_trim_1_fastq_gz,
-            germ_trim_2_fastq_gz,
-            soma_trim_1_fastq_gz,
-            soma_trim_2_fastq_gz,
+         germ_trim_1_fastq_gz,
+         germ_trim_2_fastq_gz,
+         soma_trim_1_fastq_gz,
+         soma_trim_2_fastq_gz,
         ),
         joinpath(
             output_dir,

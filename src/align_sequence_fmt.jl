@@ -47,11 +47,15 @@ function align_sequence(
 
     print_and_run_cmd(`samtools index -@ $n_job $bam`)
 
-    print_and_run_cmd(pipeline(`samtools flagstat --threads $n_job $bam`, "$bam.flagstat",))
+    print_and_run_cmd(pipeline(
+        `samtools flagstat --threads $n_job $bam`,
+        "$bam.flagstat",
+    ))
 
     end_time = now()
 
-    run_time = canonicalize(Dates.CompoundPeriod(end_time - start_time))
+    run_time = canonicalize(Dates.CompoundPeriod(end_time -
+                                                 start_time))
 
     println("($end_time) Done in $run_time.")
 

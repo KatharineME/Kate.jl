@@ -14,7 +14,8 @@ function trim_sequence(
 
     println("($start_time) Trimming sequence ...")
 
-    if isfile("$output_prefix-trimmed-pair1.fastq.gz") || isfile("$output_prefix-trimmed-pair2.fastq.gz")
+    if isfile("$output_prefix-trimmed-pair1.fastq.gz") ||
+       isfile("$output_prefix-trimmed-pair2.fastq.gz")
 
         error("$output_prefix-trimmed-pair(1|2).fastq.gz exists.")
 
@@ -28,7 +29,8 @@ function trim_sequence(
 
     end_time = now()
 
-    run_time = canonicalize(Dates.CompoundPeriod(end_time - start_time))
+    run_time = canonicalize(Dates.CompoundPeriod(end_time -
+                                                 start_time))
 
     println("($end_time) Done in $run_time.")
 

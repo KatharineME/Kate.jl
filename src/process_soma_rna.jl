@@ -54,8 +54,8 @@ function process_soma_rna(
 
     check_sequence(
         (
-            soma_trim_1_fastq_gz,
-            soma_trim_2_fastq_gz,
+         soma_trim_1_fastq_gz,
+         soma_trim_2_fastq_gz,
         ),
         joinpath(
             output_dir,

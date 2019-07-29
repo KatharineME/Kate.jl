@@ -22,9 +22,9 @@ function check_sequence(
             replace(
                 replace(
                     splitdir(fastq_gz)[end],
-                    ".fastq.gz"=>suffix,
+                    ".fastq.gz" => suffix,
                 ),
-                ".fq.gz"=>suffix,
+                ".fq.gz" => suffix,
             ),
         )
 
@@ -42,7 +42,8 @@ function check_sequence(
 
     end_time = now()
 
-    run_time = canonicalize(Dates.CompoundPeriod(end_time - start_time))
+    run_time = canonicalize(Dates.CompoundPeriod(end_time -
+                                                 start_time))
 
     println("($end_time) Done in $run_time.")
 

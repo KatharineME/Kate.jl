@@ -6,14 +6,22 @@ include("compute_gene_set_enrichment.jl")
 
 function make_gene_set_x_sample(
     gene_x_sample::DataFrame,
-    gene_set_genes::Dict{String, Array{String, 1}};
-    # TODO: Check the best practice for initializing undefined default keyword argument
-    gene_set_x_sample_file_path::Union{String, Nothing}=nothing,
+    gene_set_genes::Dict{
+        String,
+        Array{
+            String,
+            1
+        }
+    };
+    gene_set_x_sample_file_path::Union{
+        String,
+        Nothing
+    } = nothing,
 )
     
     genes = gene_x_sample[:, Symbol("Gene")]
 
-    gene_set_x_sample = DataFrame(Symbol("Gene Set")=>collect(keys(gene_set_genes)))
+    gene_set_x_sample = DataFrame(Symbol("Gene Set") => collect(keys(gene_set_genes)))
 
     for sample in names(gene_x_sample)[2:end]
 
@@ -21,7 +29,6 @@ function make_gene_set_x_sample(
 
         has_gene_value = findall(
             !ismissing,
-            # TODO: Compare [:, sample] and [!, sample]
             gene_x_sample[:, sample],
         )
 
@@ -42,7 +49,7 @@ function make_gene_set_x_sample(
         CSV.write(
             gene_set_x_sample_file_path,
             gene_set_x_sample;
-            delim='\t',
+            delim = '\t',
         )
         
     end

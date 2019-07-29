@@ -4,8 +4,14 @@ include("print_and_run_cmd.jl")
 
 
 function find_variant(
-    germ_bam::Union{String, Nothing},
-    soma_bam::Union{String, Nothing},
+    germ_bam::Union{
+        String,
+        Nothing
+    },
+    soma_bam::Union{
+        String,
+        Nothing
+    },
     is_targeted::Bool,
     dna_fasta_bgz::String,
     chromosome_bed_gz::String,
@@ -40,7 +46,8 @@ function find_variant(
     end
 
     # TODO: Check the best practice to check for nothing
-    if germ_bam != nothing && soma_bam != nothing
+    if germ_bam != nothing &&
+       soma_bam != nothing
 
         config_parameters = `$config_parameters --normalBam $germ_bam --tumorBam $soma_bam`
 
@@ -81,7 +88,8 @@ function find_variant(
     )
 
     # TODO: Check the best practice to check for nothing
-    if germ_bam != nothing && soma_bam != nothing
+    if germ_bam != nothing &&
+       soma_bam != nothing
 
         candidatesmallindels_vcf_gz = joinpath(
             manta_dir,
@@ -105,7 +113,8 @@ function find_variant(
     print_and_run_cmd(`$strelka_runworkflow_py $run_parameters`)
 
     # TODO: Check the best practice to check for nothing
-    if germ_bam != nothing && soma_bam != nothing
+    if germ_bam != nothing &&
+       soma_bam != nothing
 
         sample_txt = joinpath(
             output_dir,
@@ -114,12 +123,12 @@ function find_variant(
 
         # TODO: Use actual sample names instead of "Germ" and "Soma"
         open(
-            io->write(
+            io -> write(
                 io,
                 "Germ\nSoma",
             ),
             sample_txt;
-            write=true,
+            write = true,
         )
 
         somatic_indel_vcf_gz = joinpath(
@@ -134,9 +143,9 @@ function find_variant(
         ))
 
         mv(
-            "$somatic_indel_vcf_gz.tmp",
-            somatic_indel_vcf_gz;
-            force=true,
+           "$somatic_indel_vcf_gz.tmp",
+           somatic_indel_vcf_gz;
+           force = true,
         )
 
         print_and_run_cmd(`tabix --force $somatic_indel_vcf_gz`)
@@ -153,9 +162,9 @@ function find_variant(
         ))
 
         mv(
-            "$somatic_snv_vcf_gz.tmp",
-            somatic_snv_vcf_gz;
-            force=true,
+           "$somatic_snv_vcf_gz.tmp",
+           somatic_snv_vcf_gz;
+           force = true,
         )
 
         print_and_run_cmd(`tabix --force $somatic_snv_vcf_gz`)
@@ -220,7 +229,7 @@ function find_variant(
 
     stats_html = replace(
         stats_csv,
-        ".csv"=>".html",
+        ".csv" => ".html",
     )
 
     print_and_run_cmd(pipeline(
@@ -246,7 +255,8 @@ function find_variant(
 
     end_time = now()
 
-    run_time = canonicalize(Dates.CompoundPeriod(end_time - start_time))
+    run_time = canonicalize(Dates.CompoundPeriod(end_time -
+                                                 start_time))
 
     println("($end_time) Done in $run_time.")
 

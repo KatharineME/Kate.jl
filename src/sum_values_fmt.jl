@@ -1,4 +1,13 @@
-function sum_values(values::Array{Float64,1}, ins::Array{Int64,1},)
+function sum_values(
+    values::Array{
+        Float64,
+        1
+    },
+    ins::Array{
+        Int64,
+        1
+    },
+)
     
     sum_ = 0.0
     
