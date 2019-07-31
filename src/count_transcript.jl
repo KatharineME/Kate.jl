@@ -35,8 +35,7 @@ function count_transcript(
 
     end_time = now()
 
-    run_time = canonicalize(Dates.CompoundPeriod(end_time -
-                                                 start_time))
+    run_time = canonicalize(Dates.CompoundPeriod(end_time - start_time))
 
     println("($end_time) Done in $run_time.")
 

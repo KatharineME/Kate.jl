@@ -10,8 +10,8 @@ function make_gene_set_x_sample(
         String,
         Array{
             String,
-            1
-        }
+            1,
+        },
     };
     gene_set_x_sample_file_path::Union{
         String,

@@ -6,23 +6,23 @@ include("sum_values.jl")
 function compute_gene_set_enrichment(
     gene_values::Array{
         Float64,
-        1
+        1,
     },
     genes::AbstractArray{
         String,
-        1
+        1,
     },
     gene_set_genes::Array{
         String,
-        1
+        1,
     };
     sort_gene_values::Bool = true,
     gene_index::Union{
         Dict{
             String,
-            Int64
+            Int64,
         },
-        Nothing
+        Nothing,
     } = nothing,
     compute_cumulative_sum::Bool = true,
 )
@@ -63,9 +63,7 @@ function compute_gene_set_enrichment(
 
     n_gene = length(genes)
     
-    d_down = -1 /
-             (n_gene -
-              sum_ins(ins))
+    d_down = -1 / (n_gene - sum_ins(ins))
     
     value = 0.0
 
@@ -73,7 +71,7 @@ function compute_gene_set_enrichment(
 
         cumulative_sum = Array{
             Float64,
-            1
+            1,
         }(
             undef,
             n_gene,
@@ -96,8 +94,7 @@ function compute_gene_set_enrichment(
         
         if ins[index] == 1
             
-            value += abs_gene_values[index] /
-                     in_values_sum
+            value += abs_gene_values[index] / in_values_sum
             
         else
             
@@ -127,10 +124,7 @@ function compute_gene_set_enrichment(
             
     end
     
-    cumulative_sum,
-    min_,
-    max_,
-    auc
+    cumulative_sum, min_, max_, auc
     
 end
 
@@ -138,15 +132,15 @@ end
 function compute_gene_set_enrichment(
     gene_values::Array{
         Float64,
-        1
+        1,
     },
     genes::AbstractArray{
         String,
-        1
+        1,
     },
     gene_set_genes::Array{
         String,
-        1
+        1,
     };
     sort_gene_values::Bool = true,
 )
@@ -183,19 +177,19 @@ function compute_gene_set_enrichment(
             Union{
                 Array{
                     Float64,
-                    1
+                    1,
                 },
-                Nothing
+                Nothing,
             },
             Float64,
             Float64,
-            Float64
-        }
+            Float64,
+        },
     }()
 
     for (
         gene_set,
-        gene_set_genes_
+        gene_set_genes_,
     ) in gene_set_genes
 
         gene_set_enrichment[gene_set] = compute_gene_set_enrichment(

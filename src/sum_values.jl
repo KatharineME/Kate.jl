@@ -1,11 +1,11 @@
 function sum_values(
     values::Array{
         Float64,
-        1
+        1,
     },
     ins::Array{
         Int64,
-        1
+        1,
     },
 )
     
