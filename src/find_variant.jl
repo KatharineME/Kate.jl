@@ -86,7 +86,6 @@ function find_variant(
         "strelka",
     )
 
-    # TODO: Check the best practice to check for nothing
     if germ_bam !== nothing && soma_bam !== nothing
 
         candidatesmallindels_vcf_gz = joinpath(
@@ -110,8 +109,7 @@ function find_variant(
 
     print_and_run_cmd(`$strelka_runworkflow_py $run_parameters`)
 
-    # TODO: Check the best practice to check for nothing
-    if germ_bam != nothing && soma_bam != nothing
+    if germ_bam !== nothing && soma_bam !== nothing
 
         sample_txt = joinpath(
             output_dir,

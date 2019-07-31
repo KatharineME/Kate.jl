@@ -1,11 +1,11 @@
 function make_ins(
     elements::Array{
         String,
-        1
+        1,
     },
     elements_to_check::Array{
         String,
-        1
+        1,
     },
 )
     
@@ -13,7 +13,7 @@ function make_ins(
     
     ins = Array{
         Int64,
-        1
+        1,
     }(
         undef,
         n_element,
@@ -46,11 +46,11 @@ end
 function make_ins(
     element_index::Dict{
         String,
-        Int64
+        Int64,
     },
     elements_to_check::Array{
         String,
-        1
+        1,
     },
 )
     
@@ -67,7 +67,6 @@ function make_ins(
             nothing,
         )
 
-        # TODO: Use the best practice to check for nothing
         if index !== nothing
 
             ins[index] = 1

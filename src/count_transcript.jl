@@ -4,10 +4,10 @@ include("print_and_run_cmd.jl")
 
 
 function count_transcript(
-    _1_fastq_gz::String,
-    _2_fastq_gz::String,
-    cdna_fasta_gz::String,
-    output_dir::String,
+    _1_fastq_gz_file_path::String,
+    _2_fastq_gz_file_path::String,
+    cdna_fasta_gz_file_path::String,
+    output_directory_path::String,
     n_job::Int,
 )
 
@@ -15,23 +15,23 @@ function count_transcript(
 
     println("($start_time) Counting transcript ...")
 
-    cdna_fasta_gz_kallisto_index = "$cdna_fasta_gz.kallisto_index"
+    cdna_fasta_gz_kallisto_index_file_path = "$cdna_fasta_gz_file_path.kallisto_index"
 
-    if !ispath(cdna_fasta_gz_kallisto_index)
+    if !ispath(cdna_fasta_gz_kallisto_index_file_path)
 
-        print_and_run_cmd(`kallisto index --index $cdna_fasta_gz_kallisto_index $cdna_fasta_gz`)
-
-    end
-
-    if isdir(output_dir)
-
-        error("$output_dir exists.")
+        print_and_run_cmd(`kallisto index --index $cdna_fasta_gz_kallisto_index_file_path $cdna_fasta_gz_file_path`)
 
     end
 
-    mkpath(output_dir)
+    if isdir(output_directory_path)
 
-    print_and_run_cmd(`kallisto quant --threads $n_job --index $cdna_fasta_gz_kallisto_index --output-dir $output_dir $_1_fastq_gz $_2_fastq_gz`)
+        error("$output_directory_path exists.")
+
+    end
+
+    mkpath(output_directory_path)
+
+    print_and_run_cmd(`kallisto quant --threads $n_job --index $cdna_fasta_gz_kallisto_index_file_path --output-dir $output_directory_path $_1_fastq_gz_file_path $_2_fastq_gz_file_path`)
 
     end_time = now()
 

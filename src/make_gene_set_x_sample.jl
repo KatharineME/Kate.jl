@@ -43,7 +43,6 @@ function make_gene_set_x_sample(
 
     end
 
-    # TODO: Check the best practice to check for nothing
     if gene_set_x_sample_file_path !== nothing
         
         CSV.write(

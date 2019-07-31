@@ -29,17 +29,14 @@ function compute_gene_set_enrichment(
     
     if sort_gene_values
 
-        sort_indices = sortperm(gene_values)
+        gene_values_sort_indices = sortperm(gene_values)
 
-        gene_values = gene_values[sort_indices]
+        gene_values = gene_values[gene_values_sort_indices]
 
-        genes = genes[sort_indices]
+        genes = genes[gene_values_sort_indices]
 
     end
 
-    abs_gene_values = abs.(gene_values)
-
-    # TODO: Check the best practice to check for nothing
     if gene_index === nothing
         
         ins = make_ins(
@@ -56,8 +53,10 @@ function compute_gene_set_enrichment(
         
     end
 
-    in_values_sum = sum_values(
-        abs_gene_values,
+    gene_values_abs = abs.(gene_values)
+
+    gene_values_abs_ins_sum = sum_values(
+        gene_values_abs,
         ins,
     )
 
@@ -79,7 +78,6 @@ function compute_gene_set_enrichment(
 
     else
 
-        # TODO: Check the best practice to check for nothing
         cumulative_sum = nothing
 
     end
@@ -94,7 +92,7 @@ function compute_gene_set_enrichment(
         
         if ins[index] == 1
             
-            value += abs_gene_values[index] / in_values_sum
+            value += gene_values_abs[index] / gene_values_abs_ins_sum
             
         else
             
@@ -110,12 +108,10 @@ function compute_gene_set_enrichment(
         
         if value < min_
             
-            # TODO: Benchmark against min_ = minimum((value, min_))
             min_ = value
             
         elseif max_ < value
             
-            # TODO: Benchmark against max_ = maximum((value, max_))
             max_ = value
             
         end
@@ -128,7 +124,6 @@ function compute_gene_set_enrichment(
     
 end
 
-
 function compute_gene_set_enrichment(
     gene_values::Array{
         Float64,
@@ -138,20 +133,23 @@ function compute_gene_set_enrichment(
         String,
         1,
     },
-    gene_set_genes::Array{
+    gene_set_genes::Dict{
         String,
-        1,
+        Array{
+            String,
+            1,
+        },
     };
     sort_gene_values::Bool = true,
 )
 
     if sort_gene_values
 
-        sort_indices = sortperm(gene_values)
+        gene_values_sort_indices = sortperm(gene_values)
 
-        gene_values = gene_values[sort_indices]
+        gene_values = gene_values[gene_values_sort_indices]
 
-        genes = genes[sort_indices]
+        genes = genes[gene_values_sort_indices]
 
     end
 
@@ -163,7 +161,7 @@ function compute_gene_set_enrichment(
         
         gene_index = Dict(gene => index for (
             gene,
-            index
+            index,
         ) in zip(
             genes,
             1:length(genes),
