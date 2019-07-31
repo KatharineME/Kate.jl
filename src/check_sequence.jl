@@ -4,8 +4,8 @@ include("print_and_run_cmd.jl")
 
 
 function check_sequence(
-    fastq_gzs::Tuple{Vararg{String}},
-    output_dir::String,
+    fastq_gz_file_paths::Tuple{Vararg{String}},
+    output_directory_path::String,
     n_job::Int,
 )
 
@@ -13,32 +13,32 @@ function check_sequence(
 
     println("($start_time) Checking sequence ...")
 
-    for fastq_gz in fastq_gzs
+    for fastq_gz_file_path in fastq_gz_file_paths
 
-        suffix = "_fastqc.html"
+        file_path_suffix = "_fastqc.html"
 
-        html = joinpath(
-            output_dir,
+        html_file_path = joinpath(
+            output_directory_path,
             replace(
                 replace(
-                    splitdir(fastq_gz)[end],
-                    ".fastq.gz" => suffix,
+                    splitdir(fastq_gz_file_path)[end],
+                    ".fastq.gz" => file_path_suffix,
                 ),
-                ".fq.gz" => suffix,
+                ".fq.gz" => file_path_suffix,
             ),
         )
 
-        if isfile(html)
+        if isfile(html_file_path)
 
-            error("$html exists.")
+            error("$html_file_path exists.")
 
         end
 
     end
 
-    mkpath(output_dir)
+    mkpath(output_directory_path)
 
-    print_and_run_cmd(`fastqc --threads $n_job --outdir $output_dir $fastq_gzs`)
+    print_and_run_cmd(`fastqc --threads $n_job --outdir $output_dir $fastq_gz_file_paths`)
 
     end_time = now()
 
