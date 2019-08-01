@@ -17,7 +17,7 @@ function count_transcript(
 
     cdna_fasta_gz_kallisto_index_file_path = "$cdna_fasta_gz_file_path.kallisto_index"
 
-    if !ispath(cdna_fasta_gz_kallisto_index_file_path)
+    if !isfile(cdna_fasta_gz_kallisto_index_file_path)
 
         print_and_run_cmd(`kallisto index --index $cdna_fasta_gz_kallisto_index_file_path $cdna_fasta_gz_file_path`)
 

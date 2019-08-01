@@ -10,7 +10,7 @@ function align_sequence(
     dna_fasta_gz_file_path::String,
     bam_file_path::String,
     n_job::Int,
-    n_gb_memory::Int,
+    n_gb_memory_per_job::Int,
 )
 
     start_time = now()
@@ -19,7 +19,7 @@ function align_sequence(
 
     dna_fasta_gz_mmi_file_path = "$dna_fasta_gz_file_path.mmi"
 
-    if !ispath(dna_fasta_gz_mmi_file_path)
+    if !isfile(dna_fasta_gz_mmi_file_path)
 
         print_and_run_cmd(`minimap2 -t $n_job -d $dna_fasta_gz_mmi_file_path $dna_fasta_gz_file_path`)
 
@@ -34,10 +34,10 @@ function align_sequence(
     mkpath(splitdir(bam_file_path)[1])
 
     print_and_run_cmd(pipeline(
-        `minimap2 -x sr -t $n_job -K $(n_gb_memory)G -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fasta_gz_mmi_file_path $_1_fastq_gz_file_path $_2_fastq_gz_file_path`,
-        `samtools sort --threads $n_job -m $(n_gb_memory)G -n`,
+        `minimap2 -x sr -t $n_job -K $(n_gb_memory_per_job)G -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fasta_gz_mmi_file_path $_1_fastq_gz_file_path $_2_fastq_gz_file_path`,
+        `samtools sort --threads $n_job -m $(n_gb_memory_per_job)G -n`,
         `samtools fixmate --threads $n_job -m - -`,
-        `samtools sort --threads $n_job -m $(n_gb_memory)G`,
+        `samtools sort --threads $n_job -m $(n_gb_memory_per_job)G`,
         "$bam_file_path.tmp",
     ))
 

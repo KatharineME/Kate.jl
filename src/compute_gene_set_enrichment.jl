@@ -1,5 +1,4 @@
 include("make_ins.jl")
-include("sum_ins.jl")
 include("sum_values.jl")
 
 
@@ -62,7 +61,7 @@ function compute_gene_set_enrichment(
 
     n_gene = length(genes)
     
-    d_down = -1 / (n_gene - sum_ins(ins))
+    d_down = -1 / (n_gene - sum_values(ins))
     
     value = 0.0
 

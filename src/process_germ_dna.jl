@@ -124,10 +124,9 @@ function process_germ_dna(
     #     n_gb_memory_per_job,
     # )
 
-    dna_fasta_bgz_file_path = String(
-        splitext(dna_fasta_gz_file_path)[1],
-        ".bgz",
-    )
+    dna_fasta_file_path_prefix = splitext(dna_fasta_gz_file_path)[1]
+
+    dna_fasta_bgz_file_path = "$dna_fasta_file_path_prefix.bgz"
 
     if !isfile(dna_fasta_bgz_file_path)
 

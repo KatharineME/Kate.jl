@@ -15,16 +15,16 @@ function check_sequence(
 
     for fastq_gz_file_path in fastq_gz_file_paths
 
-        file_path_suffix = "_fastqc.html"
+        html_file_path_suffix = "_fastqc.html"
 
         html_file_path = joinpath(
             output_directory_path,
             replace(
                 replace(
                     splitdir(fastq_gz_file_path)[end],
-                    ".fastq.gz" => file_path_suffix,
+                    ".fastq.gz" => html_file_path_suffix,
                 ),
-                ".fq.gz" => file_path_suffix,
+                ".fq.gz" => html_file_path_suffix,
             ),
         )
 
@@ -38,7 +38,7 @@ function check_sequence(
 
     mkpath(output_directory_path)
 
-    print_and_run_cmd(`fastqc --threads $n_job --outdir $output_dir $fastq_gz_file_paths`)
+    print_and_run_cmd(`fastqc --threads $n_job --outdir $output_directory_path $fastq_gz_file_paths`)
 
     end_time = now()
 
