@@ -15,7 +15,7 @@ function make_gene_set_x_sample(
     };
     gene_set_x_sample_file_path::Union{
         String,
-        Nothing
+        Nothing,
     } = nothing,
 )
     

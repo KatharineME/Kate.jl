@@ -1,4 +1,3 @@
-# TODO: Compare isequal, ==, ===, etc
 function error_if_equal(
     _1::String,
     _2::String,
