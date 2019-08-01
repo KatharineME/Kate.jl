@@ -8,7 +8,7 @@ function trim_sequence(
     _2_fastq_gz_file_path::String,
     output_prefix::String,
     n_job::Int,
-)
+)::Nothing
 
     start_time = now()
 

@@ -1,3 +1,21 @@
+function sum_values(values::Array{
+    Int64,
+    1,
+})::Int64
+    
+    sum_ = 0
+    
+    @inbounds @fastmath @simd for index in 1:length(values)
+        
+        sum_ += values[index]
+        
+    end
+    
+    sum_
+    
+end
+
+
 function sum_values(
     values::Array{
         Float64,
@@ -7,7 +25,7 @@ function sum_values(
         Int64,
         1,
     },
-)
+)::Float64
     
     sum_ = 0.0
     
