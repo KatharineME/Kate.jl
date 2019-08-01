@@ -1,7 +1,7 @@
 function sum_values(values::Array{
     Int64,
     1,
-})::Int64
+})
     
     sum_ = 0
     
@@ -25,7 +25,7 @@ function sum_values(
         Int64,
         1,
     },
-)::Float64
+)
     
     sum_ = 0.0
     

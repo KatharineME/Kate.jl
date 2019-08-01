@@ -18,7 +18,7 @@ function process_germ_dna(
     n_job::Int,
     n_gb_memory::Int,
     n_gb_memory_per_job::Int,
-)::Nothing
+)
 
     for file_path in (
         germ_dna_1_fastq_gz_file_path,

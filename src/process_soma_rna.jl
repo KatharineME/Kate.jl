@@ -9,7 +9,7 @@ function process_soma_rna(
     output_directory_path::String,
     cdna_fasta_gz_file_path::String,
     n_job::Int,
-)::Nothing
+)
 
     for file_path in (
         soma_rna_1_fastq_gz_file_path,
