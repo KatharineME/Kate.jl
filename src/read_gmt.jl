@@ -1,4 +1,10 @@
-function read_gmt(gmt_file_path::String)
+function read_gmt(gmt_file_path::String)::Dict{
+    String,
+    Array{
+        String,
+        1,
+    },
+}
     
     gene_set_genes = Dict{
         String,
@@ -27,7 +33,13 @@ end
 function read_gmt(gmt_file_paths::Array{
     String,
     1,
-})
+})::Dict{
+    String,
+    Array{
+        String,
+        1,
+    },
+}
     
     gene_set_genes = Dict{
         String,
