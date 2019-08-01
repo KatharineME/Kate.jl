@@ -38,7 +38,6 @@ function make_gene_set_x_sample(
             gene_set_genes,
         )
         
-        # TODO: Compare [:, sample] and [!, sample]
         gene_set_x_sample[!, sample] = collect(enrichment[4] for enrichment in values(gene_set_enrichment))
 
     end
