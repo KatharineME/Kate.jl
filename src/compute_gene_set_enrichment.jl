@@ -1,3 +1,5 @@
+using DataFrames
+
 include("make_ins.jl")
 include("sum_values.jl")
 
@@ -123,6 +125,7 @@ function compute_gene_set_enrichment(
     
 end
 
+
 function compute_gene_set_enrichment(
     gene_values::Array{
         Float64,
@@ -201,5 +204,42 @@ function compute_gene_set_enrichment(
     end
 
     gene_set_enrichment
+    
+end
+
+
+function compute_gene_set_enrichment(
+    gene_x_sample::DataFrame,
+    gene_set_genes::Dict{
+        String,
+        Array{
+            String,
+            1,
+        },
+    },
+)
+    
+    genes = gene_x_sample[:, Symbol("Gene")]
+
+    gene_set_x_sample = DataFrame(Symbol("Gene Set") => collect(keys(gene_set_genes)))
+
+    for sample in names(gene_x_sample)[2:end]
+
+        has_gene_value = findall(
+            !ismissing,
+            gene_x_sample[:, sample],
+        )
+
+        gene_set_enrichment = compute_gene_set_enrichment(
+            Float64.(gene_x_sample[has_gene_value, sample]),
+            genes[has_gene_value],
+            gene_set_genes,
+        )
+        
+        gene_set_x_sample[!, sample] = collect(enrichment[4] for enrichment in values(gene_set_enrichment))
+
+    end
+
+    gene_set_x_sample
     
 end

@@ -55,7 +55,7 @@ function find_variant(
 
     else
 
-        error("Specify germ_bam_file_path and soma_bam_file_path (for processing soma) or germ_bam_file_path (for processing germ).")
+        error("germ_bam_file_path and soma_bam_file_path (for processing soma) or germ_bam_file_path (for processing germ) is missing.")
 
     end
 

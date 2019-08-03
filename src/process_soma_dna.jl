@@ -41,6 +41,8 @@ function process_soma_dna(
     if isdir(output_directory_path)
 
         error("$output_directory_path exists.")
+
+    end
     
     mkpath(output_directory_path)
 
