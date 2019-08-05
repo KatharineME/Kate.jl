@@ -83,9 +83,9 @@ function compute_gene_set_enrichment(
 
     end
     
-    min_ = 0.0
-    
-    max_ = 0.0
+    ks = 0.0
+
+    ks_abs = 0.0
 
     auc = 0.0
     
@@ -106,22 +106,22 @@ function compute_gene_set_enrichment(
             cumulative_sum[index] = value
 
         end
+
+        value_abs = abs(value)
         
-        if value < min_
-            
-            min_ = value
-            
-        elseif max_ < value
-            
-            max_ = value
-            
+        if ks_abs < value_abs
+
+            ks = value
+
+            ks_abs = value_abs
+
         end
 
         auc += value
             
     end
     
-    cumulative_sum, min_, max_, auc
+    cumulative_sum, ks, auc
     
 end
 
@@ -183,7 +183,6 @@ function compute_gene_set_enrichment(
             },
             Float64,
             Float64,
-            Float64,
         },
     }()
 
@@ -236,7 +235,7 @@ function compute_gene_set_enrichment(
             gene_set_genes,
         )
         
-        gene_set_x_sample[!, sample] = collect(enrichment[4] for enrichment in values(gene_set_enrichment))
+        gene_set_x_sample[!, sample] = collect(enrichment[2] for enrichment in values(gene_set_enrichment))
 
     end
 
