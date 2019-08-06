@@ -15,5 +15,5 @@ julia
 ```
 
 ``` julia
-]add https://github.com/Kraft.jl
+]add https://github.com/KwatME/Kraft.jl
 ```
