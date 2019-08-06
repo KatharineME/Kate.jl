@@ -1,5 +1,7 @@
 using CSV
-using Kraft
+
+include("compute_gene_set_enrichment.jl")
+include("read_gmt.jl")
 
 function gsea(
     gene_x_sample_tsv_file_path::String,
@@ -12,9 +14,9 @@ function gsea(
 
     gene_x_sample = CSV.read(gene_x_sample_tsv_file_path)
     
-    gene_set_genes = Kraft.read_gmt(gmt_file_paths)
+    gene_set_genes = read_gmt(gmt_file_paths)
     
-    gene_set_x_sample = Kraft.compute_gene_set_enrichment(
+    gene_set_x_sample = compute_gene_set_enrichment(
         gene_x_sample,
         gene_set_genes,
     )
@@ -30,6 +32,6 @@ function gsea(
         delim='\t',
     )
     
-    gene_set_x_sample
+    nothing
 
 end

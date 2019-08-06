@@ -17,3 +17,15 @@ julia
 ``` julia
 ]add https://github.com/KwatME/Kraft.jl
 ```
+
+## Update
+
+### Update Kraft.jl with Julia package manager
+
+``` bash
+julia
+```
+
+``` julia
+]update
+```
