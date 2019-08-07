@@ -9,7 +9,8 @@ function gsea(
         String,
         1,
     },
-    output_directory_path::String,
+    output_directory_path::String;
+    statistic::String = "ks",
 )
 
     gene_x_sample = CSV.read(gene_x_sample_tsv_file_path)
@@ -29,7 +30,7 @@ function gsea(
             "gene_set_x_sample.tsv",
         ),
         gene_set_x_sample;
-        delim='\t',
+        delim = '\t',
     )
     
     nothing
