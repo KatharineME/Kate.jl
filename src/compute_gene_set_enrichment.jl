@@ -217,11 +217,26 @@ function compute_gene_set_enrichment(
             1,
         },
     },
+    statistic::String,
 )
     
     genes = gene_x_sample[:, Symbol("Gene")]
 
     gene_set_x_sample = DataFrame(Symbol("Gene Set") => collect(keys(gene_set_genes)))
+
+    if statistic == "ks"
+
+        gene_set_enrichment_score_index = 2
+
+    elseif statistic == "auc"
+
+        gene_set_enrichment_score_index = 3
+
+    elseif statistic == "js"
+
+        gene_set_enrichment_score_index = 4
+
+    end
 
     for sample in names(gene_x_sample)[2:end]
 
@@ -236,7 +251,7 @@ function compute_gene_set_enrichment(
             gene_set_genes,
         )
         
-        gene_set_x_sample[!, sample] = collect(enrichment[2] for enrichment in values(gene_set_enrichment))
+        gene_set_x_sample[!, sample] = collect(enrichment[gene_set_enrichment_score_index] for enrichment in values(gene_set_enrichment))
 
     end
 

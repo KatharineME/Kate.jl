@@ -20,6 +20,7 @@ function gsea(
     gene_set_x_sample = compute_gene_set_enrichment(
         gene_x_sample,
         gene_set_genes,
+        statistic,
     )
     
     mkpath(output_directory_path)
