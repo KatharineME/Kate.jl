@@ -1,4 +1,5 @@
 using DataFrames
+using Distributed
 
 include("make_ins.jl")
 include("sum_values.jl")
