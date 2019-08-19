@@ -1,6 +1,6 @@
 using DataFrames
 
-function combine_dn_up_gene_sets(gene_set_x_element)
+function combine_gene_sets_dn_up(gene_set_x_element)
 
     gene_sets = gene_set_x_element[:, Symbol("Gene Set")]
 
