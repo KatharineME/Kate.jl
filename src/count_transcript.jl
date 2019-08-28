@@ -39,4 +39,6 @@ function count_transcript(
 
     println("($end_time) Done in $run_time.")
 
+    return nothing
+
 end

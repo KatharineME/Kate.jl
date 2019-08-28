@@ -14,12 +14,13 @@ function trim_sequence(
 
     println("($start_time) Trimming sequence ...")
 
-    if isfile("$output_file_path_prefix-trimmed-pair1.fastq.gz") || isfile("$output_file_path_prefix-trimmed-pair2.fastq.gz")
+    if isfile("$output_file_path_prefix-trimmed-pair1.fastq.gz") ||
+       isfile("$output_file_path_prefix-trimmed-pair2.fastq.gz")
 
         error("$output_file_path_prefix-trimmed-pair(1|2).fastq.gz exists.")
 
     end
-    
+
     output_directory_path = splitdir(output_file_path_prefix)[1]
 
     mkpath(output_directory_path)
@@ -31,5 +32,7 @@ function trim_sequence(
     run_time = canonicalize(Dates.CompoundPeriod(end_time - start_time))
 
     println("($end_time) Done in $run_time.")
+
+    return nothing
 
 end

@@ -1,32 +1,14 @@
-function make_ins(
-    elements::Array{
-        String,
-        1,
-    },
-    elements_to_check::Array{
-        String,
-        1,
-    },
-)
+function make_ins(elements::Vector{String}, elements_to_check::Vector{String},)
     
     n_element = length(elements)
     
-    ins = Array{
-        Int64,
-        1,
-    }(
-        undef,
-        n_element,
-    )
+    ins = Vector{Int64}(undef, n_element,)
     
     element_to_check_nothing = Dict(element => nothing for element in elements_to_check)
     
-    @inbounds @fastmath @simd for index in 1:n_element
+    @inbounds @fastmath @simd for index = 1:n_element
 
-        if haskey(
-            element_to_check_nothing,
-            elements[index],
-        )
+        if haskey(element_to_check_nothing, elements[index],)
             
             ins[index] = 1
 
@@ -38,34 +20,21 @@ function make_ins(
 
     end
     
-    ins
+    return ins
 
 end
 
 
 function make_ins(
-    element_index::Dict{
-        String,
-        Int64,
-    },
-    elements_to_check::Array{
-        String,
-        1,
-    },
+    element_index::Dict{String,Int64,},
+    elements_to_check::Vector{String},
 )
     
-    ins = fill(
-        0,
-        length(element_index),
-    )
+    ins = fill(0, length(element_index),)
     
     @inbounds @fastmath @simd for element in elements_to_check
 
-        index = get(
-            element_index,
-            element,
-            nothing,
-        )
+        index = get(element_index, element, nothing,)
 
         if index !== nothing
 
@@ -75,6 +44,6 @@ function make_ins(
         
     end
     
-    ins
+    return ins
 
 end

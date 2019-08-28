@@ -1,15 +1,13 @@
+include("align_sequence.jl")
+include("check_sequence.jl")
+include("find_variant.jl")
 include("print_and_run_cmd.jl")
 include("trim_sequence.jl")
-include("check_sequence.jl")
-include("align_sequence.jl")
-include("find_variant.jl")
 
 
 function process_germ_dna(
     germ_dna_1_fastq_gz_file_path::String,
     germ_dna_2_fastq_gz_file_path::String,
-    # soma_dna_1_fastq_gz_file_path::String,
-    # soma_dna_2_fastq_gz_file_path::String,
     is_targeted::Bool,
     output_directory_path::String,
     dna_fasta_gz_file_path::String,
@@ -23,8 +21,6 @@ function process_germ_dna(
     for file_path in (
         germ_dna_1_fastq_gz_file_path,
         germ_dna_2_fastq_gz_file_path,
-        # soma_dna_1_fastq_gz_file_path,
-        # soma_dna_2_fastq_gz_file_path,
         dna_fasta_gz_file_path,
         chromosome_bed_gz_file_path,
         chrn_n_tsv_file_path,
@@ -81,16 +77,8 @@ function process_germ_dna(
     # soma_trim_2_fastq_gz_file_path = "$soma_trim_sequence_file_path_prefix-trimmed-pair2.fastq.gz"
 
     check_sequence(
-        (
-         germ_trim_1_fastq_gz_file_path,
-         germ_trim_2_fastq_gz_file_path,
-        #  soma_trim_1_fastq_gz_file_path,
-        #  soma_trim_2_fastq_gz_file_path,
-        ),
-        joinpath(
-            output_directory_path,
-            "check_sequence",
-        ),
+        (germ_trim_1_fastq_gz_file_path, germ_trim_2_fastq_gz_file_path,),
+        joinpath(output_directory_path, "check_sequence",),
         n_job,
     )
 
@@ -147,7 +135,7 @@ function process_germ_dna(
 
     find_variant(
         germ_bam_file_path,
-        nothing,# soma_bam_file_path,
+        nothing,
         is_targeted,
         dna_fasta_bgz_file_path,
         chromosome_bed_gz_file_path,
@@ -156,5 +144,7 @@ function process_germ_dna(
         n_job,
         n_gb_memory,
     )
+
+    return nothing
 
 end

@@ -28,7 +28,7 @@ function align_sequence(
     if isfile(bam_file_path)
 
         error("$bam_file_path exists.")
-    
+
     end
 
     mkpath(splitdir(bam_file_path)[1])
@@ -58,4 +58,6 @@ function align_sequence(
 
     println("($end_time) Done in $run_time.")
 
+    return nothing
+                            
 end

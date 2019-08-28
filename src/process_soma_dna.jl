@@ -1,8 +1,8 @@
+include("align_sequence.jl")
+include("check_sequence.jl")
+include("find_variant.jl")
 include("print_and_run_cmd.jl")
 include("trim_sequence.jl")
-include("check_sequence.jl")
-include("align_sequence.jl")
-include("find_variant.jl")
 
 
 function process_soma_dna(
@@ -87,10 +87,7 @@ function process_soma_dna(
          soma_trim_1_fastq_gz_file_path,
          soma_trim_2_fastq_gz_file_path,
         ),
-        joinpath(
-            output_directory_path,
-            "check_sequence",
-        ),
+        joinpath(output_directory_path, "check_sequence",),
         n_job,
     )
 
@@ -156,5 +153,7 @@ function process_soma_dna(
         n_job,
         n_gb_memory,
     )
+
+    return nothing
 
 end

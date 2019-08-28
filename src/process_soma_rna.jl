@@ -1,6 +1,6 @@
-include("trim_sequence.jl")
 include("check_sequence.jl")
 include("count_transcript.jl")
+include("trim_sequence.jl")
 
 
 function process_soma_rna(
@@ -51,14 +51,8 @@ function process_soma_rna(
     soma_trim_2_fastq_gz_file_path = "$soma_trim_sequence_file_path_prefix-trimmed-pair2.fastq.gz"
 
     check_sequence(
-        (
-         soma_trim_1_fastq_gz_file_path,
-         soma_trim_2_fastq_gz_file_path,
-        ),
-        joinpath(
-            output_directory_path,
-            "check_sequence",
-        ),
+        (soma_trim_1_fastq_gz_file_path, soma_trim_2_fastq_gz_file_path,),
+        joinpath(output_directory_path, "check_sequence",),
         n_job,
     )
 
@@ -74,5 +68,7 @@ function process_soma_rna(
         count_transcript_directory_path,
         n_job,
     )
+
+    return nothing
 
 end
