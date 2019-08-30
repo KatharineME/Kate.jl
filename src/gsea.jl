@@ -16,6 +16,8 @@ function gsea(
 )
 
     gene_x_sample = CSV.read(gene_x_sample_tsv_file_path)
+
+    genes = gene_x_sample[!, 1]
     
     gene_set_genes = read_gmt(gmt_file_paths)
 
@@ -28,7 +30,7 @@ function gsea(
 
     end
 
-    gene_set_genes = Dict(gene_set => genes for (
+    gene_set_genes = Dict(gene_set => genes_ for (
         gene_set,
         genes_
     ) = gene_set_genes if n_required_gene_set_element < length(intersect(
@@ -36,11 +38,9 @@ function gsea(
         genes
     )))
 
-    normalization_method in (nothing, "log", "rank", "-0-", "0-1",)
-    
-    weight
+    sample_normalization_method, nothing, "log", "rank", "-0-", "0-1", weight
 
-    gene_set_x_sample = combine_gene_sets_dn_up(compute_gene_set_enrichment(
+    gene_set_x_sample = combine_gene_sets_dn_up(compute_set_enrichment(
         gene_x_sample,
         gene_set_genes,
         statistic,

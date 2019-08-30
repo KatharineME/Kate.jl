@@ -3,7 +3,9 @@ using DataFrames
 
 function combine_gene_sets_dn_up(gene_set_x_element::DataFrame)
 
-    gene_sets = gene_set_x_element[!, Symbol("Gene Set")]
+    column_1_name = names(gene_set_x_element)[1]
+
+    gene_sets = gene_set_x_element[!, 1]
 
     gene_set_x_element_ = DataFrame(
         eltypes(gene_set_x_element),
@@ -16,7 +18,7 @@ function combine_gene_sets_dn_up(gene_set_x_element::DataFrame)
 
             gene_set_ = gene_set[1:end-3]
 
-            if gene_set_ in gene_set_x_element_[!, Symbol("Gene Set")]
+            if gene_set_ in gene_set_x_element_[!, 1]
 
                 continue
 
@@ -34,7 +36,7 @@ function combine_gene_sets_dn_up(gene_set_x_element::DataFrame)
 
             combined_values = up_values .- dn_values
 
-            insertcols!(combined_values, 1, Symbol("Gene Set") => gene_set_,)
+            insertcols!(combined_values, 1, column_1_name => gene_set_,)
 
             push!(gene_set_x_element_, combined_values[1, :],)
 
@@ -42,9 +44,6 @@ function combine_gene_sets_dn_up(gene_set_x_element::DataFrame)
 
     end
 
-    return sort(
-        vcat(gene_set_x_element, gene_set_x_element_,),
-        Symbol("Gene Set"),
-    )
+    return sort(vcat(gene_set_x_element, gene_set_x_element_,), 1,)
 
 end
