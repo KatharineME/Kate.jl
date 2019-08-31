@@ -1,4 +1,6 @@
 using PlotlyJS
+using Printf
+using Statistics
 using WebIO
 
 include("compute_set_enrichment.jl")
@@ -12,66 +14,102 @@ function plot_set_enrichment(
     set_elements::Vector{String};
     height::Real = 500,
     width::Real = 800,
-    element_values_line_width::Int64 = 2,
-    element_values_line_color::String = "#ffb61e",
-    set_elements_marker_size::Int64 = 16,
-    set_elements_marker_line_width::Int64 = 2,
-    set_elements_marker_color::String = "#000000",
-    cumulative_sums_line_width::Real = 2,
-    cumulative_sums_line_color::String = "#8db255",
-    title_text::String = "Set Enrichment Plot",
+    line_width::Real = 2,
+    title1_text::String = "Set Enrichment Plot",
+    title2_text::String = "",
+    title1_font_size = 20,
     element_value_name = "Element<br>Value",
-    yaxis_annotation_font_size = 16,
+    axis_title_font_size = 12,
 )
         
     n_element = length(element_values)
 
-    annotation_template = Dict(
-        "xref" => "paper",
-        "yref" => "paper",
-        "x" => -0.12,
-        "font_size" => yaxis_annotation_font_size,
-        "xanchor" => "center",
-        "yanchor" => "middle",
-        "showarrow" => false,
+    annotation_template = attr(
+        xref = "paper",
+        yref = "paper",
+        xanchor = "center",
+        yanchor = "middle",
+        showarrow = false,
     )
+
+    x_annotation_template = merge(annotation_template, attr(x = 0.5,))
+
+    y_annotation_template = merge(
+        annotation_template,
+        attr(x = -0.125, font_size = axis_title_font_size,)
+    )
+
+    title2_font_size = title1_font_size * 0.7
+
+    yaxis1_domain = (0, 0.3,)
+
+    yaxis2_domain = (0.3, 0.4,)
+
+    yaxis3_domain = (0.4, 1,)
 
     layout = Layout(
         height = height,
         width = width,
+        margin_t = height * 0.2,
+        margin_l = width * 0.2,
         legend_orientation = "h",
+        legend_x = 0.5,
         legend_y = -0.2,
-        title_text = "<b>$title_text</b>",
+        legend_xanchor = "center",
+        legend_yanchor = "middle",
         xaxis1_zeroline = false,
         xaxis1_showspikes = true,
         xaxis1_spikemode = "across",
         xaxis1_spikedash = "solid",
-        xaxis1_spikethickness = 1,
-        xaxis1_automargin = true,
-        xaxis1_title_text = "<b>Element Rank (n=$n_element)</b>",
-        yaxis1_domain = (0, 0.3,),
-        yaxis1_showline = true,
-        yaxis1_automargin = true,
-        yaxis2_domain = (0.3, 0.4,),
+        yaxis3_domain = yaxis3_domain,
+        yaxis3_showline = true,
+        yaxis2_domain = yaxis2_domain,
         yaxis2_showticklabels = false,
         yaxis2_showgrid = false,
-        yaxis2_automargin = true,
-        yaxis3_domain = (0.4, 0.9,),
-        yaxis3_showline = true,
-        yaxis3_automargin = true,
-        margin_l = 130,
+        yaxis1_domain = yaxis1_domain,
+        yaxis1_showline = true,
         annotations = [
             merge(
-                annotation_template,
-                Dict("y" => 0.15, "text" => "<b>$element_value_name</b>")
+                x_annotation_template,
+                attr(
+                    y = 1.25,
+                    text = "<b>$title1_text</b>",
+                    font_size = title1_font_size
+                ),
             ),
             merge(
-                annotation_template,
-                Dict("y" => 0.35, "text" => "<b>Set<br>Member</b>")
+                x_annotation_template,
+                attr(
+                    y = 1.15,
+                    text = "<b>$title2_text</b>",
+                    font_size = title2_font_size
+                ),
             ),
             merge(
-                annotation_template,
-                Dict("y" => 0.65, "text" => "<b>Set<br>Enrichment</b>")
+                x_annotation_template,
+                attr(
+                    y = -0.1,
+                    text = "<b>Element Rank (n=$n_element)</b>",
+                    font_size = axis_title_font_size
+                ),
+            ),
+            merge(
+                y_annotation_template,
+                attr(
+                    y = mean(yaxis3_domain),
+                    text = "<b>Set<br>Enrichment</b>"
+                )
+            ),
+            merge(
+                y_annotation_template,
+                attr(y = mean(yaxis2_domain), text = "<b>Set<br>Member</b>"),
+            ),
+            merge(
+                y_annotation_template,
+                attr(
+                    y = mean(yaxis1_domain),
+                    text = "<b>$element_value_name</b>"
+                ),
             ),
         ],
     )
@@ -88,8 +126,8 @@ function plot_set_enrichment(
         x = x,
         y = element_values,
         text = elements,
-        line_width = element_values_line_width,
-        line_color = element_values_line_color,
+        line_width = line_width,
+        line_color = "#ffb61e",
         fill = "tozeroy",
     )
     
@@ -105,9 +143,9 @@ function plot_set_enrichment(
         text = elements[set_elements_bit],
         mode = "markers",
         marker_symbol = "line-ns-open",
-        marker_size = set_elements_marker_size,
-        marker_line_width = set_elements_marker_line_width,
-        marker_color = set_elements_marker_color,
+        marker_size = height * (yaxis2_domain[2] - yaxis2_domain[1]) * 0.25,
+        marker_line_width = line_width,
+        marker_color = "#006c7f",
         hoverinfo = "name+x+text",
     )
     
@@ -118,14 +156,42 @@ function plot_set_enrichment(
         compute_cumulative_sums = true,
     )
 
+    p_value = 0.05
+
+    ks_string = @sprintf "%.2e" ks
+
+    auc_string = @sprintf "%.2e" auc
+
+    p_value_string = @sprintf "%.2e" p_value
+
+    push!(
+        layout["annotations"],
+        merge(
+            x_annotation_template,
+            attr(
+                y = 1.05,
+                text = join(
+                    (
+                     "KS = $ks_string",
+                     "AUC = $auc_string",
+                     "P-Value = $p_value_string",
+                    ),
+                    "     ",
+                ),
+                font_size = title2_font_size,
+                font_color = "#a4345d",
+            ),
+        ),
+    )
+
     set_enrichments_trace = scatter(
         name = "Set Enrichment",
         yaxis = "y3",
         x = x,
         y = set_enrichments,
         text = elements,
-        line_width = cumulative_sums_line_width,
-        line_color = cumulative_sums_line_color,
+        line_width = line_width,
+        line_color = "#8db255",
         fill = "tozeroy",
     )
 
