@@ -14,21 +14,27 @@ function plot_set_enrichment(
     width::Real = 800,
     element_values_line_width::Int64 = 2,
     element_values_line_color::String = "#ffb61e",
-    _01_marker_size::Int64 = 16,
-    _01_marker_line_width::Int64 = 2,
-    _01_marker_color::String = "#000000",
+    set_elements_marker_size::Int64 = 16,
+    set_elements_marker_line_width::Int64 = 2,
+    set_elements_marker_color::String = "#000000",
     cumulative_sums_line_width::Real = 2,
     cumulative_sums_line_color::String = "#8db255",
     title_text::String = "Set Enrichment Plot",
-    element_value_name = "",
+    element_value_name = "Element<br>Value",
+    yaxis_annotation_font_size = 16,
 )
-    
-    element_values, elements = sort_vectors(
-        [element_values, elements,],
-        reverse = true,
-    )
-    
+        
     n_element = length(element_values)
+
+    annotation_template = Dict(
+        "xref" => "paper",
+        "yref" => "paper",
+        "x" => -0.12,
+        "font_size" => yaxis_annotation_font_size,
+        "xanchor" => "center",
+        "yanchor" => "middle",
+        "showarrow" => false,
+    )
 
     layout = Layout(
         height = height,
@@ -53,9 +59,29 @@ function plot_set_enrichment(
         yaxis3_domain = (0.4, 0.9,),
         yaxis3_showline = true,
         yaxis3_automargin = true,
+        margin_l = 130,
+        annotations = [
+            merge(
+                annotation_template,
+                Dict("y" => 0.15, "text" => "<b>$element_value_name</b>")
+            ),
+            merge(
+                annotation_template,
+                Dict("y" => 0.35, "text" => "<b>Set<br>Member</b>")
+            ),
+            merge(
+                annotation_template,
+                Dict("y" => 0.65, "text" => "<b>Set<br>Enrichment</b>")
+            ),
+        ],
     )
 
     x = 1:n_element
+
+    element_values, elements = sort_vectors(
+        [element_values, elements,],
+        reverse = true,
+    )
 
     element_values_trace = scatter(
         name = "Element Value",
@@ -68,7 +94,7 @@ function plot_set_enrichment(
     )
     
     set_elements_01 = make_vector_01(elements, set_elements,)
-    
+
     set_elements_bit = BitVector(set_elements_01)
 
     set_elements_trace = scatter(
@@ -79,16 +105,17 @@ function plot_set_enrichment(
         text = elements[set_elements_bit],
         mode = "markers",
         marker_symbol = "line-ns-open",
-        marker_size = _01_marker_size,
-        marker_line_width = _01_marker_line_width,
-        marker_color = _01_marker_color,
+        marker_size = set_elements_marker_size,
+        marker_line_width = set_elements_marker_line_width,
+        marker_color = set_elements_marker_color,
         hoverinfo = "name+x+text",
     )
     
     set_enrichments, ks, auc = compute_set_enrichment(
         element_values,
         elements,
-        set_elements_01,
+        set_elements_01;
+        compute_cumulative_sums = true,
     )
 
     set_enrichments_trace = scatter(
