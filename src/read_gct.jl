@@ -11,6 +11,6 @@ function read_gct(gct_file_path::String, column_1_name::String,)
 
     names!(tsv, replace(names(tsv), Symbol("Name") => Symbol(column_1_name),),)
 
-    return nothing
+    return tsv
     
 end
