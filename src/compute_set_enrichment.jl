@@ -195,8 +195,8 @@ function compute_set_enrichment(
         has_element_value = findall(!ismissing, element_x_sample[!, sample],)
 
         set_enrichment = compute_set_enrichment(
-            Float64.(element_x_sample[has_element_value, sample]),
-            elements[has_element_value],
+            Vector{Float64}(element_x_sample[has_element_value, sample]),
+            Vector{String}(elements[has_element_value]),
             set_elements,
         )
 
