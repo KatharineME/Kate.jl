@@ -2,11 +2,17 @@ using Statistics
 using StatsBase
 
 
-function normalize_vector_real(vector::Vector{<:Real}, method::String)
+function normalize_vector_real(vector::Vector{<:Real}, method::String,)
     
     vector = Vector{Float64}(vector)
     
     is_not_nan = .!isnan.(vector)
+
+    if !any(is_not_nan)
+
+        return vector
+
+    end
     
     vector_not_nan = vector[is_not_nan]
 
@@ -27,7 +33,7 @@ function normalize_vector_real(vector::Vector{<:Real}, method::String)
 
         if any(vector_not_nan .< 0)
 
-            error("can't normalize vector with any negative value with method sum.")
+            error("can not normalize vector with any negative value with method sum.")
 
         end
 

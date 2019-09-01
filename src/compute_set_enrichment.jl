@@ -3,7 +3,7 @@ using Distributed
 
 include("make_vector_01.jl")
 include("sort_vectors.jl")
-include("sum_vector_number.jl")
+include("sum_vector_real.jl")
 
 
 function compute_set_enrichment(
@@ -15,7 +15,7 @@ function compute_set_enrichment(
     
     element_values_abs = abs.(element_values)
 
-    element_values_abs_1_sum = sum_vector_number(element_values_abs, vector_01,)
+    element_values_abs_1_sum = sum_vector_real(element_values_abs, vector_01,)
 
     n_element = length(elements)
     
@@ -80,20 +80,9 @@ function compute_set_enrichment(
     element_values::Vector{Float64},
     elements::Vector{String},
     set_elements::Vector{String};
-    sort_::Bool = true,
     element_index::Union{Nothing,Dict{String,Int64,}} = nothing,
     compute_cumulative_sums::Bool = false,
 )
-    
-    if sort_
-
-        sort_indices = sortperm(element_values, rev = true)
-
-        element_values = element_values[sort_indices]
-
-        elements = elements[sort_indices]
-
-    end
     
     if element_index === nothing
         
@@ -121,14 +110,13 @@ function compute_set_enrichment(
     set_elements::Dict{String,Vector{String},};
     sort_::Bool = true,
 )
-    
+
     if sort_
 
-        sort_indices = sortperm(element_values, rev = true)
-
-        element_values = element_values[sort_indices]
-
-        elements = elements[sort_indices]
+        element_values, elements = sort_vectors(
+            [element_values, elements];
+            reverse = true,
+        )
 
     end
     
@@ -150,13 +138,13 @@ function compute_set_enrichment(
         Tuple{Union{Nothing,Vector{Float64},},Float64,Float64,},
     }()
 
-    for (set, set_elements_,) in set_elements
+    for (set, set_elements_,) = set_elements
 
         set_enrichment[set] = compute_set_enrichment(
             element_values,
             elements,
             set_elements_;
-            sort_ = false, element_index = element_index,
+            element_index = element_index,
         )
 
     end

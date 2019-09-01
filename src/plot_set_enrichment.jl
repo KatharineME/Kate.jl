@@ -36,7 +36,7 @@ function plot_set_enrichment(
 
     y_annotation_template = merge(
         annotation_template,
-        attr(x = -0.125, font_size = axis_title_font_size,)
+        attr(x = -0.125, font_size = axis_title_font_size,),
     )
 
     title2_font_size = title1_font_size * 0.7
@@ -74,7 +74,7 @@ function plot_set_enrichment(
                 attr(
                     y = 1.25,
                     text = "<b>$title1_text</b>",
-                    font_size = title1_font_size
+                    font_size = title1_font_size,
                 ),
             ),
             merge(
@@ -82,7 +82,7 @@ function plot_set_enrichment(
                 attr(
                     y = 1.15,
                     text = "<b>$title2_text</b>",
-                    font_size = title2_font_size
+                    font_size = title2_font_size,
                 ),
             ),
             merge(
@@ -90,25 +90,25 @@ function plot_set_enrichment(
                 attr(
                     y = -0.1,
                     text = "<b>Element Rank (n=$n_element)</b>",
-                    font_size = axis_title_font_size
+                    font_size = axis_title_font_size,
                 ),
             ),
             merge(
                 y_annotation_template,
                 attr(
                     y = mean(yaxis3_domain),
-                    text = "<b>Set<br>Enrichment</b>"
+                    text = "<b>Set<br>Enrichment</b>",
                 )
             ),
             merge(
                 y_annotation_template,
-                attr(y = mean(yaxis2_domain), text = "<b>Set<br>Member</b>"),
+                attr(y = mean(yaxis2_domain), text = "<b>Set<br>Member</b>",),
             ),
             merge(
                 y_annotation_template,
                 attr(
                     y = mean(yaxis1_domain),
-                    text = "<b>$element_value_name</b>"
+                    text = "<b>$element_value_name</b>",
                 ),
             ),
         ],
@@ -117,7 +117,7 @@ function plot_set_enrichment(
     x = 1:n_element
 
     element_values, elements = sort_vectors(
-        [element_values, elements,],
+        [element_values, elements,];
         reverse = true,
     )
 
@@ -179,7 +179,7 @@ function plot_set_enrichment(
                     "     ",
                 ),
                 font_size = title2_font_size,
-                font_color = "#a4345d",
+                font_color = "#913228",
             ),
         ),
     )
