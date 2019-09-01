@@ -138,7 +138,7 @@ function compute_set_enrichment(
         Tuple{Union{Nothing,Vector{Float64},},Float64,Float64,},
     }()
 
-    for (set, set_elements_,) = set_elements
+    for (set, set_elements_,) in set_elements
 
         set_enrichment[set] = compute_set_enrichment(
             element_values,

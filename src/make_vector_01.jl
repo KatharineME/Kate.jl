@@ -7,7 +7,7 @@ function make_vector_01(
     
     vector_01 = Vector{Int64}(undef, n_element,)
     
-    element_to_check_nothing = Dict(element_to_check => nothing for element_to_check = elements_to_check)
+    element_to_check_nothing = Dict(element_to_check => nothing for element_to_check in elements_to_check)
     
     @inbounds @fastmath @simd for index = 1:n_element
 
@@ -35,7 +35,7 @@ function make_vector_01(
     
     vector_01 = fill(0, length(element_index),)
     
-    @inbounds @fastmath @simd for element = elements_to_check
+    @inbounds @fastmath @simd for element in elements_to_check
 
         index = get(element_index, element, nothing,)
 
