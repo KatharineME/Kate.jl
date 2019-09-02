@@ -123,11 +123,7 @@ function find_variant(
             "$somatic_snv_vcf_gz_file_path.tmp",
         ))
 
-        mv(
-           "$somatic_snv_vcf_gz_file_path.tmp",
-           somatic_snv_vcf_gz_file_path;
-           force = true,
-        )
+        mv("$somatic_snv_vcf_gz_file_path.tmp", somatic_snv_vcf_gz_file_path; force = true,)
 
         print_and_run_cmd(`tabix --force $somatic_snv_vcf_gz_file_path`)
 

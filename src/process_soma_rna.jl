@@ -56,10 +56,7 @@ function process_soma_rna(
         n_job,
     )
 
-    count_transcript_directory_path = joinpath(
-        output_directory_path,
-        "count_transcript",
-    )
+    count_transcript_directory_path = joinpath(output_directory_path, "count_transcript",)
 
     count_transcript(
         soma_trim_1_fastq_gz_file_path,

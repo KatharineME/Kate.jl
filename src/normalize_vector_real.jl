@@ -26,8 +26,7 @@ function normalize_vector_real(vector::Vector{<:Real}, method::String,)
         vector_not_nan_minimum = minimum(vector_not_nan)
 
         vector_not_nan_normalized = (vector_not_nan .- vector_not_nan_minimum) /
-                                    (maximum(vector_not_nan) -
-                                     vector_not_nan_minimum)
+                                    (maximum(vector_not_nan) - vector_not_nan_minimum)
 
     elseif method == "sum"
 

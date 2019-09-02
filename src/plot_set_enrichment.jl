@@ -71,19 +71,11 @@ function plot_set_enrichment(
         annotations = [
             merge(
                 x_annotation_template,
-                attr(
-                    y = 1.25,
-                    text = "<b>$title1_text</b>",
-                    font_size = title1_font_size,
-                ),
+                attr(y = 1.25, text = "<b>$title1_text</b>", font_size = title1_font_size,),
             ),
             merge(
                 x_annotation_template,
-                attr(
-                    y = 1.15,
-                    text = "<b>$title2_text</b>",
-                    font_size = title2_font_size,
-                ),
+                attr(y = 1.15, text = "<b>$title2_text</b>", font_size = title2_font_size,),
             ),
             merge(
                 x_annotation_template,
@@ -95,10 +87,7 @@ function plot_set_enrichment(
             ),
             merge(
                 y_annotation_template,
-                attr(
-                    y = mean(yaxis3_domain),
-                    text = "<b>Set<br>Enrichment</b>",
-                )
+                attr(y = mean(yaxis3_domain), text = "<b>Set<br>Enrichment</b>",)
             ),
             merge(
                 y_annotation_template,
@@ -106,20 +95,14 @@ function plot_set_enrichment(
             ),
             merge(
                 y_annotation_template,
-                attr(
-                    y = mean(yaxis1_domain),
-                    text = "<b>$element_value_name</b>",
-                ),
+                attr(y = mean(yaxis1_domain), text = "<b>$element_value_name</b>",),
             ),
         ],
     )
 
     x = 1:n_element
 
-    element_values, elements = sort_vectors(
-        [element_values, elements,];
-        reverse = true,
-    )
+    element_values, elements = sort_vectors([element_values, elements,]; reverse = true,)
 
     element_values_trace = scatter(
         name = "Element Value",
@@ -171,11 +154,7 @@ function plot_set_enrichment(
             attr(
                 y = 1.05,
                 text = join(
-                    (
-                     "KS = $ks_string",
-                     "AUC = $auc_string",
-                     "P-Value = $p_value_string",
-                    ),
+                    ("KS = $ks_string", "AUC = $auc_string", "P-Value = $p_value_string",),
                     "     ",
                 ),
                 font_size = title2_font_size,
@@ -195,9 +174,6 @@ function plot_set_enrichment(
         fill = "tozeroy",
     )
 
-    plot(
-        [element_values_trace, set_elements_trace, set_enrichments_trace,],
-        layout,
-    )
+    plot([element_values_trace, set_elements_trace, set_enrichments_trace,], layout,)
 
 end

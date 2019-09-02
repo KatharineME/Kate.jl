@@ -1,7 +1,4 @@
-function make_vector_01(
-    elements::Vector{String},
-    elements_to_check::Vector{String},
-)
+function make_vector_01(elements::Vector{String}, elements_to_check::Vector{String},)
     
     n_element = length(elements)
     

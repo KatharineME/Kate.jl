@@ -53,10 +53,10 @@ function gsea(
 
         print("Selecting gene sets with keywords $gene_set_keywords... ")
         
-        gene_set_genes = Dict(gene_set => genes_ for (
+        gene_set_genes = Dict(gene_set => genes_ for (gene_set, genes_,) in gene_set_genes if any(occursin(
+            gene_set_keyword,
             gene_set,
-            genes_,
-        ) in gene_set_genes if any(occursin(gene_set_keyword, gene_set,) for gene_set_keyword in gene_set_keywords))
+        ) for gene_set_keyword in gene_set_keywords))
 
         n_gene_set = length(gene_set_genes)
 
@@ -66,10 +66,7 @@ function gsea(
 
     print("Selecting gene sets with $n_required_gene_set_element <= existing elements... ")
 
-    gene_set_genes = Dict(gene_set => genes_ for (
-        gene_set,
-        genes_,
-    ) in gene_set_genes if n_required_gene_set_element < length(intersect(
+    gene_set_genes = Dict(gene_set => genes_ for (gene_set, genes_,) in gene_set_genes if n_required_gene_set_element < length(intersect(
         genes_,
         gene_x_sample[!, 1],
     )))

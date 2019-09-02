@@ -113,10 +113,7 @@ function compute_set_enrichment(
 
     if sort_
 
-        element_values, elements = sort_vectors(
-            [element_values, elements];
-            reverse = true,
-        )
+        element_values, elements = sort_vectors([element_values, elements]; reverse = true,)
 
     end
     
@@ -133,10 +130,7 @@ function compute_set_enrichment(
         
     end
 
-    set_enrichment = Dict{
-        String,
-        Tuple{Union{Nothing,Vector{Float64},},Float64,Float64,},
-    }()
+    set_enrichment = Dict{String,Tuple{Union{Nothing,Vector{Float64},},Float64,Float64,},}()
 
     for (set, set_elements_,) in set_elements
 

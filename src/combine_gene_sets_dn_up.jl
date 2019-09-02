@@ -7,10 +7,7 @@ function combine_gene_sets_dn_up(gene_set_x_element::DataFrame)
 
     gene_sets = gene_set_x_element[!, 1]
 
-    gene_set_x_element_ = DataFrame(
-        eltypes(gene_set_x_element),
-        names(gene_set_x_element),
-    )
+    gene_set_x_element_ = DataFrame(eltypes(gene_set_x_element), names(gene_set_x_element),)
 
     for gene_set in gene_sets
 
