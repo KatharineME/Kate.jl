@@ -106,7 +106,7 @@ end
 
 function compute_set_enrichment(
     element_values::Vector{Float64},
-    elements::AbstractVector{String},
+    elements::Vector{String},
     set_elements::Dict{String,Vector{String},};
     sort_::Bool = true,
 )
