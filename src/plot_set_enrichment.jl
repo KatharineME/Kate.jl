@@ -1,7 +1,6 @@
 using PlotlyJS
 using Printf
 using Statistics
-using WebIO
 
 include("compute_set_enrichment.jl")
 include("make_vector_01.jl")
