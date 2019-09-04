@@ -15,7 +15,7 @@ function align_sequence(
 
     start_time = now()
 
-    println("($start_time) Aligning sequence ...")
+    println("($start_time) Aligning sequence...")
 
     dna_fasta_gz_mmi_file_path = "$dna_fasta_gz_file_path.mmi"
 

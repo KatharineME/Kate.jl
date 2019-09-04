@@ -11,7 +11,7 @@ function check_sequence(
 
     start_time = now()
 
-    println("($start_time) Checking sequence ...")
+    println("($start_time) Checking sequence...")
 
     for fastq_gz_file_path in fastq_gz_file_paths
 

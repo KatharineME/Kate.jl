@@ -1,1 +1,1 @@
-println("(runtests.jl) Testing ...")
+println("(runtests.jl) Testing...")

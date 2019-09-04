@@ -12,7 +12,7 @@ function trim_sequence(
 
     start_time = now()
 
-    println("($start_time) Trimming sequence ...")
+    println("($start_time) Trimming sequence...")
 
     if isfile("$output_file_path_prefix-trimmed-pair1.fastq.gz") ||
        isfile("$output_file_path_prefix-trimmed-pair2.fastq.gz")

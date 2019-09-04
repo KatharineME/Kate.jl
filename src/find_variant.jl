@@ -17,7 +17,7 @@ function find_variant(
 
     start_time = now()
 
-    println("($start_time) Finding variant ...")
+    println("($start_time) Finding variant...")
 
     if !(isfile("$dna_fasta_bgz_file_path.fai") && isfile("$dna_fasta_bgz_file_path.gzi"))
 

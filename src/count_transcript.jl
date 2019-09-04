@@ -13,7 +13,7 @@ function count_transcript(
 
     start_time = now()
 
-    println("($start_time) Counting transcript ...")
+    println("($start_time) Counting transcript...")
 
     cdna_fasta_gz_kallisto_index_file_path = "$cdna_fasta_gz_file_path.kallisto_index"
 
