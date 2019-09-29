@@ -21,6 +21,8 @@ function gsea(
     print("Reading $gene_x_sample_tsv_file_path... ")
 
     gene_x_sample = CSV.read(gene_x_sample_tsv_file_path)
+    
+    gene_x_sample = gene_x_sample[.!ismissing.(gene_x_sample[!, 1]), :]
 
     n_gene, n_sample = size(gene_x_sample)
 
