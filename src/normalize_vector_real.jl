@@ -2,10 +2,10 @@ using Statistics
 using StatsBase
 
 
-function normalize_vector_real(vector::Vector{<:Real}, method::String,)
-    
+function normalize_vector_real(vector::Vector{<:Real}, method::String)
+
     vector = Vector{Float64}(vector)
-    
+
     is_not_nan = .!isnan.(vector)
 
     if !any(is_not_nan)
@@ -13,11 +13,11 @@ function normalize_vector_real(vector::Vector{<:Real}, method::String,)
         return vector
 
     end
-    
+
     vector_not_nan = vector[is_not_nan]
 
     if method == "-0-"
-    
+
         vector_not_nan_normalized = (vector_not_nan .- mean(vector_not_nan)) /
                                     std(vector_not_nan)
 
@@ -61,7 +61,7 @@ function normalize_vector_real(vector::Vector{<:Real}, method::String,)
     end
 
     vector[is_not_nan] .= vector_not_nan_normalized
-    
+
     return vector
-    
+
 end

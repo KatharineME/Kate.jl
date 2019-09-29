@@ -1,4 +1,4 @@
-function error_if_equal(_1::String, _2::String,)
+function error_if_equal(_1::String, _2::String)
 
     if _1 == _2
 

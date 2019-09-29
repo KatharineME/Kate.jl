@@ -21,7 +21,7 @@ function gsea(
     print("Reading $gene_x_sample_tsv_file_path... ")
 
     gene_x_sample = CSV.read(gene_x_sample_tsv_file_path)
-    
+
     gene_x_sample = gene_x_sample[.!ismissing.(gene_x_sample[!, 1]), :]
 
     n_gene, n_sample = size(gene_x_sample)
@@ -33,16 +33,16 @@ function gsea(
         println("$sample_normalization_method normalizing each sample...")
 
         for name in names(gene_x_sample)[2:end]
-    
+
             gene_x_sample[!, name] = normalize_vector_real(
                 Vector{Float64}(gene_x_sample[!, name]),
                 sample_normalization_method,
             )
-            
+
         end
 
     end
-    
+
     print("Reading $gmt_file_paths... ")
 
     gene_set_genes = read_gmt(gmt_file_paths)
@@ -54,8 +54,8 @@ function gsea(
     if gene_set_keywords !== nothing
 
         print("Selecting gene sets contain any of the keywords $gene_set_keywords... ")
-        
-        gene_set_genes = Dict(gene_set => genes_ for (gene_set, genes_,) in gene_set_genes if any(occursin(
+
+        gene_set_genes = Dict(gene_set => genes_ for (gene_set, genes_) in gene_set_genes if any(occursin(
             gene_set_keyword,
             gene_set,
         ) for gene_set_keyword in gene_set_keywords))
@@ -70,7 +70,7 @@ function gsea(
 
         print("Selecting gene sets with $n_required_gene_set_element <= existing elements... ")
 
-        gene_set_genes = Dict(gene_set => genes_ for (gene_set, genes_,) in gene_set_genes if n_required_gene_set_element < length(intersect(
+        gene_set_genes = Dict(gene_set => genes_ for (gene_set, genes_) in gene_set_genes if n_required_gene_set_element < length(intersect(
             genes_,
             gene_x_sample[!, 1],
         )))
@@ -82,7 +82,7 @@ function gsea(
     end
 
     println("Computing set enrichment...")
-    
+
     gene_set_x_sample = combine_gene_sets_dn_up(compute_set_enrichment(
         gene_x_sample,
         gene_set_genes,
@@ -97,7 +97,7 @@ function gsea(
     )
 
     println("Writing $gene_set_x_sample_tsv_file_path...")
-    
+
     CSV.write(gene_set_x_sample_tsv_file_path, gene_set_x_sample; delim = '\t',)
 
     end_time = now()
@@ -105,7 +105,7 @@ function gsea(
     run_time = canonicalize(Dates.CompoundPeriod(end_time - start_time))
 
     println("($end_time) Done in $run_time.")
-    
+
     return gene_set_x_sample_tsv_file_path
 
 end

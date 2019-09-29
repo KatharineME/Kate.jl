@@ -30,7 +30,7 @@ function process_soma_rna(
         error("$output_directory_path exists.")
 
     end
-    
+
     mkpath(output_directory_path)
 
     soma_trim_sequence_file_path_prefix = joinpath(
@@ -51,12 +51,12 @@ function process_soma_rna(
     soma_trim_2_fastq_gz_file_path = "$soma_trim_sequence_file_path_prefix-trimmed-pair2.fastq.gz"
 
     check_sequence(
-        (soma_trim_1_fastq_gz_file_path, soma_trim_2_fastq_gz_file_path,),
-        joinpath(output_directory_path, "check_sequence",),
+        (soma_trim_1_fastq_gz_file_path, soma_trim_2_fastq_gz_file_path),
+        joinpath(output_directory_path, "check_sequence"),
         n_job,
     )
 
-    count_transcript_directory_path = joinpath(output_directory_path, "count_transcript",)
+    count_transcript_directory_path = joinpath(output_directory_path, "count_transcript")
 
     count_transcript(
         soma_trim_1_fastq_gz_file_path,

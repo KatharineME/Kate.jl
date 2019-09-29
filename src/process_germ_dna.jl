@@ -39,7 +39,7 @@ function process_germ_dna(
         error("$output_directory_path exists.")
 
     end
-    
+
     mkpath(output_directory_path)
 
     germ_trim_sequence_file_path_prefix = joinpath(
@@ -77,12 +77,12 @@ function process_germ_dna(
     # soma_trim_2_fastq_gz_file_path = "$soma_trim_sequence_file_path_prefix-trimmed-pair2.fastq.gz"
 
     check_sequence(
-        (germ_trim_1_fastq_gz_file_path, germ_trim_2_fastq_gz_file_path,),
-        joinpath(output_directory_path, "check_sequence",),
+        (germ_trim_1_fastq_gz_file_path, germ_trim_2_fastq_gz_file_path),
+        joinpath(output_directory_path, "check_sequence"),
         n_job,
     )
 
-    germ_bam_file_path = joinpath(output_directory_path, "align_sequence", "germ.bam",)
+    germ_bam_file_path = joinpath(output_directory_path, "align_sequence", "germ.bam")
 
     align_sequence(
         germ_trim_1_fastq_gz_file_path,
@@ -124,7 +124,7 @@ function process_germ_dna(
 
     end
 
-    find_variant_directory_path = joinpath(output_directory_path, "find_variant",)
+    find_variant_directory_path = joinpath(output_directory_path, "find_variant")
 
     find_variant(
         germ_bam_file_path,

@@ -1,4 +1,4 @@
-function sum_vector_real(vector_real::Vector{<:Real}, vector_01::Vector{Int64},)
+function sum_vector_real(vector_real::Vector{<:Real}, vector_01::Vector{Int64})
 
     sum_ = eltype(vector_real)(0)
 

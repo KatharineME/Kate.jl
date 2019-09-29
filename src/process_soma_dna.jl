@@ -43,7 +43,7 @@ function process_soma_dna(
         error("$output_directory_path exists.")
 
     end
-    
+
     mkpath(output_directory_path)
 
     germ_trim_sequence_file_path_prefix = joinpath(
@@ -87,11 +87,11 @@ function process_soma_dna(
          soma_trim_1_fastq_gz_file_path,
          soma_trim_2_fastq_gz_file_path,
         ),
-        joinpath(output_directory_path, "check_sequence",),
+        joinpath(output_directory_path, "check_sequence"),
         n_job,
     )
 
-    germ_bam_file_path = joinpath(output_directory_path, "align_sequence", "germ.bam",)
+    germ_bam_file_path = joinpath(output_directory_path, "align_sequence", "germ.bam")
 
     align_sequence(
         germ_trim_1_fastq_gz_file_path,
@@ -103,7 +103,7 @@ function process_soma_dna(
         n_gb_memory_per_job,
     )
 
-    soma_bam_file_path = joinpath(output_directory_path, "align_sequence", "soma.bam",)
+    soma_bam_file_path = joinpath(output_directory_path, "align_sequence", "soma.bam")
 
     align_sequence(
         soma_trim_1_fastq_gz_file_path,
@@ -129,7 +129,7 @@ function process_soma_dna(
 
     end
 
-    find_variant_directory_path = joinpath(output_directory_path, "find_variant",)
+    find_variant_directory_path = joinpath(output_directory_path, "find_variant")
 
     find_variant(
         germ_bam_file_path,

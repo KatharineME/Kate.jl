@@ -20,7 +20,7 @@ function plot_set_enrichment(
     element_value_name = "Element<br>Value",
     axis_title_font_size = 12,
 )
-        
+
     n_element = length(element_values)
 
     annotation_template = attr(
@@ -35,16 +35,16 @@ function plot_set_enrichment(
 
     y_annotation_template = merge(
         annotation_template,
-        attr(x = -0.125, font_size = axis_title_font_size,),
+        attr(x = -0.125, font_size = axis_title_font_size),
     )
 
     title2_font_size = title1_font_size * 0.7
 
-    yaxis1_domain = (0, 0.3,)
+    yaxis1_domain = (0, 0.3)
 
-    yaxis2_domain = (0.3, 0.4,)
+    yaxis2_domain = (0.3, 0.4)
 
-    yaxis3_domain = (0.4, 1,)
+    yaxis3_domain = (0.4, 1)
 
     layout = Layout(
         height = height,
@@ -70,11 +70,11 @@ function plot_set_enrichment(
         annotations = [
             merge(
                 x_annotation_template,
-                attr(y = 1.25, text = "<b>$title1_text</b>", font_size = title1_font_size,),
+                attr(y = 1.25, text = "<b>$title1_text</b>", font_size = title1_font_size),
             ),
             merge(
                 x_annotation_template,
-                attr(y = 1.15, text = "<b>$title2_text</b>", font_size = title2_font_size,),
+                attr(y = 1.15, text = "<b>$title2_text</b>", font_size = title2_font_size),
             ),
             merge(
                 x_annotation_template,
@@ -86,22 +86,22 @@ function plot_set_enrichment(
             ),
             merge(
                 y_annotation_template,
-                attr(y = mean(yaxis3_domain), text = "<b>Set<br>Enrichment</b>",)
+                attr(y = mean(yaxis3_domain), text = "<b>Set<br>Enrichment</b>"),
             ),
             merge(
                 y_annotation_template,
-                attr(y = mean(yaxis2_domain), text = "<b>Set<br>Member</b>",),
+                attr(y = mean(yaxis2_domain), text = "<b>Set<br>Member</b>"),
             ),
             merge(
                 y_annotation_template,
-                attr(y = mean(yaxis1_domain), text = "<b>$element_value_name</b>",),
+                attr(y = mean(yaxis1_domain), text = "<b>$element_value_name</b>"),
             ),
         ],
     )
 
     x = 1:n_element
 
-    element_values, elements = sort_vectors([element_values, elements,]; reverse = true,)
+    element_values, elements = sort_vectors([element_values, elements]; reverse = true,)
 
     element_values_trace = scatter(
         name = "Element Value",
@@ -112,8 +112,8 @@ function plot_set_enrichment(
         line_color = "#ffb61e",
         fill = "tozeroy",
     )
-    
-    set_elements_01 = make_vector_01(elements, set_elements,)
+
+    set_elements_01 = make_vector_01(elements, set_elements)
 
     set_elements_bit = BitVector(set_elements_01)
 
@@ -130,7 +130,7 @@ function plot_set_enrichment(
         marker_color = "#006c7f",
         hoverinfo = "name+x+text",
     )
-    
+
     set_enrichments, ks, auc = compute_set_enrichment(
         element_values,
         elements,
@@ -153,7 +153,7 @@ function plot_set_enrichment(
             attr(
                 y = 1.05,
                 text = join(
-                    ("KS = $ks_string", "AUC = $auc_string", "P-Value = $p_value_string",),
+                    ("KS = $ks_string", "AUC = $auc_string", "P-Value = $p_value_string"),
                     "     ",
                 ),
                 font_size = title2_font_size,
@@ -173,6 +173,6 @@ function plot_set_enrichment(
         fill = "tozeroy",
     )
 
-    plot([element_values_trace, set_elements_trace, set_enrichments_trace,], layout,)
+    plot([element_values_trace, set_elements_trace, set_enrichments_trace], layout)
 
 end
