@@ -1,6 +1,6 @@
 name = "Kraft"
 uuid = "5c7faf16-a6b3-11e9-0c80-d5a0766e5f8b"
-authors = ["KwatME <kwatme8@gmail.com>"]
+authors = ["kwatme <kwatme8@gmail.com>"]
 version = "0.1.0"
 
 [deps]
