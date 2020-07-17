@@ -2,7 +2,7 @@ using CSV
 
 include("combine_gene_sets_dn_up.jl")
 include("compute_set_enrichment.jl")
-include("read_gmt.jl")
+include("read.jl")
 
 function gsea(
     gene_x_sample_tsv_file_path::String,
@@ -45,7 +45,7 @@ function gsea(
 
     print("Reading $gmt_file_paths... ")
 
-    gene_set_genes = read_gmt(gmt_file_paths)
+    gene_set_genes = read(gmt_file_paths)
 
     n_gene_set = length(gene_set_genes)
 

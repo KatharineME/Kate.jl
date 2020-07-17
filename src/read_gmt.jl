@@ -1,4 +1,4 @@
-function read_gmt(gmt_file_path::String)
+function read(gmt_file_path::String)
 
     gene_set_genes = Dict{String,Vector{String}}()
 
@@ -15,13 +15,13 @@ function read_gmt(gmt_file_path::String)
 end
 
 
-function read_gmt(gmt_file_paths::Vector{String})
+function read(gmt_file_paths::Vector{String})
 
     gene_set_genes = Dict{String,Vector{String}}()
 
     for gmt_file_path in gmt_file_paths
 
-        gene_set_genes = merge(gene_set_genes, read_gmt(gmt_file_path))
+        gene_set_genes = merge(gene_set_genes, read(gmt_file_path))
 
     end
 

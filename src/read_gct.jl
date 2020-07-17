@@ -2,7 +2,7 @@ using CSV
 using DataFrames
 
 
-function read_gct(gct_file_path::String, column_1_name::String)
+function read(gct_file_path::String, column_1_name::String)
 
     tsv = select(
         CSV.read(gct_file_path; header = 3, delim = '\t',),
