@@ -1,71 +1,54 @@
-include("check_sequence.jl")
-include("count_transcript.jl")
 include("trim_sequence.jl")
+
+include("check_sequence.jl")
+
+include("count_transcript.jl")
 
 
 function process_soma_rna(
-    soma_rna_1_fastq_gz_file_path::String,
-    soma_rna_2_fastq_gz_file_path::String,
-    output_directory_path::String,
-    cdna_fasta_gz_file_path::String,
+    soma_rna_1_fastq_gz::String,
+    soma_rna_2_fastq_gz::String,
+    output_dir::String,
+    cdna_fasta_gz::String,
     n_job::Int,
 )
 
-    for file_path in (
-        soma_rna_1_fastq_gz_file_path,
-        soma_rna_2_fastq_gz_file_path,
-        cdna_fasta_gz_file_path,
-    )
-
+    for file_path in (soma_rna_1_fastq_gz, soma_rna_2_fastq_gz, cdna_fasta_gz)
         if !isfile(file_path)
 
-            error("$file_path does not exist.")
+            error("$file_path doesn't exist.")
 
         end
 
     end
 
-    if isdir(output_directory_path)
-
-        error("$output_directory_path exists.")
-
-    end
-
-    mkpath(output_directory_path)
-
-    soma_trim_sequence_file_path_prefix = joinpath(
-        output_directory_path,
-        "trim_sequence",
-        "soma",
-    )
+    soma_trim_sequence_prefix = joinpath(output_dir, "trim_sequence", "soma")
 
     trim_sequence(
-        soma_rna_1_fastq_gz_file_path,
-        soma_rna_2_fastq_gz_file_path,
-        soma_trim_sequence_file_path_prefix,
+        soma_rna_1_fastq_gz,
+        soma_rna_2_fastq_gz,
+        soma_trim_sequence_prefix,
         n_job,
     )
 
-    soma_trim_1_fastq_gz_file_path = "$soma_trim_sequence_file_path_prefix-trimmed-pair1.fastq.gz"
+    soma_trim_1_fastq_gz = "$soma_trim_sequence_prefix-trimmed-pair1.fastq.gz"
 
-    soma_trim_2_fastq_gz_file_path = "$soma_trim_sequence_file_path_prefix-trimmed-pair2.fastq.gz"
+    soma_trim_2_fastq_gz = "$soma_trim_sequence_prefix-trimmed-pair2.fastq.gz"
 
     check_sequence(
-        (soma_trim_1_fastq_gz_file_path, soma_trim_2_fastq_gz_file_path),
-        joinpath(output_directory_path, "check_sequence"),
+        (soma_trim_1_fastq_gz, soma_trim_2_fastq_gz),
+        joinpath(output_dir, "check_sequence"),
         n_job,
     )
 
-    count_transcript_directory_path = joinpath(output_directory_path, "count_transcript")
+    count_transcript_dir = joinpath(output_dir, "count_transcript")
 
     count_transcript(
-        soma_trim_1_fastq_gz_file_path,
-        soma_trim_2_fastq_gz_file_path,
-        cdna_fasta_gz_file_path,
-        count_transcript_directory_path,
+        soma_trim_1_fastq_gz,
+        soma_trim_2_fastq_gz,
+        cdna_fasta_gz,
+        count_transcript_dir,
         n_job,
     )
-
-    return nothing
 
 end

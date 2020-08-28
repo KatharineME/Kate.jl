@@ -4,189 +4,165 @@ include("print_and_run_cmd.jl")
 
 
 function find_variant(
-    germ_bam_file_path::Union{Nothing,String},
-    soma_bam_file_path::Union{Nothing,String},
+    germ_bam::Union{String,Nothing},
+    soma_bam::Union{String,Nothing},
     is_targeted::Bool,
-    dna_fasta_bgz_file_path::String,
-    chromosome_bed_gz_file_path::String,
-    chrn_n_tsv_file_path::String,
-    output_directory_path::String,
+    dna_fasta_bgz::String,
+    chromosome_bed_gz::String,
+    chrn_n_tsv::String,
+    output_dir::String,
     n_job::Int,
-    n_gb_memory::Int,
+    gb_memory::Int,
+    snpeff::String,
 )
 
     start_time = now()
 
-    println("($start_time) Finding variant...")
+    println("($start_time) Finding variant ...")
 
-    if !(isfile("$dna_fasta_bgz_file_path.fai") && isfile("$dna_fasta_bgz_file_path.gzi"))
+    if !(isfile("$dna_fasta_bgz.fai") && ispath("$dna_fasta_bgz.gzi"))
 
-        print_and_run_cmd(`samtools faidx $dna_fasta_bgz_file_path`)
-
-    end
-
-    if !isfile("$chromosome_bed_gz_file_path.tbi")
-
-        print_and_run_cmd(`tabix --force $chromosome_bed_gz_file_path`)
+        print_and_run_cmd(`samtools faidx $dna_fasta_bgz`)
 
     end
 
-    config_parameters = `--referenceFasta $dna_fasta_bgz_file_path --callRegions $chromosome_bed_gz_file_path`
+    if !ispath("$chromosome_bed_gz.tbi")
+
+        print_and_run_cmd(`tabix --force $chromosome_bed_gz`)
+
+    end
+
+    config_parameters::String = "--referenceFasta $dna_fasta_bgz --callRegions $chromosome_bed_gz"
 
     if is_targeted
 
-        config_parameters = `$config_parameters --exome`
+        config_parameters = "$config_parameters --exome"
 
     end
 
-    if germ_bam_file_path !== nothing && soma_bam_file_path !== nothing
+    if germ_bam != nothing && soma_bam != nothing
 
-        config_parameters = `$config_parameters --normalBam $germ_bam_file_path --tumorBam $soma_bam_file_path`
+        config_parameters = "$config_parameters --normalBam $germ_bam --tumorBam $soma_bam"
 
-    elseif germ_bam_file_path !== nothing
+    elseif germ_bam != nothing
 
-        config_parameters = `$config_parameters --bam $germ_bam_file_path`
+        config_parameters = "$config_parameters --bam $germ_bam"
 
     else
 
-        error("germ_bam_file_path and soma_bam_file_path (for processing soma) or germ_bam_file_path (for processing germ) is missing.")
+        error("Specify germ and soma .bam for processing soma or germ .bam for processing germ.")
 
     end
 
-    run_parameters = `--mode local --jobs $n_job --memGb $n_gb_memory --quiet`
+    run_parameters::String = "--mode local --jobs $n_job --memGb $gb_memory --quiet"
 
-    partial_path = joinpath("results", "variants")
+    partial_path::String = joinpath("results", "variants")
 
-    manta_directory_path = joinpath(output_directory_path, "manta")
+    manta_dir::String = joinpath(output_dir, "manta")
 
-    print_and_run_cmd(`configManta.py $config_parameters --outputContig --runDir $manta_directory_path`)
+    print_and_run_cmd(`bash -c "source activate py2 && configManta.py $config_parameters --outputContig --runDir $manta_dir && $(joinpath(manta_dir, "runWorkflow.py")) $run_parameters"`)
 
-    manta_runworkflow_py = joinpath(manta_directory_path, "runWorkflow.py")
+    strelka_dir::String = joinpath(output_dir, "strelka")
 
-    print_and_run_cmd(`$manta_runworkflow_py $run_parameters`)
+    local configure_strelka::String
 
-    strelka_directory_path = joinpath(output_directory_path, "strelka")
+    if germ_bam != nothing && soma_bam != nothing
 
-    if germ_bam_file_path !== nothing && soma_bam_file_path !== nothing
-
-        candidatesmallindels_vcf_gz_file_path = joinpath(
-            manta_directory_path,
-            partial_path,
-            "candidateSmallIndels.vcf.gz",
-        )
-
-        print_and_run_cmd(`configureStrelkaSomaticWorkflow.py $config_parameters --indelCandidates $candidatesmallindels_vcf_gz_file_path --runDir $strelka_directory_path`)
+        configure_strelka = "configureStrelkaSomaticWorkflow.py $config_parameters --indelCandidates $(joinpath(manta_dir, partial_path, "candidateSmallIndels.vcf.gz")) --runDir $strelka_dir"
 
     else
 
-        print_and_run_cmd(`configureStrelkaGermlineWorkflow.py $config_parameters --runDir $strelka_directory_path`)
+        configure_strelka = "configureStrelkaGermlineWorkflow.py $config_parameters --runDir $strelka_dir"
 
     end
 
-    strelka_runworkflow_py = joinpath(strelka_directory_path, "runWorkflow.py")
+    print_and_run_cmd(`bash -c "source activate py2 && $configure_strelka && $(joinpath(strelka_dir, "runWorkflow.py")) $run_parameters"`)
 
-    print_and_run_cmd(`$strelka_runworkflow_py $run_parameters`)
+    local concat_vcfs::Tuple{Vararg{String}}
 
-    if germ_bam_file_path !== nothing && soma_bam_file_path !== nothing
+    if germ_bam != nothing && soma_bam != nothing
 
-        sample_txt = joinpath(output_directory_path, "sample.txt")
+        sample_txt::String = joinpath(output_dir, "sample.txt")
 
-        open(io -> write(io, "Germ\nSoma"), sample_txt; write = true,)
+        # TODO: get sample names (maybe from .bam) and use them instead of "Germ" and "Soma"
+        open(io -> write(io, "Germ\nSoma"), sample_txt; write = true)
 
-        somatic_indel_vcf_gz_file_path = joinpath(
-            strelka_directory_path,
-            partial_path,
-            "somatic.indels.vcf.gz",
-        )
+        somatic_indel_vcf_gz::String =
+            joinpath(strelka_dir, partial_path, "somatic.indels.vcf.gz")
 
         print_and_run_cmd(pipeline(
-            `bcftools reheader --threads $n_job --samples $sample_txt $somatic_indel_vcf_gz_file_path`,
-            "$somatic_indel_vcf_gz_file_path.tmp",
+            `bcftools reheader --threads $n_job --samples $sample_txt $somatic_indel_vcf_gz`,
+            "$somatic_indel_vcf_gz.tmp",
         ))
 
-        mv(
-           "$somatic_indel_vcf_gz_file_path.tmp",
-           somatic_indel_vcf_gz_file_path;
-           force = true,
-        )
+        mv("$somatic_indel_vcf_gz.tmp", somatic_indel_vcf_gz; force = true)
 
-        print_and_run_cmd(`tabix --force $somatic_indel_vcf_gz_file_path`)
+        print_and_run_cmd(`tabix --force $somatic_indel_vcf_gz`)
 
-        somatic_snv_vcf_gz_file_path = joinpath(
-            strelka_directory_path,
-            partial_path,
-            "somatic.snvs.vcf.gz",
-        )
+        somatic_snv_vcf_gz::String =
+            joinpath(strelka_dir, partial_path, "somatic.snvs.vcf.gz")
 
         print_and_run_cmd(pipeline(
-            `bcftools reheader --threads $n_job --samples $sample_txt $somatic_snv_vcf_gz_file_path`,
-            "$somatic_snv_vcf_gz_file_path.tmp",
+            `bcftools reheader --threads $n_job --samples $sample_txt $somatic_snv_vcf_gz`,
+            "$somatic_snv_vcf_gz.tmp",
         ))
 
-        mv("$somatic_snv_vcf_gz_file_path.tmp", somatic_snv_vcf_gz_file_path; force = true,)
+        mv("$somatic_snv_vcf_gz.tmp", somatic_snv_vcf_gz; force = true)
 
-        print_and_run_cmd(`tabix --force $somatic_snv_vcf_gz_file_path`)
+        print_and_run_cmd(`tabix --force $somatic_snv_vcf_gz`)
 
-        concat_vcf_file_paths = (
-            joinpath(manta_directory_path, partial_path, "somaticSV.vcf.gz"),
-            somatic_indel_vcf_gz_file_path,
-            somatic_snv_vcf_gz_file_path,
+        concat_vcfs = (
+            joinpath(manta_dir, partial_path, "somaticSV.vcf.gz"),
+            somatic_indel_vcf_gz,
+            somatic_snv_vcf_gz,
         )
 
     else
 
-        concat_vcf_file_paths = (
-            joinpath(manta_directory_path, partial_path, "diploidSV.vcf.gz"),
-            joinpath(strelka_directory_path, partial_path, "variants.vcf.gz"),
+        concat_vcfs = (
+            joinpath(manta_dir, partial_path, "diploidSV.vcf.gz"),
+            joinpath(strelka_dir, partial_path, "variants.vcf.gz"),
         )
 
     end
 
-    concat_vcf_gz_file_path = joinpath(output_directory_path, "concat.vcf.gz")
+    concat_vcf_gz::String = joinpath(output_dir, "concat.vcf.gz")
 
     print_and_run_cmd(pipeline(
-        `bcftools concat --threads $n_job --allow-overlaps $concat_vcf_file_paths`,
-        `bcftools annotate --threads $n_job --rename-chrs $chrn_n_tsv_file_path`,
+        `bcftools concat --threads $n_job --allow-overlaps $concat_vcfs`,
+        `bcftools annotate --threads $n_job --rename-chrs $chrn_n_tsv`,
         `bgzip --threads $n_job --stdout`,
-        concat_vcf_gz_file_path,
+        concat_vcf_gz,
     ))
 
-    print_and_run_cmd(`tabix $concat_vcf_gz_file_path`)
+    print_and_run_cmd(`tabix $concat_vcf_gz`)
 
-    snpeff_directory_path = joinpath(output_directory_path, "snpeff")
+    snpeff_dir::String = joinpath(output_dir, "snpeff")
 
-    mkpath(snpeff_directory_path)
+    mkpath(snpeff_dir)
 
-    snpeff_vcf_gz_file_path = joinpath(snpeff_directory_path, "snpeff.vcf.gz")
-
-    stats_csv = joinpath(snpeff_directory_path, "stats.csv")
-
-    stats_html = replace(stats_csv, ".csv" => ".html")
+    snpeff_vcf_gz::String = joinpath(snpeff_dir, "snpeff.vcf.gz")
 
     print_and_run_cmd(pipeline(
-        `snpEff -Xmx$(n_gb_memory)g GRCh38.86 -noLog -verbose -csvStats $stats_csv -htmlStats $stats_html $concat_vcf_gz_file_path`,
+        `java -Xmx$(gb_memory)g -jar $snpeff GRCh38.99 -noLog -verbose -csvStats $(joinpath(snpeff_dir, "stats.csv")) -htmlStats $(joinpath(snpeff_dir, "stats.html")) $concat_vcf_gz`,
         `bgzip --threads $n_job --stdout`,
-        snpeff_vcf_gz_file_path,
+        snpeff_vcf_gz,
     ))
 
-    print_and_run_cmd(`tabix $snpeff_vcf_gz_file_path`)
+    print_and_run_cmd(`tabix $snpeff_vcf_gz`)
 
-    pass_vcf_gz_file_path = joinpath(output_directory_path, "pass.vcf.gz")
+    pass_vcf_gz::String = joinpath(output_dir, "pass.vcf.gz")
 
     print_and_run_cmd(pipeline(
-        `bcftools view --threads $n_job --include 'FILTER=="PASS"' $snpeff_vcf_gz_file_path`,
+        `bcftools view --threads $n_job --include 'FILTER=="PASS"' $snpeff_vcf_gz`,
         `bgzip --threads $n_job --stdout`,
-        pass_vcf_gz_file_path,
+        pass_vcf_gz,
     ))
 
-    print_and_run_cmd(`tabix $pass_vcf_gz_file_path`)
+    print_and_run_cmd(`tabix $pass_vcf_gz`)
 
     end_time = now()
 
-    run_time = canonicalize(Dates.CompoundPeriod(end_time - start_time))
-
-    println("($end_time) Done in $run_time.")
-
-    return nothing
+    println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
 
 end
