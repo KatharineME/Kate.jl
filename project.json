@@ -1,0 +1,7 @@
+{
+  "dna_is_targeted": false,
+  "germ_dna.1.fastq.gz": "input/HG002_cat/HG002_R1.fastq.gz",
+  "germ_dna.2.fastq.gz": "input/HG002_cat/HG002_R2.fastq.gz",
+  "n_job": 2,
+  "gb_memory": 50 
+}
