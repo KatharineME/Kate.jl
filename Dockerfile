@@ -1,5 +1,3 @@
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
 ARG BASE_CONTAINER=jupyter/scipy-notebook
 FROM $BASE_CONTAINER
 
@@ -15,10 +13,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 USER root
 
 # Julia installation
-# Default values can be overridden at build time
-# (ARGS are in lower case to distinguish them from ENV)
-# Check https://julialang.org/downloads/
 ARG julia_version="1.5.2"
+
 # SHA256 checksum
 ARG julia_checksum="6da704fadcefa39725503e4c7a9cfa1a570ba8a647c4bd8de69a118f43584630"
 
