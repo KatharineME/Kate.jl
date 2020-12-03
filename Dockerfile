@@ -88,10 +88,6 @@ RUN conda create --name py2 --yes python=2.7 && \
     'manta' \
     'strelka'
 
-# Add Julia packages. Only add HDF5 if this is not a test-only build since
-# it takes roughly half the entire build time of all of the images on Travis
-# to add this one package and often causes Travis to timeout.
-#
 # Install IJulia as jovyan and then move the kernelspec out
 # to the system share location. Avoids problems with runtime UID change not
 # taking effect properly on the .local folder in the jovyan home dir.
