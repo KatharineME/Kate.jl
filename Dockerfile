@@ -55,9 +55,9 @@ RUN mkdir /etc/julia && \
 
 # Install SnpEff into /opt/
 RUN mkdir /opt/snpeff && \
-    wget -q -P "/tmp/" https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip && \
-    unzip "/tmp/snpEff_latest_core.zip" && \
-    rm "/tmp/snpEff_latest_core.zip"
+    wget -q -P "/opt/snpeff" https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip && \
+    unzip "/opt/snpeff/snpEff_latest_core.zip" && \
+    rm "/opt/snpeff/snpEff_latest_core.zip"
     
 
 USER $NB_UID
