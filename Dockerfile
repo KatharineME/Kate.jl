@@ -55,10 +55,8 @@ RUN mkdir /etc/julia && \
 
 # Install SnpEff into /opt/
 RUN mkdir /opt/snpeff && \
-    wget -q -P "/opt/snpeff" https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip && \
-    unzip "/opt/snpeff/snpEff_latest_core.zip" && \
-    rm "/opt/snpeff/snpEff_latest_core.zip"
-    
+    wget -q -P "/opt/snpeff/" https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip && \
+    unzip "/opt/snpeff/snpEff_latest_core.zip"
 
 USER $NB_UID
 
@@ -108,5 +106,6 @@ RUN julia -e 'import Pkg; Pkg.update()' && \
     rm -rf "${HOME}/.local" && \
     fix-permissions "${JULIA_PKGDIR}" "${CONDA_DIR}/share/jupyter"
 
+RUN rm -r /home/jovyan/work/
 
 WORKDIR $HOME
