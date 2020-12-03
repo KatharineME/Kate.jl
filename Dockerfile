@@ -52,6 +52,14 @@ RUN mkdir /etc/julia && \
     chown "${NB_USER}" "${JULIA_PKGDIR}" && \
     fix-permissions "${JULIA_PKGDIR}"
 
+
+# Install SnpEff into /opt/
+RUN mkdir /opt/snpeff && \
+    wget -q -P "/tmp/" https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip && \
+    unzip "/tmp/snpEff_latest_core.zip" && \
+    rm "/tmp/snpEff_latest_core.zip"
+    
+
 USER $NB_UID
 
 # R packages including IRKernel which gets installed globally.
@@ -100,9 +108,5 @@ RUN julia -e 'import Pkg; Pkg.update()' && \
     rm -rf "${HOME}/.local" && \
     fix-permissions "${JULIA_PKGDIR}" "${CONDA_DIR}/share/jupyter"
 
-# Install SnpEff into the /opt/ directory in the container    
-RUN wget -q -P "/tmp/" https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip && \
-    unzip "/tmp/snpEff_latest_core.zip" && \
-    rm "/tmp/snpEff_latest_core.zip"
 
 WORKDIR $HOME
