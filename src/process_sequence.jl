@@ -1,4 +1,4 @@
-module analyze_sequence
+module ProcessSequence
 
 for name::String in readdir(@__DIR__)
     if endswith(name, ".jl") && name != splitdir(@__FILE__)[end]
