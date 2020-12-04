@@ -6,7 +6,7 @@ git clone https://github.com/KatharineME/ProcessSequence.jl
 cd ProcessSequence.jl
 ```
 
-Run the analyze_sequence docker container. This command makes the analyze_sequence code accessible and editable in the container. It also runs JupyterLab on port `8888` in the container and maps it to port `10000` on the host OS. Note: 'jovyan' is the default name Jupyter uses in containers.
+Run the `process_sequence` docker container. This command makes the `ProcessSequence.jl` code accessible and editable in the container. It also runs JupyterLab on port `8888` in the container and maps it to port `10000` on the host OS. Note: 'jovyan' is the default name Jupyter uses in containers.
 ```sh
 docker run --rm -p 10000:8888 -e JUPYTER_ENABLE_LAB=yes -v "$PWD":/home/jovyan/ProcessSequence.jl katharineme/process_sequence
 ```
