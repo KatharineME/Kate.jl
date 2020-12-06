@@ -45,6 +45,7 @@ function process_germ_dna(
     trim_sequence(
         germ_dna_1_fastq_gz,
         germ_dna_2_fastq_gz,
+        output_dir,
         germ_trim_sequence_prefix,
         n_job,
     )
