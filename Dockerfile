@@ -58,6 +58,7 @@ RUN mkdir /opt/snpeff && \
     wget -q -P "/opt/snpeff/" https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip && \
     cd /opt/snpeff/ && \
     unzip "/opt/snpeff/snpEff_latest_core.zip"
+    mkdir /opt/snpeff/snpEff/data/GRCh38.99/
 
 USER $NB_UID
 
