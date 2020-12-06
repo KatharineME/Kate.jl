@@ -58,8 +58,11 @@ RUN mkdir /opt/snpeff && \
     wget -q -P "/opt/snpeff/" https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip && \
     cd /opt/snpeff/ && \
     unzip "/opt/snpeff/snpEff_latest_core.zip" && \
-    mkdir -p /opt/snpeff/snpEff/data/GRCh38.99/
+    mkdir -p /opt/snpeff/snpEff/data/GRCh38.99/ && \
+    chown -R "${NB_USER}" /opt/snpeff && \
+    fix-permissions /opt/snpeff
 
+s
 USER $NB_UID
 
 # R packages including IRKernel which gets installed globally.
