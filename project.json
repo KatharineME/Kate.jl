@@ -1,7 +1,8 @@
 {
   "dna_is_targeted": false,
+  "sample_name": "test_high_quality",
   "germ_dna.1.fastq.gz": "input/test_high_quality/germ_dna.1.1m.fastq.gz",
   "germ_dna.2.fastq.gz": "input/test_high_quality/germ_dna.2.1m.fastq.gz",
   "n_job": 8,
-  "gb_memory": 40 
+  "gb_memory": 40
 }
