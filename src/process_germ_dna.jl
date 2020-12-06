@@ -63,6 +63,7 @@ function process_germ_dna(
     # trim_sequence(
     #     soma_dna_1_fastq_gz,
     #     soma_dna_2_fastq_gz,
+    #     output_dir,
     #     soma_trim_sequence_prefix,
     #     n_job,
     # )

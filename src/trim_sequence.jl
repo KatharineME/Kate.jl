@@ -13,9 +13,17 @@ function trim_sequence(
 
     start_time = now()
 
-    if isfile(joinpath(output_dir, "trim_sequence/germ-trimmed-pair1.fastq.gz")) && isfile(joinpath(output_dir, "trim_sequence/germ-trimmed-pair2.fastq.gz"))
+    trim_sequence_dir = splitdir(output_prefix)[1]
+
+    germ_or_soma = splitdir(output_prefix)[2]
+
+    trimmed_pair_1_path = joinpath(string(trim_sequence_dir), string(germ_or_soma, "-trimmed-pair1.fastq.gz"))
+
+    trimmed_pair_2_path = joinpath(string(trim_sequence_dir), string(germ_or_soma, "-trimmed-pair2.fastq.gz"))
+
+    if isfile(trimmed_pair_1_path) && isfile(trimmed_pair_2_path)
         
-        println("Trimmed files already exist.\n")
+        println("Skipping trimming because trimmed files already exist:\n $trimmed_pair_1_path\n $trimmed_pair_2_path\n")
 
     else
         

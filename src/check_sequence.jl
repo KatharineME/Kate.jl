@@ -9,7 +9,7 @@ function check_sequence(fastq_gzs::Tuple{Vararg{String}}, output_dir::String, n_
 
     if ispath(output_dir)
 
-        println("Skipping check_sequence because $output_dir already exists.\n")
+        println("Skipping check sequence because check sequence directory already exists:\n $output_dir\n")
 
     else
 
