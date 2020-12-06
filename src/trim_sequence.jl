@@ -15,7 +15,7 @@ function trim_sequence(
 
     if isfile(joinpath(output_dir, "trim_sequence/germ-trimmed-pair1.fastq.gz")) && isfile(joinpath(output_dir, "trim_sequence/germ-trimmed-pair2.fastq.gz"))
         
-        println("Trimmed files already exist.")
+        println("Trimmed files already exist.\n")
 
     else
         

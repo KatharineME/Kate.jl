@@ -7,14 +7,22 @@ function check_sequence(fastq_gzs::Tuple{Vararg{String}}, output_dir::String, n_
 
     start_time = now()
 
-    println("($start_time) Checking sequence ...")
+    if ispath(output_dir)
 
-    mkpath(output_dir)
+        println("Skipping check_sequence because $output_dir already exists.\n")
 
-    print_and_run_cmd(`fastqc --threads $(minimum((length(fastq_gzs), n_job))) --outdir $output_dir $fastq_gzs`)
+    else
 
-    end_time = now()
+        println("($start_time) Checking sequence ...")
 
-    println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
+        mkpath(output_dir)
+
+        print_and_run_cmd(`fastqc --threads $(minimum((length(fastq_gzs), n_job))) --outdir $output_dir $fastq_gzs`)
+
+        end_time = now()
+
+        println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
+
+    end
 
 end
