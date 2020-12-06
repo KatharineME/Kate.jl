@@ -82,7 +82,7 @@ RUN conda config --set channel_priority false && \
     'multiqc' \
     'minimap2' \
     'htslib' \
-    'samtools' \
+    'samtools=1.9' \
     'bcftools' \
     'snpeff' \
     'kallisto' && \ 
