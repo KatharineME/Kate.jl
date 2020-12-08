@@ -31,9 +31,11 @@ function align_sequence(
 
     print_and_run_cmd(pipeline(
         `minimap2 -x sr -t $n_job -K $(job_gb_memory)G -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fasta_gz_mmi $_1_fastq_gz $_2_fastq_gz`,
-        `samtools sort --threads $n_job -m $(job_gb_memory)G -n`,
+        # `samtools sort --threads $n_job -m $(job_gb_memory)G -n`,
+        `samtools sort --threads $n_job -n`,
         `samtools fixmate --threads $n_job -m - -`,
-        `samtools sort --threads $n_job -m $(job_gb_memory)G`,
+        # `samtools sort --threads $n_job -m $(job_gb_memory)G`,
+        `samtools sort --threads $n_job`,
         "$bam.tmp",
     ))
 

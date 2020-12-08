@@ -63,7 +63,7 @@ RUN mkdir /opt/snpeff && \
     chown -R "${NB_USER}" /opt/snpeff && \
     fix-permissions /opt/snpeff
 
-s
+
 USER $NB_UID
 
 # R packages including IRKernel which gets installed globally.

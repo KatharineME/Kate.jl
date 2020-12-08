@@ -11,6 +11,7 @@
 input/*
 output/*
 tool/*
+notebook/*.bam*
 
 !input/.gitkeep
 !output/.gitkeep

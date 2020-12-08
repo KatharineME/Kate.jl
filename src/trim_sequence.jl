@@ -35,7 +35,7 @@ function trim_sequence(
         
         print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --end-quality 20 --mode pe --compress --output $output_prefix --quiet $_1_fastq_gz $_2_fastq_gz`)
         
-        endtime = now()
+        end_time = now()
         
         println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")        
 
