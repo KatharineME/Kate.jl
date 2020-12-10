@@ -40,22 +40,42 @@ function concatenate_reads(
 
     end
 
-    println("Number of Forward (R1) Reads = $number_of_forward_reads\n")
+    println("Number of forward (R1) read files = $number_of_forward_reads\n")
     
-    println("Number of Reverse (R2) Reads = $number_of_reverse_reads\n")
+    println("Number of reverse (R2) read files = $number_of_reverse_reads\n")
 
     sample_cat_dir = joinpath(input_dir, string(sample_name, "_cat"))
+    
+    if ispath(sample_cat_dir)
+        
+        println("Skipping concatenation because concatenate directory already exists:\n $sample_cat_dir\n")
+        
+    else
 
-    run(pipeline(`mkdir $sample_cat_dir`))
+        run(pipeline(`mkdir $sample_cat_dir`))
+    
+        if number_of_forward_reads > 1
 
-    println("\nCombining R1 Reads\n")
+            println("\nCombining R1 reads\n")
 
-    run(pipeline(`cat $forward_read_files`, stdout=joinpath(sample_cat_dir, string(sample_name, "_R1.fastq.gz"))))
+            run(pipeline(`cat $forward_read_files`, stdout=joinpath(sample_cat_dir, string(sample_name, "_R1.fastq.gz"))))
 
-    println("\nCombining R2 Reads\n")
+        if number_of_reverse_reads > 1
 
-    run(pipeline(`cat $reverse_read_files`, stdout=joinpath(sample_cat_dir, string(sample_name, "_R1.fastq.gz"))))
-            
+            println("\nCombining R2 reads\n")
+
+            run(pipeline(`cat $reverse_read_files`, stdout=joinpath(sample_cat_dir, string(sample_name, "_R2.fastq.gz"))))       
+
+        else
+
+            println("Number of forward and reverse read files are not more than 1, so there are no fastq files to concatenate.")
+
+        end
+
+    end
+        
+    end
+        
     end_time = now()
             
     println("\nDone at: $end_time\n")
