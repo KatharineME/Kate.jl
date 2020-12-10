@@ -1,6 +1,6 @@
 {
   "dna_is_targeted": false,
-  "sample_name": "1004",
+  "sample_name": "1005",
   "germ_dna.1.fastq.gz": "input/1004/G1004_CSFP200000023-2a_H52MHDSXY_L4_1.fq.gz",
   "germ_dna.2.fastq.gz": "input/1004/G1004_CSFP200000023-2a_H52MHDSXY_L4_2.fq.gz",
   "n_job": 8,
