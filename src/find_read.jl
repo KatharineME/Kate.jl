@@ -19,12 +19,12 @@ function find_reads(sample_dir::String)
         
         for file in files
 
-            if occursin(".fastq", file)
+            if occursin(".fastq", file) && !(occursin(".md5", file)) 
 
                 number_of_fastq_files += 1
             end
 
-            if occursin("fastq.gz", file)
+            if occursin("fastq.gz", file) && !(occursin(".md5", file))
                 
 		        number_of_fastq_gz_files += 1
 
@@ -32,7 +32,7 @@ function find_reads(sample_dir::String)
 
             end
 
-            if occursin("fq.gz", file)
+            if occursin("fq.gz", file) && !(occursin(".md5", file)) 
 
                 number_of_fastq_gz_files += 1
 
