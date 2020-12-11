@@ -13,7 +13,7 @@ function find_variant(
     output_dir::String,
     n_job::Int,
     gb_memory::Int,
-    snpeff::String,
+    snpeff_jar::String,
 )
 
     start_time = now()
@@ -144,7 +144,7 @@ function find_variant(
     snpeff_vcf_gz::String = joinpath(snpeff_dir, "snpeff.vcf.gz")
 
     print_and_run_cmd(pipeline(
-        `java -Xmx$(gb_memory)g -jar $snpeff GRCh38.99 -noLog -verbose -csvStats $(joinpath(snpeff_dir, "stats.csv")) -htmlStats $(joinpath(snpeff_dir, "stats.html")) $concat_vcf_gz`,
+        `java -Xmx$(gb_memory)g -jar $snpeff_jar GRCh38.99 -noLog -verbose -csvStats $(joinpath(snpeff_dir, "stats.csv")) -htmlStats $(joinpath(snpeff_dir, "stats.html")) $concat_vcf_gz`,
         `bgzip --threads $n_job --stdout`,
         snpeff_vcf_gz,
     ))
