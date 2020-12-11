@@ -31,6 +31,7 @@ function process_germ_dna(
         dna_fasta_gz,
         chromosome_bed_gz,
         chrn_n_tsv,
+        snpeff_jar,
     )
         if !isfile(file_path)
 
