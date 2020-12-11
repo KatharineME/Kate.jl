@@ -20,7 +20,7 @@ function process_germ_dna(
     n_job::Int,
     gb_memory::Int,
     job_gb_memory::Int,
-    snpeff::String,
+    snpeff_jar::String,
 )
 
     for file_path::String in (
@@ -130,7 +130,7 @@ function process_germ_dna(
         find_variant_dir,
         n_job,
         gb_memory,
-        snpeff,
+        snpeff_jar,
     )
 
 end
