@@ -9,6 +9,7 @@ function concatenate_reads(
 
     start_time = now()
 
+
     forward_read_files = []
     
     reverse_read_files = []
