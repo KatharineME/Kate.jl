@@ -1,0 +1,16 @@
+
+Input Data
+Files              : GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
+Format             : FASTA
+Type               : DNA
+Number of sequences: 195
+Total residues     : 3099922541
+Minimum length     : 970
+Maximum length     : 248956422
+
+Output Data
+SDF-ID             : 7f95b918-30df-4b58-8000-78ebc1cc404f
+Number of sequences: 195
+Total residues     : 3099922541
+Minimum length     : 970
+Maximum length     : 248956422
