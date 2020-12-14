@@ -67,9 +67,9 @@ RUN mkdir /opt/snpeff && \
 RUN mkdir /opt/rtg && \
     wget -q -P "/opt/rtg/" https://github.com/RealTimeGenomics/rtg-tools/releases/download/3.11/rtg-tools-3.11-linux-x64.zip && \
     cd /opt/rtg/ && \
-    unzip "/opt/rtg/rtg-tools-3.11-linux-x64.zip" && \
-    cd /opt/rtg/rtg-tools-3.11/ && \
-    n0 | ./rtg
+    unzip "/opt/rtg/rtg-tools-3.11-linux-x64.zip"
+    # cd /opt/rtg/rtg-tools-3.11/
+    # no | ./rtg
 
 RUN chown -R "${NB_USER}" /opt/rtg && \
     fix-permissions /opt/rtg

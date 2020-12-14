@@ -33,7 +33,9 @@ function trim_sequence(
         
         mkpath(output_dir)
         
-        print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --end-quality 20 --mode pe --compress --output $output_prefix --quiet $_1_fastq_gz $_2_fastq_gz`)
+        print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --mode pe -Q 2 -q 2 --compress --output $output_prefix --quiet $_1_fastq_gz $_2_fastq_gz`)
+        
+        # print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --end-quality 20 --mode pe --compress --output $output_prefix --quiet $_1_fastq_gz $_2_fastq_gz`)
         
         end_time = now()
         
