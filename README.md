@@ -11,6 +11,6 @@ Run the [process_sequence](https://hub.docker.com/repository/docker/katharineme/
 docker run --rm -p 10000:8888 -e JUPYTER_ENABLE_LAB=yes -v "$PWD":/home/jovyan/ProcessSequence.jl katharineme/process_sequence
 ```
 
-JupyterLab is running in the container at the link below. Use the `token_id` that's printed to the terminal when the container is run.
+JupyterLab is now running at the link below. Use the `token_id` that was printed to the terminal.
 
 `http://127.0.0.1:10000/?token=<token_id>`
