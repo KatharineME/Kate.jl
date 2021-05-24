@@ -16,7 +16,7 @@ docker run --rm -p 10000:8888 -e JUPYTER_ENABLE_LAB=yes -v "$PWD":/home/jovyan/P
 
 This command makes the `ProcessSequence.jl` code accessible and editable in the container. It also runs JupyterLab on port `8888` in the container and maps it to port `10000` on the host OS. Note: 'jovyan' is the default name Jupyter uses in containers. 
 
-#### 4. Access JupyterLab at this link:
+#### 4. Access JupyterLab at this link
 
 `http://127.0.0.1:10000/?token=<token_id>`
 
