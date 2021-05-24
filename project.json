@@ -1,8 +1,8 @@
 {
   "dna_is_targeted": false,
-  "sample_name": "736",
-  "germ_dna.1.fastq.gz": "input/736/fastq_black/WGC064630D_combined_R1.fastq.gz",
-  "germ_dna.2.fastq.gz": "input/736/fastq_black/WGC064630D_combined_R2.fastq.gz",
+  "sample_name": "cell_line",
+  "germ_dna.1.fastq.gz": "input/cell_line/KTB21-1_S77_all_R1_001.fastq.gz",
+  "germ_dna.2.fastq.gz": "input/cell_line/KTB21-1_S77_all_R2_001.fastq.gz",
   "n_job": 8,
   "gb_memory": 40
 }
