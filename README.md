@@ -1,4 +1,4 @@
-[Install Docker](https://www.docker.com/get-started).
+#### 1. [Install Docker](https://www.docker.com/get-started).
 
 ```sh
 git clone https://github.com/KatharineME/ProcessSequence.jl
