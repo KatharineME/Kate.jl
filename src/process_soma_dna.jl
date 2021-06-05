@@ -13,7 +13,7 @@ function process_soma_dna(
     soma_dna_1_fastq_gz::String,
     soma_dna_2_fastq_gz::String,
     dna_is_targeted::Bool,
-    output_dir::String,
+    paou::String,
     dna_fasta_gz::String,
     chromosome_bed_gz::String,
     chrn_n_tsv::String,
@@ -40,11 +40,12 @@ function process_soma_dna(
 
     end
 
-    germ_trim_sequence_prefix::String = joinpath(output_dir, "trim_sequence", "germ")
+    germ_trim_sequence_prefix::String = joinpath(paou, "trim_sequence", "germ")
 
     trim_sequence(
         germ_dna_1_fastq_gz,
         germ_dna_2_fastq_gz,
+        paou,
         germ_trim_sequence_prefix,
         n_job,
     )
@@ -53,7 +54,7 @@ function process_soma_dna(
 
     germ_trim_2_fastq_gz::String = "$germ_trim_sequence_prefix-trimmed-pair2.fastq.gz"
 
-    soma_trim_sequence_prefix::String = joinpath(output_dir, "trim_sequence", "soma")
+    soma_trim_sequence_prefix::String = joinpath(paou, "trim_sequence", "soma")
 
     trim_sequence(
         soma_dna_1_fastq_gz,
@@ -73,11 +74,11 @@ function process_soma_dna(
             soma_trim_1_fastq_gz,
             soma_trim_2_fastq_gz,
         ),
-        joinpath(output_dir, "check_sequence"),
+        joinpath(paou, "check_sequence"),
         n_job,
     )
 
-    germ_bam::String = joinpath(output_dir, "align_sequence", "germ.bam")
+    germ_bam::String = joinpath(paou, "align_sequence", "germ.bam")
 
     align_sequence(
         germ_trim_1_fastq_gz,
@@ -89,7 +90,7 @@ function process_soma_dna(
         job_gb_memory,
     )
 
-    soma_bam::String = joinpath(output_dir, "align_sequence", "soma.bam")
+    soma_bam::String = joinpath(paou, "align_sequence", "soma.bam")
 
     align_sequence(
         soma_trim_1_fastq_gz,
@@ -113,7 +114,7 @@ function process_soma_dna(
 
     end
 
-    find_variant_dir::String = joinpath(output_dir, "find_variant")
+    find_variant_dir::String = joinpath(paou, "find_variant")
 
     find_variant(
         germ_bam,

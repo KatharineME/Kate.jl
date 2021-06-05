@@ -4,10 +4,10 @@ include("print_and_run_cmd.jl")
 
 
 function align_sequence(
-    _1_fastq_gz::String,
-    _2_fastq_gz::String,
-    sample_name::String,
-    dna_fasta_gz::String,
+    fq1::String,
+    fq2::String,
+    sa::String,
+    fa::String,
     bam::String,
     n_job::Int,
     job_gb_memory::Int,
@@ -17,11 +17,11 @@ function align_sequence(
 
     println("($start_time) Aligning sequence ...")
 
-    dna_fasta_gz_mmi::String = "$dna_fasta_gz.mmi"
+    dna_fasta_gz_mmi::String = "$fa.mmi"
 
     if !ispath(dna_fasta_gz_mmi)
 
-        print_and_run_cmd(`minimap2 -t $n_job -d $dna_fasta_gz_mmi $dna_fasta_gz`)
+        print_and_run_cmd(`minimap2 -t $n_job -d $dna_fasta_gz_mmi $fa`)
 
     end
 
@@ -30,7 +30,7 @@ function align_sequence(
     mkpath(output_dir)
 
     print_and_run_cmd(pipeline(
-        `minimap2 -x sr -t $n_job -K $(job_gb_memory)G -R "@RG\tID:$sample_name\tSM:$sample_name" -a $dna_fasta_gz_mmi $_1_fastq_gz $_2_fastq_gz`,
+        `minimap2 -x sr -t $n_job -K $(job_gb_memory)G -R "@RG\tID:$sa\tSM:$sa" -a $dna_fasta_gz_mmi $fq1 $fq2`,
         # `samtools sort --threads $n_job -m $(job_gb_memory)G -n`,
         `samtools sort --threads $n_job -n`,
         `samtools fixmate --threads $n_job -m - -`,
