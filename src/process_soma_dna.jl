@@ -8,29 +8,29 @@ include("find_variant.jl")
 
 
 function process_soma_dna(
-    germ_dna_1_fastq_gz::String,
-    germ_dna_2_fastq_gz::String,
-    soma_dna_1_fastq_gz::String,
-    soma_dna_2_fastq_gz::String,
-    dna_is_targeted::Bool,
+    ge1::String,
+    ge2::String,
+    so1::String,
+    so2::String,
+    ta::Bool,
     paou::String,
-    dna_fasta_gz::String,
-    chromosome_bed_gz::String,
-    chrn_n_tsv::String,
-    n_job::Int,
-    gb_memory::Int,
-    job_gb_memory::Int,
+    fa::String,
+    chsi::String,
+    chna::String,
+    n_jo::Int,
+    meto::Int,
+    mejo::Int,
     snpeff::String,
 )
 
     for file_path::String in (
-        germ_dna_1_fastq_gz,
-        germ_dna_2_fastq_gz,
-        soma_dna_1_fastq_gz,
-        soma_dna_2_fastq_gz,
-        dna_fasta_gz,
-        chromosome_bed_gz,
-        chrn_n_tsv,
+        ge1,
+        ge2,
+        so1,
+        so2,
+        fa,
+        chsi,
+        chna,
     )
         if !isfile(file_path)
 
@@ -40,92 +40,92 @@ function process_soma_dna(
 
     end
 
-    germ_trim_sequence_prefix::String = joinpath(paou, "trim_sequence", "germ")
+    page::String = joinpath(paou, "trim_sequence", "germ")
 
     trim_sequence(
-        germ_dna_1_fastq_gz,
-        germ_dna_2_fastq_gz,
+        ge1,
+        ge2,
         paou,
-        germ_trim_sequence_prefix,
-        n_job,
+        page,
+        n_jo,
     )
 
-    germ_trim_1_fastq_gz::String = "$germ_trim_sequence_prefix-trimmed-pair1.fastq.gz"
+    ge1tr::String = "$page-trimmed-pair1.fastq.gz"
 
-    germ_trim_2_fastq_gz::String = "$germ_trim_sequence_prefix-trimmed-pair2.fastq.gz"
+    ge2tr::String = "$page-trimmed-pair2.fastq.gz"
 
-    soma_trim_sequence_prefix::String = joinpath(paou, "trim_sequence", "soma")
+    paso::String = joinpath(paou, "trim_sequence", "soma")
 
     trim_sequence(
-        soma_dna_1_fastq_gz,
-        soma_dna_2_fastq_gz,
-        soma_trim_sequence_prefix,
-        n_job,
+        so1,
+        so2,
+        paso,
+        n_jo,
     )
 
-    soma_trim_1_fastq_gz::String = "$soma_trim_sequence_prefix-trimmed-pair1.fastq.gz"
+    so1tr::String = "$paso-trimmed-pair1.fastq.gz"
 
-    soma_trim_2_fastq_gz::String = "$soma_trim_sequence_prefix-trimmed-pair2.fastq.gz"
+    so2tr::String = "$paso-trimmed-pair2.fastq.gz"
 
     check_sequence(
         (
-            germ_trim_1_fastq_gz,
-            germ_trim_2_fastq_gz,
-            soma_trim_1_fastq_gz,
-            soma_trim_2_fastq_gz,
+            ge1tr,
+            ge2tr,
+            so1tr,
+            so2tr,
         ),
         joinpath(paou, "check_sequence"),
-        n_job,
+        n_jo,
     )
 
-    germ_bam::String = joinpath(paou, "align_sequence", "germ.bam")
+    page::String = joinpath(paou, "align_sequence", "germ.bam")
 
     align_sequence(
-        germ_trim_1_fastq_gz,
-        germ_trim_2_fastq_gz,
+        ge1tr,
+        ge2tr,
         "Germ",
-        dna_fasta_gz,
-        germ_bam,
-        n_job,
-        job_gb_memory,
+        fa,
+        page,
+        n_jo,
+        mejo,
     )
 
-    soma_bam::String = joinpath(paou, "align_sequence", "soma.bam")
+    paso::String = joinpath(paou, "align_sequence", "soma.bam")
 
     align_sequence(
-        soma_trim_1_fastq_gz,
-        soma_trim_2_fastq_gz,
+        so1tr,
+        so2tr,
         "Soma",
-        dna_fasta_gz,
-        soma_bam,
-        n_job,
-        job_gb_memory,
+        fa,
+        paso,
+        n_jo,
+        mejo,
     )
 
-    dna_fasta_bgz::String = "$(splitext(dna_fasta_gz)[1]).bgz"
+    fagz::String = "$(splitext(fa)[1]).bgz"
 
-    if !isfile(dna_fasta_bgz)
+    if !isfile(fagz)
 
         print_and_run_cmd(pipeline(
-            `gzip --decompress $dna_fasta_gz --stdout`,
-            `bgzip --threads $n_job --stdout`,
-            dna_fasta_bgz,
+            `gzip --decompress $fa --stdout`,
+            `bgzip --threads $n_jo --stdout`,
+            fagz,
         ))
 
     end
 
-    find_variant_dir::String = joinpath(paou, "find_variant")
+    pava::String = joinpath(paou, "find_variant")
 
     find_variant(
-        germ_bam,
-        soma_bam,
-        dna_is_targeted,
-        dna_fasta_bgz,
-        chromosome_bed_gz,
-        chrn_n_tsv,
-        find_variant_dir,
-        n_job,
-        gb_memory,
+        page,
+        paso,
+        ta,
+        fagz,
+        chsi,
+        chna,
+        pava,
+        n_jo,
+        meto,
         snpeff,
     )
 
