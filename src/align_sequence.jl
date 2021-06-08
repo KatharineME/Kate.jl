@@ -1,6 +1,6 @@
 using Dates
 
-include("print_and_run_cmd.jl")
+include("run_command.jl")
 
 
 function align_sequence(
@@ -8,47 +8,51 @@ function align_sequence(
     fq2::String,
     sa::String,
     fa::String,
-    bam::String,
-    n_job::Int,
-    job_gb_memory::Int,
+    pa::String,
+    n_jo::Int,
+    me::Int,
 )
 
-    start_time = now()
+    st = now()
 
-    println("($start_time) Aligning sequence ...")
+    println("($st) Aligning sequence ...")
 
-    dna_fasta_gz_mmi::String = "$fa.mmi"
+    id::String = "$fa.mmi"
 
-    if !ispath(dna_fasta_gz_mmi)
+    if !ispath(id)
 
-        print_and_run_cmd(`minimap2 -t $n_job -d $dna_fasta_gz_mmi $fa`)
+        # Make index
+        #
+        run_command(`minimap2 -t $n_jo -d $id $fa`)
 
     end
 
-    output_dir::String = splitdir(bam)[1]
+    mkpath(splitdir(pa)[1])
 
-    mkpath(output_dir)
+    run_command(
+        pipeline(
+            `minimap2 -x sr -t $n_jo -K $(me)G -R "@RG\tID:$sa\tSM:$sa" -a $id $fq1 $fq2`,
+            # `samtools sort --threads $n_jo -m $(me)G -n`,
+            `samtools sort --threads $n_jo -n`,
+            `samtools fixmate --threads $n_jo -m - -`,
+            # `samtools sort --threads $n_jo -m $(me)G`,
+            `samtools sort --threads $n_jo`,
+            "$pa.tmp",
+        ),
+    )
 
-    print_and_run_cmd(pipeline(
-        `minimap2 -x sr -t $n_job -K $(job_gb_memory)G -R "@RG\tID:$sa\tSM:$sa" -a $dna_fasta_gz_mmi $fq1 $fq2`,
-        # `samtools sort --threads $n_job -m $(job_gb_memory)G -n`,
-        `samtools sort --threads $n_job -n`,
-        `samtools fixmate --threads $n_job -m - -`,
-        # `samtools sort --threads $n_job -m $(job_gb_memory)G`,
-        `samtools sort --threads $n_job`,
-        "$bam.tmp",
-    ))
+    run_command(`samtools markdup --threads $n_jo -s $pa.tmp $pa`)
 
-    print_and_run_cmd(`samtools markdup --threads $n_job -s $bam.tmp $bam`)
+    rm("$pa.tmp")
 
-    rm("$bam.tmp")
+    run_command(`samtools index -@ $n_jo $pa`)
 
-    print_and_run_cmd(`samtools index -@ $n_job $bam`)
+    run_command(pipeline(`samtools flagstat --threads $n_jo $pa`, "$pa.flagstat"))
 
-    print_and_run_cmd(pipeline(`samtools flagstat --threads $n_job $bam`, "$bam.flagstat"))
+    en = now()
 
-    end_time = now()
-
-    println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
+    println(
+        "($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).",
+    )
 
 end

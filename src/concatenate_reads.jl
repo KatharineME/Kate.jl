@@ -1,86 +1,95 @@
 using Dates
 
 
-function concatenate_reads(
-        read_file_paths, 
-        sample_name::String, 
-        input_dir::String,
-    )
+function concatenate_reads(fq_, sa::String, pa::String)
 
-    start_time = now()
+    st = now()
 
+    fo_ = []
 
-    forward_read_files = []
-    
-    reverse_read_files = []
+    re_ = []
 
-    number_of_forward_reads = 0
-    
-    number_of_reverse_reads = 0
+    for fi in fq_
 
-    for file in read_file_paths
-        
-        if occursin("R1", file)
-            
-            push!(forward_read_files, file)
-            
-            number_of_forward_reads += 1
-            
-        end
-        
-    end
+        if occursin("R1", fi)
 
-    for file in read_file_paths
-        
-        if occursin("R2", file)
-            
-            push!(reverse_read_files, file)
-            
-            number_of_reverse_reads += 1
+            push!(fo_, fi)
+
         end
 
     end
 
-    println("Number of forward (R1) read files = $number_of_forward_reads\n")
-    
-    println("Number of reverse (R2) read files = $number_of_reverse_reads\n")
+    for fi in fq_
 
-    sample_cat_dir = joinpath(input_dir, string(sample_name, "_cat"))
-    
-    if ispath(sample_cat_dir)
-        
-        println("Skipping concatenation because concatenate directory already exists:\n $sample_cat_dir\n")
-        
+        if occursin("R2", fi)
+
+            push!(re_, fi)
+
+        end
+
+    end
+
+    n_fo = length(fo_)
+
+    n_re = length(re_)
+
+    println("Number of forward (R1) read files = $n_fo\n")
+
+    println("Number of reverse (R2) read files = $n_re\n")
+
+    paca = joinpath(pa, string(sa, "_cat"))
+
+    if ispath(paca)
+
+        println(
+            "Skipping concatenation because directory already exists:\n $paca\n",
+        )
+
     else
 
-        run(pipeline(`mkdir $sample_cat_dir`))
-    
-        if number_of_forward_reads > 1
+        run(pipeline(`mkdir $paca`))
+
+        if n_fo > 1
 
             println("\nCombining R1 reads\n")
 
-            run(pipeline(`cat $forward_read_files`, stdout=joinpath(sample_cat_dir, string(sample_name, "_R1.fastq.gz"))))
+            run(
+                pipeline(
+                    `cat $fo_`,
+                    stdout = joinpath(paca, string(sa, "_R1.fastq.gz")),
+                ),
+            )
 
-        if number_of_reverse_reads > 1
+        if n_re > 1
 
             println("\nCombining R2 reads\n")
 
-            run(pipeline(`cat $reverse_read_files`, stdout=joinpath(sample_cat_dir, string(sample_name, "_R2.fastq.gz"))))       
+            run(
+                pipeline(
+                    `cat $re_`,
+                    stdout = joinpath(
+                        paca,
+                        string(sa, "_R2.fastq.gz"),
+                    ),
+                ),
+            )
 
-        else
+        if n_fo <= 1 && n_re <= 1
 
-            println("Number of forward and reverse read files are not more than 1, so there are no fastq files to concatenate.")
+                println(
+                        "Nothing to concatenate because number of forward reads ($n_fo) and number of reverse reads ($n_re) are <= 1.",
+                )
+
+            end
 
         end
 
     end
-        
-    end
-        
-    end_time = now()
-            
-    println("\nDone at: $end_time\n")
-    
-    println("Took $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).\n")     
-            
+
+    en = now()
+
+    println("\nDone at: $en\n")
+
+    println("Took $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
+
 end

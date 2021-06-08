@@ -1,9 +1,9 @@
 module ProcessSequence
 
-for name::String in readdir(@__DIR__)
-    if endswith(name, ".jl") && name != splitdir(@__FILE__)[end]
+for na::String in readdir(@__DIR__)
+    if endswith(na, ".jl") && na != splitdir(@__FILE__)[end]
 
-        include(name)
+        include(na)
 
     end
 

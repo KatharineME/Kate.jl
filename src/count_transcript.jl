@@ -1,34 +1,40 @@
 using Dates
 
-include("print_and_run_cmd.jl")
+include("run_command.jl")
 
 
 function count_transcript(
-    _1_fastq_gz::String,
-    _2_fastq_gz::String,
-    cdna_fasta_gz::String,
-    output_dir::String,
-    n_job::Int,
+    fq1::String,
+    fq2::String,
+    fa::String,
+    pa::String,
+    n_jo::Int,
 )
 
-    start_time = now()
+    st = now()
 
-    println("($start_time) Counting transcript ...")
+    println("($st) Counting transcript ...")
 
-    cdna_fasta_gz_kallisto_index::String = "$cdna_fasta_gz.kallisto_index"
+    id::String = "$fa.kallisto_index"
 
-    if !ispath(cdna_fasta_gz_kallisto_index)
+    if !ispath(id)
 
-        print_and_run_cmd(`kallisto index --index $cdna_fasta_gz_kallisto_index $cdna_fasta_gz`)
+        run_command(
+            `kallisto index --index $id $fa`,
+        )
 
     end
 
-    mkpath(output_dir)
+    mkpath(pa)
 
-    print_and_run_cmd(`kallisto quant --threads $n_job --index $cdna_fasta_gz_kallisto_index --output-dir $output_dir $_1_fastq_gz $_2_fastq_gz`)
+    run_command(
+        `kallisto quant --threads $n_jo --index $id --output-dir $pa $fq1 $fq2`,
+    )
 
-    end_time = now()
+    en = now()
 
-    println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
+    println(
+        "($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).",
+    )
 
 end

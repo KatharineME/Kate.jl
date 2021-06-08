@@ -1,42 +1,43 @@
 using Dates
 
 
-function find_reads(sample_dir::String)
-    
-    start_time = now()
-    
-    number_of_fastq_files = 0
+function find_reads(pa::String)
 
-    number_of_fastq_gz_files = 0
+    st = now()
 
-    fastq_files_to_check = []
-    
+    n_fq = 0
+
+    n_gz = 0
+
+    fi_ = []
+
     println("Walking sample directory...\n")
 
-    for (root, dirs, files) in walkdir("$sample_dir")
-        
-        println("$root\n")
-        
-        for file in files
+    for (ro, di, th_) in walkdir("$pa")
 
-            if occursin(".fastq", file) && !(occursin(".md5", file)) 
+        println("$ro\n")
 
-                number_of_fastq_files += 1
-            end
+        for th in th_
 
-            if occursin("fastq.gz", file) && !(occursin(".md5", file))
-                
-		        number_of_fastq_gz_files += 1
+            if occursin(".fastq", th) && !(occursin(".md5", th))
 
-                push!(fastq_files_to_check, joinpath(root, file))
+                n_fq += 1
 
             end
 
-            if occursin("fq.gz", file) && !(occursin(".md5", file)) 
+            if occursin("fastq.gz", th) && !(occursin(".md5", th))
 
-                number_of_fastq_gz_files += 1
+                n_gz += 1
 
-                push!(fastq_files_to_check, joinpath(root, file))
+                push!(fi_, joinpath(ro, th))
+
+            end
+
+            if occursin("fq.gz", th) && !(occursin(".md5", th))
+
+                n_gz += 1
+
+                push!(fi_, joinpath(ro, th))
 
             end
 
@@ -44,16 +45,18 @@ function find_reads(sample_dir::String)
 
     end
 
-    println("\nNumber of fastq files found in directories walked: $number_of_fastq_files\n")
+    println("\nNumber of fastq files found in directories walked: $n_fq\n")
 
-    println("Number of fastq.gz or fq.gz files found in directories walked: $number_of_fastq_gz_files\n")
-    
-    end_time = now()
-    
-    println("\nDone at: $end_time\n")
-    
-    println("Took $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).\n")
-    
-    return fastq_files_to_check
-    
+    println(
+        "Number of fastq.gz or fq.gz files found in directories walked: $n_gz\n",
+    )
+
+    en = now()
+
+    println("\nDone at: $en\n")
+
+    println("Took $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
+
+    return fi_
+
 end

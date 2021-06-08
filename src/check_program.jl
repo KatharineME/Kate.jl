@@ -1,11 +1,11 @@
-include("print_and_run_cmd.jl")
+include("run_command.jl")
 
 
 function check_program()
 
     println("Checking program...")
 
-    for program::String in (
+    for pr::String in (
         "skewer",
         "fastqc",
         "bgzip",
@@ -13,20 +13,18 @@ function check_program()
         "minimap2",
         "samtools",
         "bcftools",
-
-        # "snpEff",
         "kallisto",
     )
-        print_and_run_cmd(`which $program`)
+        run_command(`which $pr`)
 
     end
 
-    for program::String in (
+    for pr::String in (
         "configManta.py",
         "configureStrelkaGermlineWorkflow.py",
         "configureStrelkaSomaticWorkflow.py",
     )
-        print_and_run_cmd(`bash -c "source activate py2 && which $program"`)
+        run_command(`bash -c "source activate py2 && which $pr"`)
 
     end
 

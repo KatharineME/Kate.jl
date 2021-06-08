@@ -1,27 +1,33 @@
 using Dates
 
-include("print_and_run_cmd.jl")
+include("run_command.jl")
 
 
-function check_sequence(fastq_gzs::Tuple{Vararg{String}}, output_dir::String, n_job::Int)
+function check_sequence(fq_::Vector{Vararg{String}}, pa::String, n_jo::Int)
 
-    start_time = now()
+    st = now()
 
-    if ispath(output_dir)
+    if ispath(pa)
 
-        println("Skipping check sequence because check sequence directory already exists:\n $output_dir\n")
+        println(
+            "Skipping check sequence because directory already exists:\n $pa\n",
+        )
 
     else
 
-        println("($start_time) Checking sequence ...")
+        println("($st) Checking sequence ...")
 
-        mkpath(output_dir)
+        mkpath(pa)
 
-        print_and_run_cmd(`fastqc --threads $(minimum((length(fastq_gzs), n_job))) --outdir $output_dir $fastq_gzs`)
+        run_command(
+            `fastqc --threads $(minimum((length(fq_), n_jo))) --outdir $pa $fq_`,
+        )
 
-        end_time = now()
+        en = now()
 
-        println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")
+        println(
+            "($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).",
+        )
 
     end
 

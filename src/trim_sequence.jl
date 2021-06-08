@@ -1,45 +1,39 @@
 using Dates
 
-include("print_and_run_cmd.jl")
+include("run_command.jl")
 
 
-function trim_sequence(
-    _1_fastq_gz::String,
-    _2_fastq_gz::String,
-    output_dir,
-    output_prefix::String,
-    n_job::Int,
-)
+function trim_sequence(fq1::String, fq2::String, pa::String, n_jo::Int)
 
-    start_time = now()
+    st = now()
 
-    trim_sequence_dir = splitdir(output_prefix)[1]
+    di = splitdir(pa)[1]
 
-    germ_or_soma = splitdir(output_prefix)[2]
+    ty = splitdir(pa)[2]
 
-    trimmed_pair_1_path = joinpath(string(trim_sequence_dir), string(germ_or_soma, "-trimmed-pair1.fastq.gz"))
+    pa1 = joinpath(string(di), string(ty, "-trimmed-pair1.fastq.gz"))
 
-    trimmed_pair_2_path = joinpath(string(trim_sequence_dir), string(germ_or_soma, "-trimmed-pair2.fastq.gz"))
+    pa2 = joinpath(string(di), string(ty, "-trimmed-pair2.fastq.gz"))
 
-    if isfile(trimmed_pair_1_path) && isfile(trimmed_pair_2_path)
-        
-        println("Skipping trimming because trimmed files already exist:\n $trimmed_pair_1_path\n $trimmed_pair_2_path\n")
+    if isfile(pa1) && isfile(pa2)
+
+        println("Skipping trimming because trimmed files already exist:\n $pa1\n $pa2\n")
 
     else
-        
-        println("($start_time) Trimming sequence ...")
-        
-        output_dir::String = splitdir(output_prefix)[1]
-        
-        mkpath(output_dir)
-        
-        print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --mode pe -Q 2 -q 2 --compress --output $output_prefix --quiet $_1_fastq_gz $_2_fastq_gz`)
-        
-        # print_and_run_cmd(`skewer --threads $n_job -x AGATCGGAAGAGC --end-quality 20 --mode pe --compress --output $output_prefix --quiet $_1_fastq_gz $_2_fastq_gz`)
-        
-        end_time = now()
-        
-        println("($end_time) Done in $(canonicalize(Dates.CompoundPeriod(end_time - start_time))).")        
+
+        println("($st) Trimming sequence ...")
+
+        mkpath(splitdir(pa)[1])
+
+        run_command(
+            `skewer --thread $n_jo -x AGATCGGAAGAGC --mode pe -Q 2 -q 2 --compress --output $pa --quiet $fq1 $fq2`,
+        )
+
+        # run_command(`skewer --threads $n_jo -x AGATCGGAAGAGC --end-quality 20 --mode pe --compress --output $pa --quiet $fq1 $fq2`)
+
+        en = now()
+
+        println("($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).")
 
     end
 
