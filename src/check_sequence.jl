@@ -3,7 +3,7 @@ using Dates
 include("run_command.jl")
 
 
-function check_sequence(fq_::Vector{Vararg{String}}, pa::String, n_jo::Int)
+function check_sequence(fq_::Vector{String}, pa::String, n_jo::Int)
 
     st = now()
 

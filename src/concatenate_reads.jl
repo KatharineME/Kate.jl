@@ -60,6 +60,8 @@ function concatenate_reads(fq_, sa::String, pa::String)
                 ),
             )
 
+        end
+
         if n_re > 1
 
             println("\nCombining R2 reads\n")
@@ -73,14 +75,14 @@ function concatenate_reads(fq_, sa::String, pa::String)
                     ),
                 ),
             )
+        
+        end
 
         if n_fo <= 1 && n_re <= 1
 
                 println(
                         "Nothing to concatenate because number of forward reads ($n_fo) and number of reverse reads ($n_re) are <= 1.",
                 )
-
-            end
 
         end
 

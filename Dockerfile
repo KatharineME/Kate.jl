@@ -52,7 +52,6 @@ RUN mkdir /etc/julia && \
     chown "${NB_USER}" "${JULIA_PKGDIR}" && \
     fix-permissions "${JULIA_PKGDIR}"
 
-
 # Install snpEff into /opt/
 # Create directory for snpEff data download
 RUN mkdir /opt/snpeff && \
@@ -78,7 +77,7 @@ USER $NB_UID
 
 # R packages including IRKernel which gets installed globally.
 RUN conda config --set channel_priority false && \
-    conda install --quiet --yes --channel conda-forge \
+    conda install --quiet --yes \
     'git' \
     'git-lfs' \
     'nodejs' \
@@ -115,7 +114,7 @@ RUN conda create --name py2 --yes python=2.7 && \
 # taking effect properly on the .local folder in the jovyan home dir.
 RUN julia -e 'import Pkg; Pkg.update()' && \
     # (test $TEST_ONLY_BUILD || julia -e 'import Pkg; Pkg.add("HDF5")') && \
-    julia -e "using Pkg; pkg\"add IJulia\"; pkg\"add JuliaFormatter\"; pkg\"add CSV\"; pkg\"add JSON\"; pkg\"add Plots\"; pkg\"add BenchmarkTools\"; pkg\"add Revise\"; pkg\"precompile\"" && \
+    julia -e "using Pkg; pkg\"add IJulia\"; pkg\"add JuliaFormatter\"; pkg\"add CSV\"; pkg\"add Plots\"; pkg\"add BenchmarkTools\"; pkg\"add Revise\"; pkg\"precompile\"" && \
     # move kernelspec out of home \
     mv "${HOME}/.local/share/jupyter/kernels/julia"* "${CONDA_DIR}/share/jupyter/kernels/" && \
     chmod -R go+rx "${CONDA_DIR}/share/jupyter" && \
