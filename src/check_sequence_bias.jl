@@ -3,14 +3,12 @@ using Dates
 include("run_command.jl")
 
 
-function check_sequence_bias(sa::String, pa::String)
+function check_sequence_bias(pa::String)
 
     st = now()
 
-    pach = joinpath(pa, string("check_sequence_", sa))
-
     run_command(
-        `multiqc --outdir $pach $pach`,
+        `multiqc --outdir $pa $pa`,
     )
 
     en = now()

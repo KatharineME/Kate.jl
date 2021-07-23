@@ -16,6 +16,12 @@ function concatenate_reads(fq_, sa::String, pa::String)
             push!(fo_, fi)
 
         end
+        
+        if occursin("_1.fq", fi)
+            
+            push!(fo_, fi)
+        
+        end
 
     end
 
@@ -25,6 +31,12 @@ function concatenate_reads(fq_, sa::String, pa::String)
 
             push!(re_, fi)
 
+        end
+            
+        if occursin("_2.fq", fi)
+            
+            push!(re_, fi)
+    
         end
 
     end
@@ -38,17 +50,23 @@ function concatenate_reads(fq_, sa::String, pa::String)
     println("Number of reverse (R2) read files = $n_re\n")
 
     paca = joinpath(pa, string(sa, "_cat"))
-
+        
     if ispath(paca)
 
         println(
             "Skipping concatenation because directory already exists:\n $paca\n",
         )
+    
+    elseif n_fo <= 1 && n_re <= 1
 
+        println(
+            "Nothing to concatenate because number of forward reads ($n_fo) and number of reverse reads ($n_re) are <= 1.",
+                )
+        
     else
 
-        run(pipeline(`mkdir $paca`))
-
+        run(pipeline(`mkdir $paca`))        
+            
         if n_fo > 1
 
             println("\nCombining R1 reads\n")
@@ -76,14 +94,6 @@ function concatenate_reads(fq_, sa::String, pa::String)
                 ),
             )
         
-        end
-
-        if n_fo <= 1 && n_re <= 1
-
-                println(
-                        "Nothing to concatenate because number of forward reads ($n_fo) and number of reverse reads ($n_re) are <= 1.",
-                )
-
         end
 
     end

@@ -30,15 +30,17 @@ function process_germ_dna(
 
     end
 
-    patr::String = joinpath(paou, "trim_sequence", "germ")
+    patr::String = joinpath(paou, "trim_sequence/")
 
-    trim_sequence(fq1, fq2, paou, patr, n_jo)
+    println(patr)
+    
+    trim_sequence(fq1, fq2, patr, n_jo)
 
-    fq1tr::String = "$patr-trimmed-pair1.fastq.gz"
+    fq1tr::String = "$patr/trimmed-pair1.fastq.gz"
 
-    fq2tr::String = "$patr-trimmed-pair2.fastq.gz"
+    fq2tr::String = "$patr/trimmed-pair2.fastq.gz"
 
-    check_sequence((fq1tr, fq2tr), joinpath(paou, "check_sequence"), n_jo)
+    check_sequence([fq1tr, fq2tr], joinpath(paou, "check_sequence_trimmed"), n_jo)
 
     paal::String = joinpath(paou, "align_sequence", "germ.bam")
 
@@ -60,6 +62,10 @@ function process_germ_dna(
 
     pava::String = joinpath(paou, "find_variant")
 
+    println("Starting variant analysis")
+    
     find_variant(paal, nothing, ta, fagz, chsi, chna, pava, n_jo, meto, pasn)
+    
+    println("Finished variant analysis")
 
 end

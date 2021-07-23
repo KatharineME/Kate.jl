@@ -15,17 +15,15 @@ function find_variant(
     me::Int,
     pasn::String,
 )
-
-    st = now()
-
-    println("($st) Finding variant ...")
+    
+    println("paou at the start of find_variant: $paou")
 
     if !(isfile("$fa.fai") && ispath("$fa.gzi"))
 
         run_command(`samtools faidx $fa`)
 
     end
-
+    
     if !ispath("$chsi.tbi")
 
         run_command(`tabix --force $chsi`)
@@ -90,17 +88,17 @@ function find_variant(
         `bash -c "source activate py2 && $st && $(joinpath(past, "runWorkflow.py")) $ru"`,
     )
 
-    local vc_::Vector{Vararg{String}}
+#     local vc_::Vector{Vararg{String}}
 
     if ge != nothing && so != nothing
 
-        sa::String = joinpath(paou, "sample.txt")
+        sa = joinpath(paou, "sample.txt")
 
         # TODO: get sample names (maybe from .bam) and use them instead of "Germ" and "Soma"
 
         open(io -> write(io, "Germ\nSoma"), sa; write = true)
-
-        pain::String =
+        
+        pain =
             joinpath(past, pava, "somatic.indels.vcf.gz")
 
         run_command(
@@ -142,7 +140,7 @@ function find_variant(
            ]
 
     end
-
+    
     paco::String = joinpath(paou, "concat.vcf.gz")
 
     run_command(
@@ -183,11 +181,5 @@ function find_variant(
     )
 
     run_command(`tabix $ps`)
-
-    en = now()
-
-    println(
-        "($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).",
-    )
-
+    
 end

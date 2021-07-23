@@ -5,7 +5,7 @@ include("run_command.jl")
 
 function count_transcript(
     fq1::String,
-    fq2::String,
+#     fq2::String,
     fa::String,
     pa::String,
     n_jo::Int,
@@ -28,8 +28,13 @@ function count_transcript(
     mkpath(pa)
 
     run_command(
-        `kallisto quant --threads $n_jo --index $id --output-dir $pa $fq1 $fq2`,
+        `kallisto quant --single -l 51 -s 0.05 --threads $n_jo --index $id --output-dir $pa $fq1`,
     )
+    
+    # run_command(
+    #    `kallisto quant --threads $n_jo --index $id --output-dir $pa $fq1 $fq2`,
+    #)
+
 
     en = now()
 
