@@ -27,32 +27,38 @@ function align_sequence(
 
     end
     
-    pane = splitdir(pa)[1]
+    paal = splitdir(pa)[1]
     
-    print("path made by align_sequence: $pane")
+    if isdir(paal)
+         
+        continue
+        
+    else
+        
+        mkpath(paal)
 
-    mkpath(splitdir(pa)[1])
+        run_command(
+            pipeline(
+                `minimap2 -x sr -t $n_jo -K $(me)G -R "@RG\tID:$sa\tSM:$sa" -a $id $fq1 $fq2`,
+                # `samtools sort --threads $n_jo -m $(me)G -n`,
+                `samtools sort --threads $n_jo -n`,
+                `samtools fixmate --threads $n_jo -m - -`,
+                # `samtools sort --threads $n_jo -m $(me)G`,
+                `samtools sort --threads $n_jo`,
+                "$pa.tmp",
+            ),
+        )
 
-    run_command(
-        pipeline(
-            `minimap2 -x sr -t $n_jo -K $(me)G -R "@RG\tID:$sa\tSM:$sa" -a $id $fq1 $fq2`,
-            # `samtools sort --threads $n_jo -m $(me)G -n`,
-            `samtools sort --threads $n_jo -n`,
-            `samtools fixmate --threads $n_jo -m - -`,
-            # `samtools sort --threads $n_jo -m $(me)G`,
-            `samtools sort --threads $n_jo`,
-            "$pa.tmp",
-        ),
-    )
+        run_command(`samtools markdup --threads $n_jo -s $pa.tmp $pa`)
 
-    run_command(`samtools markdup --threads $n_jo -s $pa.tmp $pa`)
+        rm("$pa.tmp")
 
-    rm("$pa.tmp")
+        run_command(`samtools index -@ $n_jo $pa`)
 
-    run_command(`samtools index -@ $n_jo $pa`)
+        run_command(pipeline(`samtools flagstat --threads $n_jo $pa`, "$pa.flagstat"))
 
-    run_command(pipeline(`samtools flagstat --threads $n_jo $pa`, "$pa.flagstat"))
-
+    end
+        
     en = now()
 
     println(
