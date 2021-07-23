@@ -26,6 +26,10 @@ function align_sequence(
         run_command(`minimap2 -t $n_jo -d $id $fa`)
 
     end
+    
+    pane = splitdir(pa)[1]
+    
+    print("path made by align_sequence: $pane")
 
     mkpath(splitdir(pa)[1])
 
