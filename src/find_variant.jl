@@ -16,7 +16,7 @@ function find_variant(
     pasn::String,
 )
     
-    println("paou at the start of find_variant: $paou")
+    println("CALL VARIANTS")
 
     if !(isfile("$fa.fai") && ispath("$fa.gzi"))
 

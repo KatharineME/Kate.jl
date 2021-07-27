@@ -1,5 +1,4 @@
-using Dates
-
+using Dates: now, CompoundPeriod
 
 function concatenate_reads(fq_, sa::String, pa::String)
 

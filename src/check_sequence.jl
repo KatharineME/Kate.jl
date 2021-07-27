@@ -1,7 +1,4 @@
-using Dates
-
-include("run_command.jl")
-
+using Dates: now, CompoundPeriod
 
 function check_sequence(fq_::Array, pa::String, n_jo::Int)
 
@@ -23,12 +20,18 @@ function check_sequence(fq_::Array, pa::String, n_jo::Int)
             `fastqc --threads $(minimum((length(fq_), n_jo))) --outdir $pa $fq_`,
         )
 
-        en = now()
+        println("Checking sequence bias ...")
 
-        println(
-            "($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).",
+        run_command(
+            `multiqc --outdir $pa $pa`,
         )
 
     end
+    
+    en = now()
+
+    println("($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).")
 
 end
+
+export check_sequence

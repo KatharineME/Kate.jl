@@ -1,11 +1,10 @@
 using Dates
 
-include("run_command.jl")
-
-
 function trim_sequence(fq1::String, fq2::String, pa::String, n_jo::Int)
 
     st = now()
+    
+    println("TRIM")
 
     pa1 = joinpath(string(pa), "trimmed-pair1.fastq.gz")
 
@@ -16,6 +15,7 @@ function trim_sequence(fq1::String, fq2::String, pa::String, n_jo::Int)
         println("Skipping trimming because trimmed files already exist:\n $pa1\n $pa2\n")
 
     else
+
 
         println("($st) Trimming sequence ...")
 
@@ -31,8 +31,10 @@ function trim_sequence(fq1::String, fq2::String, pa::String, n_jo::Int)
 
         en = now()
 
-        println("($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).")
+        println("($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).\n\n")
 
     end
 
 end
+
+export trim_sequence

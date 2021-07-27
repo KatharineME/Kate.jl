@@ -1,7 +1,4 @@
-using Dates
-
-include("run_command.jl")
-
+using Dates: now, CompoundPeriod
 
 function align_sequence(
     fq1::String,
@@ -15,25 +12,25 @@ function align_sequence(
 
     st = now()
 
-    println("($st) Aligning sequence ...")
-
-    id::String = "$fa.mmi"
-
-    if !ispath(id)
-
-        # Make index
-        #
-        run_command(`minimap2 -t $n_jo -d $id $fa`)
-
-    end
+    println("ALIGN")
     
     paal = splitdir(pa)[1]
     
+    id::String = "$fa.mmi"
+    
     if isdir(paal)
          
-        continue
+        println("Skipping alignment because directory already exists: \n$paal")
         
     else
+        
+        println("($st) Aligning sequence ...")
+        
+        if !ispath(id)
+
+            run_command(`minimap2 -t $n_jo -d $id $fa`)
+
+        end
         
         mkpath(paal)
 
@@ -62,7 +59,9 @@ function align_sequence(
     en = now()
 
     println(
-        "($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).",
+        "($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).\n",
     )
 
 end
+
+export align_sequence

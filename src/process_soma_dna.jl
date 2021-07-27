@@ -1,12 +1,3 @@
-include("trim_sequence.jl")
-
-include("check_sequence.jl")
-
-include("align_sequence.jl")
-
-include("find_variant.jl")
-
-
 function process_soma_dna(
     ge1::String,
     ge2::String,
@@ -77,3 +68,5 @@ function process_soma_dna(
     find_variant(pageal, pasoal, ta, fagz, chsi, chna, pava, n_jo, meto, snpeff)
 
 end
+
+export process_soma_dna

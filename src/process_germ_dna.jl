@@ -31,8 +31,6 @@ function process_germ_dna(
     end
 
     patr::String = joinpath(paou, "trim_sequence/")
-
-    println(patr)
     
     trim_sequence(fq1, fq2, patr, n_jo)
 
@@ -61,11 +59,7 @@ function process_germ_dna(
     end
 
     pava::String = joinpath(paou, "find_variant")
-
-    println("Starting variant analysis")
     
     find_variant(paal, nothing, ta, fagz, chsi, chna, pava, n_jo, meto, pasn)
-    
-    println("Finished variant analysis")
 
 end

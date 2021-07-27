@@ -1,6 +1,3 @@
-include("run_command.jl")
-
-
 function check_program()
 
     println("Checking program...")
@@ -28,6 +25,6 @@ function check_program()
 
     end
 
-    nothing
-
 end
+
+export check_program
