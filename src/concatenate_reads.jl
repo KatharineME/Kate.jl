@@ -104,3 +104,5 @@ function concatenate_reads(fq_, sa::String, pa::String)
     println("Took $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
 
 end
+
+export concatenate_reads
