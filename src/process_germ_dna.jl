@@ -1,12 +1,3 @@
-include("trim_sequence.jl")
-
-include("check_sequence.jl")
-
-include("align_sequence.jl")
-
-include("find_variant.jl")
-
-
 function process_germ_dna(
     fq1::String,
     fq2::String,
@@ -63,3 +54,5 @@ function process_germ_dna(
     find_variant(paal, nothing, ta, fagz, chsi, chna, pava, n_jo, meto, pasn)
 
 end
+
+export process_germ_dna

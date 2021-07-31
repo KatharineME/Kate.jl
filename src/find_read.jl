@@ -1,7 +1,6 @@
 using Dates
 
-
-function find_reads(pa::String)
+function find_read(pa::String)
 
     st = now()
 
@@ -60,3 +59,5 @@ function find_reads(pa::String)
     return fi_
 
 end
+
+export find_read

@@ -1,8 +1,5 @@
 using Dates
 
-include("run_command.jl")
-
-
 function count_transcript(
     fq1::String,
 #     fq2::String,
@@ -43,3 +40,5 @@ function count_transcript(
     )
 
 end
+
+export count_transcript

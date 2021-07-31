@@ -1,4 +1,4 @@
-using Dates
+using Dates: now, CompoundPeriod
 
 function trim_sequence(fq1::String, fq2::String, pa::String, n_jo::Int)
 
@@ -24,10 +24,8 @@ function trim_sequence(fq1::String, fq2::String, pa::String, n_jo::Int)
         println("Made path for trimmed files: $pa")
 
         run_command(
-            `skewer --threads $n_jo -x AGATCGGAAGAGC --mode pe -Q 2 -q 2 --compress --output $pa --quiet $fq1 $fq2`,
+            `skewer --threads $n_jo -x AGATCGGAAGAGC --mode pe --mean-quality 10 --end-quality 15 --compress --output $pa --quiet $fq1 $fq2`,
         )
-
-        # run_command(`skewer --threads $n_jo -x AGATCGGAAGAGC --end-quality 20 --mode pe --compress --output $pa --quiet $fq1 $fq2`)
 
         en = now()
 

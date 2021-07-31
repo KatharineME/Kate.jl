@@ -1,8 +1,5 @@
 using Dates
 
-include("run_command.jl")
-
-
 function find_variant(
     ge::Union{String,Nothing},
     so::Union{String,Nothing},
@@ -183,3 +180,5 @@ function find_variant(
     run_command(`tabix $ps`)
     
 end
+
+export find_variant

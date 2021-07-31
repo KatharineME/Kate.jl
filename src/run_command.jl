@@ -5,3 +5,5 @@ function run_command(co::Base.AbstractCmd)
     run(co)
 
 end
+
+export run_command

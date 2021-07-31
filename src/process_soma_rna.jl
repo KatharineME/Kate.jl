@@ -1,10 +1,3 @@
-include("trim_sequence.jl")
-
-include("check_sequence.jl")
-
-include("count_transcript.jl")
-
-
 function process_soma_rna(
     so1::String,
     so2::String,
@@ -53,3 +46,5 @@ function process_soma_rna(
     )
 
 end
+
+export process_soma_rna
