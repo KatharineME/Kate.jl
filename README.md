@@ -8,7 +8,7 @@ git clone https://github.com/KatharineME/Kate.jl
 cd Kate.jl
 ```
 
-#### 3. Run the [kate](https://hub.docker.com/repository/docker/katharineme/process_sequence) Docker container
+#### 3. Run the [kate](https://hub.docker.com/repository/docker/katharineme/kate) Docker container
 
 ```sh
 docker run --rm -p 10000:8888 -e JUPYTER_ENABLE_LAB=yes -v "$PWD":/home/jovyan/Kate.jl katharineme/kate
