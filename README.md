@@ -1,20 +1,20 @@
 #### 1. [Install Docker](https://www.docker.com/get-started)
 
-#### 2. Get ProcessSequence.jl
+#### 2. Get Kate.jl
 
 ```sh
-git clone https://github.com/KatharineME/ProcessSequence.jl
+git clone https://github.com/KatharineME/Kate.jl
 
-cd ProcessSequence.jl
+cd Kate.jl
 ```
 
-#### 3. Run the [process_sequence](https://hub.docker.com/repository/docker/katharineme/process_sequence) Docker container
+#### 3. Run the [kate](https://hub.docker.com/repository/docker/katharineme/process_sequence) Docker container
 
 ```sh
-docker run --rm -p 10000:8888 -e JUPYTER_ENABLE_LAB=yes -v "$PWD":/home/jovyan/ProcessSequence.jl katharineme/process_sequence
+docker run --rm -p 10000:8888 -e JUPYTER_ENABLE_LAB=yes -v "$PWD":/home/jovyan/Kate.jl katharineme/kate
 ```
 
-This command makes the `ProcessSequence.jl` code accessible and editable in the container. It also runs JupyterLab on port `8888` in the container and maps it to port `10000` on the host OS. Note: 'jovyan' is the default name Jupyter uses in containers. 
+This command makes the `Kate.jl` code accessible and editable in the container. It also runs JupyterLab on port `8888` in the container and maps it to port `10000` on the host OS. Note: 'jovyan' is the default name Jupyter uses in containers. 
 
 Learn more about Docker.
 
