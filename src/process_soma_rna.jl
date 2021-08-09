@@ -2,10 +2,9 @@ function process_soma_rna(
     so1::String,
     so2::String,
     pa::String,
-    fa::String,
+    fa::String,  # fa is cdna_fasta.gz
     n_jo::Int,
 )
-    # fa is cdna_fasta.gz
 
     for fi in (so1, so2, fa)
         if !isfile(fi)
