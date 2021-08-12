@@ -1,6 +1,6 @@
 using Dates: now, CompoundPeriod
 
-function check_sequence(fq_::Array, pa::String, n_jo::Int)
+function check(fq_::Array, pa::String, n_jo::Int)
 
     st = now()
     
@@ -30,8 +30,8 @@ function check_sequence(fq_::Array, pa::String, n_jo::Int)
     
     en = now()
 
-    println("($en) Done in $(canonicalize(Dates.CompoundPeriod(en - st))).")
+    println("Done at $en in $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
 
 end
 
-export check_sequence
+export check

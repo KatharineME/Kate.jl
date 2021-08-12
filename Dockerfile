@@ -3,10 +3,6 @@ FROM $BASE_CONTAINER
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 
-# Set when building on Travis so that certain long-running build steps can
-# be skipped to shorten build time.
-ARG TEST_ONLY_BUILD
-
 # Fix DL4006
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

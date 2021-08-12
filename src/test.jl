@@ -1,6 +1,6 @@
-function check_environment()
+function test()
 
-    println("Checking environment...")
+    println("Testing environment...")
 
     for pr::String in (
         "skewer",
@@ -27,4 +27,4 @@ function check_environment()
 
 end
 
-export check_environment
+export test

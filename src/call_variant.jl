@@ -1,19 +1,18 @@
 using Dates
 
-function find_variant(
+function call_variant(
+    mo::String,
     ge::Union{String,Nothing},
     so::Union{String,Nothing},
     ta::Bool,
     fa::String,
-    chsi::String,
-    chna::String,
-    paou::String,
+    chs::String,
+    chn::String,
+    pao::String,
     n_jo::Int,
     me::Int,
-    pasn::String,
+    pas::String,
 )
-    
-    println("CALL VARIANTS")
 
     if !(isfile("$fa.fai") && ispath("$fa.gzi"))
 
@@ -21,15 +20,15 @@ function find_variant(
 
     end
     
-    if !ispath("$chsi.tbi")
+    if !ispath("$chs.tbi")
 
-        run_command(`tabix --force $chsi`)
+        run_command(`tabix --force $chs`)
 
     end
 
     # Set config parameters
 
-    co::String = "--referenceFasta $fa --callRegions $chsi"
+    co::String = "--referenceFasta $fa --callRegions $chs"
 
     if ta
 
@@ -52,20 +51,26 @@ function find_variant(
         )
 
     end
+    
+    if mo == "cdna"
+        
+        co = "$co --rna"
+        
+    end
 
     # Set run parameters
 
-    ru::String = "--mode local --jobs $n_jo --memGb $me --quiet"
+    ru::String = "--mode local --jobs $n_jo --memGb $me"
 
-    pava::String = joinpath("results", "variants")
+    pav::String = joinpath("results", "variants")
 
-    pama::String = joinpath(paou, "manta")
+    pam::String = joinpath(pao, "manta")
 
     run_command(
-        `bash -c "source activate py2 && configManta.py $co --outputContig --runDir $pama && $(joinpath(pama, "runWorkflow.py")) $ru"`,
+        `bash -c "source activate py2 && configManta.py $co --outputContig --runDir $pam && $(joinpath(pam, "runWorkflow.py")) $ru"`,
     )
 
-    past::String = joinpath(paou, "strelka")
+    past::String = joinpath(pao, "strelka")
 
     # Configure strelka
 
@@ -73,7 +78,7 @@ function find_variant(
 
     if ge != nothing && so != nothing
 
-        st = "configureStrelkaSomaticWorkflow.py $co --indelCandidates $(joinpath(pama, pava, "candidateSmallIndels.vcf.gz")) --runDir $past"
+        st = "configureStrelkaSomaticWorkflow.py $co --indelCandidates $(joinpath(pam, pav, "candidateSmallIndels.vcf.gz")) --runDir $past"
 
     else
 
@@ -85,18 +90,17 @@ function find_variant(
         `bash -c "source activate py2 && $st && $(joinpath(past, "runWorkflow.py")) $ru"`,
     )
 
-#     local vc_::Vector{Vararg{String}}
 
     if ge != nothing && so != nothing
 
-        sa = joinpath(paou, "sample.txt")
+        sa = joinpath(pao, "sample.txt")
 
         # TODO: get sample names (maybe from .bam) and use them instead of "Germ" and "Soma"
 
         open(io -> write(io, "Germ\nSoma"), sa; write = true)
         
         pain =
-            joinpath(past, pava, "somatic.indels.vcf.gz")
+            joinpath(past, pav, "somatic.indels.vcf.gz")
 
         run_command(
             pipeline(
@@ -110,7 +114,7 @@ function find_variant(
         run_command(`tabix --force $pain`)
 
         pasv::String =
-            joinpath(past, pava, "somatic.snvs.vcf.gz")
+            joinpath(past, pav, "somatic.snvs.vcf.gz")
 
         run_command(
             pipeline(
@@ -124,7 +128,7 @@ function find_variant(
         run_command(`tabix --force $pasv`)
 
         vc_ = [
-            joinpath(pama, pava, "somaticSV.vcf.gz"),
+            joinpath(pam, pav, "somaticSV.vcf.gz"),
             pain,
             pasv,
         ]
@@ -132,18 +136,18 @@ function find_variant(
     else
 
         vc_ = [
-            joinpath(pama, pava, "diploidSV.vcf.gz"),
-            joinpath(past, pava, "variants.vcf.gz"),
+            joinpath(pam, pav, "diploidSV.vcf.gz"),
+            joinpath(past, pav, "variants.vcf.gz"),
            ]
 
     end
     
-    paco::String = joinpath(paou, "concat.vcf.gz")
+    paco::String = joinpath(pao, "concat.vcf.gz")
 
     run_command(
         pipeline(
             `bcftools concat --threads $n_jo --allow-overlaps $vc_`,
-            `bcftools annotate --threads $n_jo --rename-chrs $chna`,
+            `bcftools annotate --threads $n_jo --rename-chrs $chn`,
             `bgzip --threads $n_jo --stdout`,
             paco,
         ),
@@ -151,7 +155,7 @@ function find_variant(
 
     run_command(`tabix $paco`)
 
-    sn::String = joinpath(paou, "snpeff")
+    sn::String = joinpath(pao, "snpeff")
 
     mkpath(sn)
 
@@ -159,7 +163,7 @@ function find_variant(
 
     run_command(
         pipeline(
-            `java -Xmx$(me)g -jar $pasn GRCh38.99 -noLog -verbose -csvStats $(joinpath(sn, "stats.csv")) -htmlStats $(joinpath(sn, "stats.html")) $paco`,
+            `java -Xmx$(me)g -jar $pas GRCh38.99 -noLog -verbose -csvStats $(joinpath(sn, "stats.csv")) -htmlStats $(joinpath(sn, "stats.html")) $paco`,
             `bgzip --threads $n_jo --stdout`,
             snvc,
         ),
@@ -167,7 +171,7 @@ function find_variant(
 
     run_command(`tabix $snvc`)
 
-    ps::String = joinpath(paou, "pass.vcf.gz")
+    ps::String = joinpath(pao, "pass.vcf.gz")
 
     run_command(
         pipeline(
@@ -181,4 +185,4 @@ function find_variant(
     
 end
 
-export find_variant
+export call_variant

@@ -1,6 +1,6 @@
 using Dates
 
-function find_read(pa::String)
+function find(pa::String)
 
     st = now()
 
@@ -44,7 +44,7 @@ function find_read(pa::String)
 
     end
 
-    println("\nNumber of fastq files found in directories walked: $n_fq\n")
+    println("Number of fastq files found in directories walked: $n_fq\n")
 
     println(
         "Number of fastq.gz or fq.gz files found in directories walked: $n_gz\n",
@@ -52,12 +52,10 @@ function find_read(pa::String)
 
     en = now()
 
-    println("\nDone at: $en\n")
-
-    println("Took $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
+    println("Done at $en in $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
 
     return fi_
 
 end
 
-export find_read
+export find

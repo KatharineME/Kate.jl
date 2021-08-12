@@ -1,6 +1,6 @@
 using Dates: now, CompoundPeriod
 
-function concatenate_reads(fq_, sa::String, pa::String)
+function concatenate(fq_, sa::String, pa::String)
 
     st = now()
 
@@ -94,15 +94,15 @@ function concatenate_reads(fq_, sa::String, pa::String)
             )
         
         end
+        
+        println("\nCocatenated files saved at $paca\n")
 
     end
 
-    en = now()
+    en = now()    
 
-    println("\nDone at: $en\n")
-
-    println("Took $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
+    println("Done at $en in $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
 
 end
 
-export concatenate_reads
+export concatenate
