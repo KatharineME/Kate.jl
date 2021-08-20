@@ -6,14 +6,13 @@ function count_transcript(
     n_jo::Int,
     fq1::String,
     fq2::String=nothing,
-    st::String="pe",
     fr::Int64=51,
     sd::Float64=0.05,  
 )
 
-    st = now()
+    sa = now()
 
-    println("($st) Counting transcript ...")
+    println("Counting transcript ...\n")
     
     id::String = "$fa.kallisto_index"
 
@@ -27,13 +26,13 @@ function count_transcript(
 
     mkpath(pa)
     
-    if st == "pe"
+    if fq2 !== nothing
 
         run_command(
            `kallisto quant --threads $n_jo --index $id --output-dir $pa $fq1 $fq2`,
         )
         
-    elseif st == "se"
+    elseif fq2 === nothing
         
         run_command(
             `kallisto quant --single --fragment-length $fr --sd $sd --threads $n_jo --index $id --output-dir $pa $fq1`,
@@ -43,7 +42,7 @@ function count_transcript(
     
     en = now()
 
-    println("Done at $en in $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
+    println("Done at $en in $(canonicalize(Dates.CompoundPeriod(en - sa))).\n")
 
 end
 

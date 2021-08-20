@@ -1,53 +1,45 @@
 using Dates: now, CompoundPeriod
 
-function concatenate(fq_, sa::String, pa::String)
+function concatenate(fq_, un::Bool, sa::String, pa::String)
 
     st = now()
 
     fo_ = []
 
     re_ = []
-
-    for fi in fq_
-
-        if occursin("R1", fi)
-
-            push!(fo_, fi)
-
-        end
-        
-        if occursin("_1.fq", fi)
-            
-            push!(fo_, fi)
-        
-        end
-
-    end
-
-    for fi in fq_
-
-        if occursin("R2", fi)
-
-            push!(re_, fi)
-
-        end
-            
-        if occursin("_2.fq", fi)
-            
-            push!(re_, fi)
     
-        end
+    naf_ = ["R1", "_1", "read1"]
+    
+    nar_ = ["R2", "_2", "read2"]
+    
+    for fi in fq_
+            
+        for na in naf_ if occursin(na, fi)
 
+                push!(fo_, fi)
+
+            end
+            
+        end
+        
+        for na in nar_ if occursin(na, fi)
+            
+                push!(re_, fi)
+        
+            end
+
+        end
+    
     end
 
     n_fo = length(fo_)
 
     n_re = length(re_)
 
-    println("Number of forward (R1) read files = $n_fo\n")
+    println("Number of forward read files = $n_fo\n")
 
-    println("Number of reverse (R2) read files = $n_re\n")
-
+    println("Number of reverse read files = $n_re\n")
+    
     paca = joinpath(pa, string(sa, "_cat"))
         
     if ispath(paca)
@@ -59,43 +51,34 @@ function concatenate(fq_, sa::String, pa::String)
     elseif n_fo <= 1 && n_re <= 1
 
         println(
-            "Nothing to concatenate because number of forward reads ($n_fo) and number of reverse reads ($n_re) are <= 1.",
-                )
+            "Nothing to concatenate because number of forward reads ($n_fo) and number of reverse reads ($n_re) are <= 1.\n")
         
     else
 
         run(pipeline(`mkdir $paca`))        
             
-        if n_fo > 1
+        println("Combining forward reads...\n")
 
-            println("\nCombining R1 reads\n")
+        run(
+            pipeline(
+                `cat $fo_`,
+                stdout = joinpath(paca, string(sa, "_R1.fastq.gz")),
+            ),
+        )
 
-            run(
-                pipeline(
-                    `cat $fo_`,
-                    stdout = joinpath(paca, string(sa, "_R1.fastq.gz")),
+        println("Combining reverse reads...\n")
+
+        run(
+            pipeline(
+                `cat $re_`,
+                stdout = joinpath(
+                    paca,
+                    string(sa, "_R2.fastq.gz"),
                 ),
-            )
-
-        end
-
-        if n_re > 1
-
-            println("\nCombining R2 reads\n")
-
-            run(
-                pipeline(
-                    `cat $re_`,
-                    stdout = joinpath(
-                        paca,
-                        string(sa, "_R2.fastq.gz"),
-                    ),
-                ),
-            )
+            ),
+        )
         
-        end
-        
-        println("\nCocatenated files saved at $paca\n")
+        println("Concatenated files saved at $paca\n")
 
     end
 
