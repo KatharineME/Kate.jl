@@ -1,3 +1,5 @@
+## Get Started
+
 #### 1. [Install Docker](https://www.docker.com/get-started)
 
 #### 2. Get Kate.jl
@@ -26,7 +28,9 @@ Use the `token_id` that was printed to the terminal.
 
 <br>
 
-#### Optional: Run commands in container's terminal
+## Other
+
+#### Run commands in container's terminal
 
 ```sh
 docker exec -it <container_id> /bin/bash
