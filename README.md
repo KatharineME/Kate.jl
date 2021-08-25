@@ -35,3 +35,4 @@ Use the `token_id` that was printed to the terminal.
 ```sh
 docker exec -it <container_id> /bin/bash
 ```
+Get <container_id> by running `docker ps -a`.
