@@ -1,4 +1,4 @@
-## Get Started
+## Start
 
 #### 1. [Install Docker](https://www.docker.com/get-started)
 
