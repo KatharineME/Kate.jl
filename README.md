@@ -24,6 +24,8 @@ Learn more about Docker.
 
 Use the `token_id` that was printed to the terminal.
 
+<br>
+
 #### Optional: Run commands in container's terminal
 
 ```sh
