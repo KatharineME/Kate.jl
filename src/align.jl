@@ -38,10 +38,8 @@ function align(
             run_command(
                 pipeline(
                     `minimap2 -x sr -t $n_jo -K $(me)G -R "@RG\tID:$sa\tSM:$sa" -a $id $fq1 $fq2`,
-                    # `samtools sort --threads $n_jo -m $(me)G -n`,
                     `samtools sort --threads $n_jo -n`,
                     `samtools fixmate --threads $n_jo -m - -`,
-                    # `samtools sort --threads $n_jo -m $(me)G`,
                     `samtools sort --threads $n_jo`,
                     "$pa.tmp",
                 ),
@@ -51,11 +49,9 @@ function align(
                 
             run_command(
                 pipeline(
-                    `minimap2 -ax splice -t $n_jo -K $(me)G -R "@RG\tID:$sa\tSM:$sa" -a $id $fq1 $fq2`,
-                    # `samtools sort --threads $n_jo -m $(me)G -n`,
+                    `minimap2 -ax splice -uf -t $n_jo -K $(me)G -R "@RG\tID:$sa\tSM:$sa" -a $id $fq1 $fq2`,
                     `samtools sort --threads $n_jo -n`,
                     `samtools fixmate --threads $n_jo -m - -`,
-                    # `samtools sort --threads $n_jo -m $(me)G`,
                     `samtools sort --threads $n_jo`,
                     "$pa.tmp",
                 ),

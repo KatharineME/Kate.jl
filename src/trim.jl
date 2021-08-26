@@ -28,7 +28,7 @@ function trim(
         println("Made path for trimmed files: $pa")
 
         run_command(
-            `skewer --threads $n_jo -x $ad --mode pe --mean-quality 10 --end-quality 15 --compress --output $pa --quiet $fq1 $fq2`,
+            `skewer --threads $n_jo -x $ad --mode pe --mean-quality 10 --end-quality 10 --compress --output $pa --quiet $fq1 $fq2`,
         )
 
         en = now()

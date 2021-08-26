@@ -14,6 +14,7 @@ function call_variant(
     pas::String,
 )
 
+
     if !(isfile("$fa.fai") && ispath("$fa.gzi"))
 
         run_command(`samtools faidx $fa`)
@@ -26,6 +27,7 @@ function call_variant(
 
     end
 
+
     # Set config parameters
 
     co::String = "--referenceFasta $fa --callRegions $chs"
@@ -34,6 +36,14 @@ function call_variant(
 
         co = "$co --exome"
 
+    end
+
+    if mo == "cdna"
+        
+        co = "$co --rna"
+
+        println("rna flag was added to config params\n")
+        
     end
 
     if ge != nothing && so != nothing
@@ -52,25 +62,25 @@ function call_variant(
 
     end
     
-    if mo == "cdna"
-        
-        co = "$co --rna"
-        
-    end
 
     # Set run parameters
 
-    ru::String = "--mode local --jobs $n_jo --memGb $me"
+    ru::String = "--mode local --jobs $n_jo --memGb $me --quiet"
 
     pav::String = joinpath("results", "variants")
 
-    pam::String = joinpath(pao, "manta")
+    if mo == "dna"
 
-    run_command(
-        `bash -c "source activate py2 && configManta.py $co --outputContig --runDir $pam && $(joinpath(pam, "runWorkflow.py")) $ru"`,
-    )
+        pam::String = joinpath(pao, "manta")
+
+        run_command(
+            `bash -c "source activate py2 && configManta.py $co --outputContig --runDir $pam && $(joinpath(pam, "runWorkflow.py")) $ru"`,
+        )
+
+    end
 
     past::String = joinpath(pao, "strelka")
+
 
     # Configure strelka
 
@@ -82,9 +92,14 @@ function call_variant(
 
     else
 
+        println("this is co right before strelka is configured: $co\n")
+
         st = "configureStrelkaGermlineWorkflow.py $co --runDir $past"
 
     end
+
+
+    # Run strelka
 
     run_command(
         `bash -c "source activate py2 && $st && $(joinpath(past, "runWorkflow.py")) $ru"`,
@@ -132,6 +147,13 @@ function call_variant(
             pain,
             pasv,
         ]
+
+    elseif mo == "cdna"
+
+        vc_ = [joinpath(past, pav, "variants.vcf.gz"),]
+
+        println("this is vc_: $vc_")
+
 
     else
 
