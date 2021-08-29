@@ -14,6 +14,13 @@ function call_variant(
     pas::String,
 )
 
+    println("this is fa: $fa")
+
+    if isfile(fa)
+
+        println("the file exists")
+
+    end
 
     if !(isfile("$fa.fai") && ispath("$fa.gzi"))
 
@@ -42,8 +49,6 @@ function call_variant(
         
         co = "$co --rna"
 
-        println("rna flag was added to config params\n")
-        
     end
 
     if ge != nothing && so != nothing
