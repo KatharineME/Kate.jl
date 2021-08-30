@@ -14,14 +14,6 @@ function call_variant(
     pas::String,
 )
 
-    println("this is fa: $fa")
-
-    if isfile(fa)
-
-        println("the file exists")
-
-    end
-
     if !(isfile("$fa.fai") && ispath("$fa.gzi"))
 
         run_command(`samtools faidx $fa`)
