@@ -12,7 +12,7 @@ function test()
         "bcftools",
         "kallisto",
     )
-        run_command(`which $pr`)
+        run(`which $pr`)
 
     end
 
@@ -21,7 +21,7 @@ function test()
         "configureStrelkaGermlineWorkflow.py",
         "configureStrelkaSomaticWorkflow.py",
     )
-        run_command(`bash -c "source activate py2 && which $pr"`)
+        run(`bash -c "source activate py2 && which $pr"`)
 
     end
 

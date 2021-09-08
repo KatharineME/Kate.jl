@@ -1,0 +1,16 @@
+{
+  "ex" : "2014",
+  "mo": "dna",
+  "ta": "false",
+  "ad": "AGATCGGAAGAGC",
+
+  "fq1": "../input/2014/XH79_CSFP210000169-1a_HH5TWDSX2_L1_R1.fq.gz",
+  "fq2": "nothing",
+
+  "n_jo": 4,
+  "mt": 40,
+  "mej": 4,
+
+  "fr": 51,
+  "sd": 0.10
+}

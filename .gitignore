@@ -1,15 +1,8 @@
  ==============================================================================
 # Project
 
-input/*
 output/*
 nb/*.bam*
-
-!input/.gitkeep
-
-!input/human_dna_high_quality/
-!input/human_dna_high_quality/germ.1k.R1.fastq.gz
-!input/human_dna_high_quality/germ.1k.R2.fastq.gz
 
 !output/.gitkeep
 # ==============================================================================
