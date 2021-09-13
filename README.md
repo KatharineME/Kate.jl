@@ -6,8 +6,6 @@
 
 ```sh
 git clone https://github.com/KatharineME/Kate.jl
-
-cd Kate.jl
 ```
 
 #### 3. Run the [kate](https://hub.docker.com/repository/docker/katharineme/kate) Docker container
