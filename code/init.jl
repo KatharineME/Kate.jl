@@ -6,16 +6,18 @@ using JSON
 
 pase = abspath(readlink("setting.json"))
     
-se = JSON.parsefile(pase)
+SE = JSON.parsefile(pase)
 
-par = dirname(dirname(dirname(pase)))
+PAK = joinpath(dirname(dirname(dirname(pase))), "Kate.jl")
 
-pai = joinpath(par, "input/")
+PAI = joinpath(PAK, "input/")
 
-pao = joinpath(par, "output/")
+PAO = joinpath(PAK, "output/")
 
-pasn = "/opt/snpeff/snpEff/snpEff.jar";
+PASN = "/opt/snpeff/snpEff/snpEff.jar";
+
+println("Settings are loaded.\n")
 
 Kate.test()
 
-println("\nSettings are loaded and environment tests passed.")
+println("\nEnvironment passed.")

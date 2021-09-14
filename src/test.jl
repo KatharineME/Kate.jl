@@ -1,6 +1,6 @@
 function test()
 
-    println("Testing environment...")
+    println("Testing environment...\n")
 
     for pr::String in (
         "skewer",

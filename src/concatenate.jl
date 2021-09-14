@@ -1,6 +1,6 @@
 using Dates: now, CompoundPeriod
 
-function concatenate(fq_, un::Bool, sa::String, pa::String)
+function concatenate(fq_, sa::String, pa::String)
 
     st = now()
 

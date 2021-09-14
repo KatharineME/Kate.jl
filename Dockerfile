@@ -1,8 +1,6 @@
 ARG BASE_CONTAINER=jupyter/scipy-notebook
 FROM $BASE_CONTAINER
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
-
 # Fix DL4006
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -24,8 +22,7 @@ RUN apt-get update && \
     gcc && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Julia dependencies
-# install Julia packages in /opt/julia instead of $HOME
+# Install Julia packages in /opt/julia
 ENV JULIA_DEPOT_PATH=/opt/julia \
     JULIA_PKGDIR=/opt/julia \
     JULIA_VERSION="${julia_version}"
@@ -49,7 +46,6 @@ RUN mkdir /etc/julia && \
     fix-permissions "${JULIA_PKGDIR}"
 
 # Install snpEff into /opt/
-# Create directory for snpEff data download
 RUN mkdir /opt/snpeff && \
     wget -q -P "/opt/snpeff/" https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip && \
     cd /opt/snpeff/ && \
@@ -74,7 +70,6 @@ RUN mkdir /opt/star && \
 
 USER $NB_UID
 
-# R packages including IRKernel which gets installed globally.
 RUN conda config --set channel_priority false && \
     conda install --quiet --yes \
     'git' \
@@ -110,9 +105,8 @@ RUN conda create --name py2 --yes python=2.7 && \
 
 # Install IJulia as jovyan and then move the kernelspec out
 # to the system share location. Avoids problems with runtime UID change not
-# taking effect properly on the .local folder in the jovyan home dir.
+# taking effect properly on the .local folder in the jovyan home dir. \
 RUN julia -e 'import Pkg; Pkg.update()' && \
-    # (test $TEST_ONLY_BUILD || julia -e 'import Pkg; Pkg.add("HDF5")') && \
     julia -e "using Pkg; pkg\"add IJulia\"; pkg\"add JuliaFormatter\"; pkg\"add CSV\"; pkg\"add DataFrames\"; pkg\"add Plots\"; pkg\"add BenchmarkTools\"; pkg\"add Revise\"; pkg\"precompile\"" && \
     # move kernelspec out of home \
     mv "${HOME}/.local/share/jupyter/kernels/julia"* "${CONDA_DIR}/share/jupyter/kernels/" && \
