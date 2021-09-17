@@ -23,14 +23,3 @@ Learn more about Docker.
 `http://127.0.0.1:10000/?token=<token_id>`
 
 Use the `token_id` that was printed to the terminal.
-
-<br>
-
-## Other
-
-#### Run commands in container's terminal
-
-```sh
-docker exec -it <container_id> /bin/bash
-```
-Get <container_id> by running `docker ps -a`.
