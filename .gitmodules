@@ -1,0 +1,3 @@
+[submodule "kwat.py"]
+	path = kwat.py
+	url = https://github.com/kwatme/kwat.py

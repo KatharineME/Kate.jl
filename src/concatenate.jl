@@ -7,10 +7,12 @@ function concatenate(fq_, sa::String, pa::String)
     fo_ = []
 
     re_ = []
+
+    println("I am seeing your changes")
     
-    naf_ = ["R1", "_1", "read1"]
+    naf_ = ["R1", "r1", "read1"]
     
-    nar_ = ["R2", "_2", "read2"]
+    nar_ = ["R2", "r2", "read2"]
     
     for fi in fq_
             
