@@ -2,8 +2,8 @@ using Dates
 
 function call_variant(
     mo::String,
-    ge::Union{String,Nothing},
-    so::Union{String,Nothing},
+    ge::Union{String, Nothing},
+    so::Union{String, Nothing},
     ta::Bool,
     fa::String,
     chs::String,
@@ -19,7 +19,7 @@ function call_variant(
         run_command(`samtools faidx $fa`)
 
     end
-    
+
     if !ispath("$chs.tbi")
 
         run_command(`tabix --force $chs`)
@@ -38,7 +38,7 @@ function call_variant(
     end
 
     if mo == "cdna"
-        
+
         co = "$co --rna"
 
     end
@@ -58,7 +58,7 @@ function call_variant(
         )
 
     end
-    
+
 
     # Set run parameters
 
@@ -110,9 +110,8 @@ function call_variant(
         # TODO: get sample names (maybe from .bam) and use them instead of "Germ" and "Soma"
 
         open(io -> write(io, "Germ\nSoma"), sa; write = true)
-        
-        pain =
-            joinpath(past, pav, "somatic.indels.vcf.gz")
+
+        pain = joinpath(past, pav, "somatic.indels.vcf.gz")
 
         run_command(
             pipeline(
@@ -125,8 +124,7 @@ function call_variant(
 
         run_command(`tabix --force $pain`)
 
-        pasv::String =
-            joinpath(past, pav, "somatic.snvs.vcf.gz")
+        pasv::String = joinpath(past, pav, "somatic.snvs.vcf.gz")
 
         run_command(
             pipeline(
@@ -139,15 +137,11 @@ function call_variant(
 
         run_command(`tabix --force $pasv`)
 
-        vc_ = [
-            joinpath(pam, pav, "somaticSV.vcf.gz"),
-            pain,
-            pasv,
-        ]
+        vc_ = [joinpath(pam, pav, "somaticSV.vcf.gz"), pain, pasv]
 
     elseif mo == "cdna"
 
-        vc_ = [joinpath(past, pav, "variants.vcf.gz"),]
+        vc_ = [joinpath(past, pav, "variants.vcf.gz")]
 
         println("this is vc_: $vc_")
 
@@ -157,10 +151,10 @@ function call_variant(
         vc_ = [
             joinpath(pam, pav, "diploidSV.vcf.gz"),
             joinpath(past, pav, "variants.vcf.gz"),
-           ]
+        ]
 
     end
-    
+
     paco::String = joinpath(pao, "concat.vcf.gz")
 
     run_command(
@@ -200,8 +194,8 @@ function call_variant(
         ),
     )
 
-    run_command(`tabix $ps`)
-    
+    return run_command(`tabix $ps`)
+
 end
 
 export call_variant

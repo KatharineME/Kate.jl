@@ -3,7 +3,7 @@ using Dates: now, CompoundPeriod
 function check(fq_::Array, pa::String, n_jo::Int)
 
     st = now()
-    
+
     if ispath(pa)
 
         println(
@@ -22,15 +22,15 @@ function check(fq_::Array, pa::String, n_jo::Int)
 
         println("Checking sequence bias ...")
 
-        run_command(
-            `multiqc --outdir $pa $pa`,
-        )
+        run_command(`multiqc --outdir $pa $pa`)
 
     end
-    
+
     en = now()
 
-    println("Done at $en in $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
+    return println(
+        "Done at $en in $(canonicalize(Dates.CompoundPeriod(en - st))).\n",
+    )
 
 end
 

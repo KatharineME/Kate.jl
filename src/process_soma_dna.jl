@@ -39,7 +39,11 @@ function process_soma_dna(
 
     so2tr::String = "$pasotr-trimmed-pair2.fastq.gz"
 
-    check_sequence((ge1tr, ge2tr, so1tr, so2tr), joinpath(paou, "check_sequence"), n_jo)
+    check_sequence(
+        (ge1tr, ge2tr, so1tr, so2tr),
+        joinpath(paou, "check_sequence"),
+        n_jo,
+    )
 
     pageal::String = joinpath(paou, "align_sequence", "germ.bam")
 
@@ -65,7 +69,18 @@ function process_soma_dna(
 
     pava::String = joinpath(paou, "find_variant")
 
-    find_variant(pageal, pasoal, ta, fagz, chsi, chna, pava, n_jo, meto, snpeff)
+    return find_variant(
+        pageal,
+        pasoal,
+        ta,
+        fagz,
+        chsi,
+        chna,
+        pava,
+        n_jo,
+        meto,
+        snpeff,
+    )
 
 end
 

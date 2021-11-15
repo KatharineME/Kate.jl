@@ -2,7 +2,7 @@ function run_command(co::Base.AbstractCmd)
 
     println(co)
 
-    run(co)
+    return run(co)
 
 end
 

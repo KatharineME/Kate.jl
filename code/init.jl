@@ -5,7 +5,7 @@ using Revise
 using JSON
 
 pase = abspath(readlink("setting.json"))
-    
+
 SE = JSON.parsefile(pase)
 
 PAK = joinpath(dirname(dirname(dirname(pase))), "Kate.jl")

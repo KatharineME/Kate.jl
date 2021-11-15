@@ -1,12 +1,12 @@
 using Dates: now, CompoundPeriod
 
 function trim(
-    fq1::String, 
-    fq2::String, 
-    pa::String, 
+    fq1::String,
+    fq2::String,
+    pa::String,
     n_jo::Int,
-    ad::String="AGATCGGAAGAGC"
-    )
+    ad::String = "AGATCGGAAGAGC",
+)
 
     st = now()
 
@@ -16,7 +16,9 @@ function trim(
 
     if isfile(pa1) && isfile(pa2)
 
-        println("Skipping trimming because trimmed files already exist:\n $pa1\n $pa2\n")
+        println(
+            "Skipping trimming because trimmed files already exist:\n $pa1\n $pa2\n",
+        )
 
     else
 
@@ -24,7 +26,7 @@ function trim(
         println("($st) Trimming sequence ...")
 
         mkpath(pa)
-        
+
         println("Made path for trimmed files: $pa")
 
         run_command(
@@ -33,7 +35,9 @@ function trim(
 
         en = now()
 
-        println("Done at $en in $(canonicalize(Dates.CompoundPeriod(en - st))).\n")
+        println(
+            "Done at $en in $(canonicalize(Dates.CompoundPeriod(en - st))).\n",
+        )
 
     end
 
